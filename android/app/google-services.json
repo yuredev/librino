@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "15456961857",
+    "project_id": "librino-f7ecb",
+    "storage_bucket": "librino-f7ecb.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:15456961857:android:d7b70505d824a05f34cdc0",
+        "android_client_info": {
+          "package_name": "com.example.librino"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "15456961857-72acrdb04513vn1roved4q9ustg5do0u.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBvQal8szus-NLSWrqgEcuOsxtHwdqJvvg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "15456961857-72acrdb04513vn1roved4q9ustg5do0u.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

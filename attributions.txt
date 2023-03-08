@@ -1,0 +1,24 @@
+
+alphabet.png:
+<a href="https://www.flaticon.com/free-icons/alphabet" title="alphabet icons">Alphabet icons created by bukeicon - Flaticon</a>
+
+animals.png:
+<a href="https://www.flaticon.com/free-icons/cute" title="cute icons">Cute icons created by Smashicons - Flaticon</a>
+
+verbs.png:
+<a href="https://www.flaticon.com/free-icons/actions" title="actions icons">Actions icons created by Paul J. - Flaticon</a>
+
+professions.png:
+<a href="https://www.flaticon.com/free-icons/startup" title="startup icons">Startup icons created by Vectors Market - Flaticon</a>
+
+user.png:
+<a href="https://www.flaticon.com/free-icons/user" title="user icons">User icons created by Vectors Market - Flaticon</a>
+
+house.png
+<a href="https://www.flaticon.com/free-icons/household" title="household icons">Household icons created by Becris - Flaticon</a>
+
+establishment.png
+<a href="https://www.flaticon.com/free-icons/agency" title="agency icons">Agency icons created by cah nggunung - Flaticon</a>
+
+clothes.png
+<a href="https://www.flaticon.com/free-icons/hanger" title="hanger icons">Hanger icons created by Freepik - Flaticon</a>

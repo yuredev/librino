@@ -1,0 +1,39 @@
+name: librino
+description: A new Flutter project.
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=2.19.2 <3.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.2
+  get_it: ^7.2.0
+  flutter_bloc: ^8.1.2
+  intl: ^0.18.0
+  lottie: ^2.2.0
+  equatable: ^2.0.5
+  firebase_core: ^2.7.0
+  firebase_storage: ^11.0.14
+  cloud_firestore: ^4.4.3
+  google_fonts: ^4.0.3
+  shimmer: ^2.0.0
+  reorderables: ^0.6.0
+  video_player: ^2.5.3
+  fluttertoast: ^8.2.1
+  json_annotation: ^4.8.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^2.0.0
+  json_serializable: ^6.6.1
+  build_runner: ^2.3.3
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/images/
+    - assets/animations/
