@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:librino/core/constants/sizes.dart';
 import 'package:librino/presentation/widgets/shared/button_widget.dart';
 import 'package:librino/presentation/widgets/shared/librino_scaffold.dart';
 
@@ -20,7 +21,7 @@ class QuestionScaffold extends StatelessWidget {
         child: ButtonWidget(
           title: 'Checar',
           width: double.infinity,
-          height: 53,
+          height: Sizes.defaultButtonSize,
           onPress: () {},
         ),
       ),

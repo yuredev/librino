@@ -8,6 +8,7 @@ abstract class LibrinoColors {
   static const disabledGray = Color(0xFFD1D1D1);
   static const backgroundWhite = Color.fromARGB(255, 253, 253, 255);
   static const alertYellow = Color(0xFFE3A702);
+  static const starGold = Color(0xFFFFD700);
   static const lightBlue = Color(0xFF1C8CCF);
   static const highlightLightBlue = Color(0xFF31DAFF);
   static const borderGray = Color.fromARGB(255, 228, 228, 228);

@@ -138,16 +138,30 @@ class LibrinoDrawer extends StatelessWidget {
                           VisualAlerts.showYesNotDialog(
                             context,
                             title: 'Deseja sair?',
-                            description: 'Você precisará se autenticar novamente para usar o app',
+                            description:
+                                'Você precisará se autenticar novamente para usar o app',
                           );
                         },
-                        child: Text(
-                          'Sair',
-                          style: TextStyle(
-                            color: LibrinoColors.textLightBlack,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16,
-                          ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Container(
+                              margin: const EdgeInsets.only(right: 4),
+                              child: Icon(
+                                Icons.logout,
+                                color: LibrinoColors.textLightBlack,
+                                size: 22,
+                              ),
+                            ),
+                            Text(
+                              'Sair',
+                              style: TextStyle(
+                                color: LibrinoColors.textLightBlack,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ],

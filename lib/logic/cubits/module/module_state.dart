@@ -2,11 +2,11 @@
 import 'package:equatable/equatable.dart';
 import 'package:librino/data/models/module/module.dart';
 
-abstract class HomeModulesListState {}
+abstract class ModuleState {}
 
-class LoadingHomeModulesList implements HomeModulesListState {}
+class LoadingHomeModulesList implements ModuleState {}
 
-class HomeModulesListLoaded extends Equatable implements HomeModulesListState {
+class HomeModulesListLoaded extends Equatable implements ModuleState {
   final List<Module> modules;
 
   const HomeModulesListLoaded(
@@ -17,7 +17,7 @@ class HomeModulesListLoaded extends Equatable implements HomeModulesListState {
   List<Object?> get props => [modules];
 }
 
-class HomeModulesListError extends Equatable implements HomeModulesListState {
+class HomeModulesListError extends Equatable implements ModuleState {
   final String message;
   final bool isNetworkError;
 

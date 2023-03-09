@@ -3,9 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:librino/core/constants/colors.dart';
 import 'package:librino/core/constants/sizes.dart';
 import 'package:librino/data/models/user.dart';
-import 'package:librino/logic/cubits/module/home_modules_list/home_modules_list_cubit.dart';
+import 'package:librino/logic/cubits/module/load_modules_cubit.dart';
 import 'package:librino/presentation/widgets/home/home_app_bar.dart';
-import 'package:librino/presentation/widgets/home/home_modules_grid_widget.dart';
+import 'package:librino/presentation/widgets/home/modules_grid_widget.dart';
 import 'package:librino/presentation/widgets/home/librino_drawer.dart';
 import 'package:librino/presentation/widgets/shared/librino_scaffold.dart';
 import 'package:librino/presentation/widgets/shared/refreshable_scrollview_widget.dart';
@@ -20,7 +20,7 @@ class HomeScreenWidget extends StatefulWidget {
 }
 
 class _HomeScreenWidgetState extends State<HomeScreenWidget> {
-  late final listCubit = context.read<HomeModulesListCubit>();
+  late final listCubit = context.read<LoadModulesCubit>();
   late final List<Widget> tabs;
   var activeTab = 0;
 
@@ -83,7 +83,7 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
 }
 
 class _LearningOverview extends StatefulWidget {
-  final HomeModulesListCubit listCubit;
+  final LoadModulesCubit listCubit;
 
   const _LearningOverview({
     required this.listCubit,
@@ -137,7 +137,7 @@ class _LearningOverviewState extends State<_LearningOverview> {
                   margin: const EdgeInsets.only(
                     bottom: Sizes.defaultScreenBottomMargin,
                   ),
-                  child: HomeModulesGridWidget(),
+                  child: ModulesGridWidget(),
                 )
               ],
             ),

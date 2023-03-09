@@ -91,7 +91,7 @@ class LibrasToWordScreen extends StatelessWidget {
               child: ButtonWidget(
                 title: 'Checar',
                 width: double.infinity,
-                height: 53,
+                height: Sizes.defaultButtonSize,
                 onPress: () {},
               ),
             ),

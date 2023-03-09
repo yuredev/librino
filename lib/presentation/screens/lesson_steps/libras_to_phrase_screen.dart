@@ -212,7 +212,7 @@ class _LibrasToPhraseScreenState extends State<LibrasToPhraseScreen> {
                     ),
                     child: ButtonWidget(
                       title: 'Checar',
-                      height: 53,
+                      height: Sizes.defaultButtonSize,
                       width: double.infinity,
                       onPress: () {},
                     ),

@@ -144,10 +144,23 @@ abstract class VisualAlerts {
   static void showToast(String texto) async {
     await Fluttertoast.cancel();
     Fluttertoast.showToast(
-        msg: texto,
-        backgroundColor: LibrinoColors.toastGray,
-        fontSize: 12,
-        toastLength: Toast.LENGTH_SHORT,
-      );
+      msg: texto,
+      backgroundColor: LibrinoColors.toastGray,
+      fontSize: 12,
+      toastLength: Toast.LENGTH_SHORT,
+    );
+  }
+
+  static void showBottomModal(BuildContext context, Widget widget) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(30.0),
+        ),
+      ),
+      builder: (ctx) => widget,
+    );
   }
 }
