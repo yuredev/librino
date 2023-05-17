@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:librino/core/constants/colors.dart';
-import 'package:librino/presentation/visual_alerts.dart';
+import 'package:librino/presentation/utils/presentation_utils.dart';
 import 'package:librino/presentation/widgets/shared/progress_bar_widget.dart';
 
 class LessonTopBarWidget extends StatelessWidget {
@@ -24,7 +24,7 @@ class LessonTopBarWidget extends StatelessWidget {
           ),
           child: InkWell(
             onTap: () async {
-              final deveSair = await VisualAlerts.showYesNotDialog(
+              final deveSair = await PresentationUtils.showYesNotDialog(
                     context,
                     title: 'Deseja sair?',
                     description: 'Você perderá o progresso neste exercício',
@@ -48,7 +48,7 @@ class LessonTopBarWidget extends StatelessWidget {
           child: Container(
             margin: const EdgeInsets.symmetric(horizontal: 10),
             child: ProgressBarWidget(
-              color: LibrinoColors.mainOrange,
+              color: LibrinoColors.main,
               progression: progression,
               height: 18,
             ),

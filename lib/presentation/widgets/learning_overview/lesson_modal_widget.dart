@@ -1,14 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:librino/core/constants/colors.dart';
+import 'package:librino/core/constants/mappings.dart';
 import 'package:librino/core/constants/sizes.dart';
-import 'package:librino/core/enums/enums.dart';
-import 'package:librino/core/routes.dart';
 import 'package:librino/data/models/lesson/lesson.dart';
 import 'package:librino/data/models/module/module.dart';
-import 'package:librino/logic/cubits/lesson/lesson_state.dart';
-import 'package:librino/presentation/visual_alerts.dart';
+import 'package:librino/data/models/play_lesson_dto.dart';
 import 'package:librino/presentation/widgets/shared/button_widget.dart';
-import 'package:librino/presentation/widgets/shared/modal_top_bar_widget.dart';
 import 'package:librino/presentation/widgets/shared/progress_bar_widget.dart';
 
 class LessonModalWidget extends StatelessWidget {
@@ -21,44 +18,18 @@ class LessonModalWidget extends StatelessWidget {
     required this.module,
   });
 
-  static const _navigationMapping = {
-    LessonStepType.librasToWord: Routes.librasToWordQuestion,
-    LessonStepType.librasToPhrase: Routes.librasToPhraseQuestion,
-    LessonStepType.wordToLibras: Routes.wordToLibrasQuestion,
-    LessonStepType.phraseToLibras: Routes.phraseToLibrasQuestion,
-    LessonStepType.supportContent: Routes.phraseToLibrasQuestion,
-  };
-
-  void onButtonPress(BuildContext context) {
+  void onButtonPress(BuildContext context) async {
     final steps = lesson.steps;
-    steps.sort((a, b) {
-      return a.number - b.number;
-    });
     final firstStep = steps.removeAt(0);
+
     Navigator.pushReplacementNamed(
       context,
-      _navigationMapping[firstStep.type]!,
-      arguments: {'steps': steps},
+      lessonTypeToScreenNameMap[firstStep.type]!,
+      arguments: PlayLessonDTO(
+        lives: 3,
+        steps: steps,
+      ),
     );
-
-    switch (firstStep.type) {
-      case LessonStepType.librasToWord:
-        Navigator.pushReplacementNamed(context, Routes.librasToWordQuestion);
-        break;
-      case LessonStepType.librasToPhrase:
-        Navigator.pushReplacementNamed(context, Routes.librasToPhraseQuestion);
-        break;
-      case LessonStepType.wordToLibras:
-        Navigator.pushReplacementNamed(context, Routes.wordToLibrasQuestion);
-        break;
-      case LessonStepType.phraseToLibras:
-        Navigator.pushReplacementNamed(context, Routes.phraseToLibrasQuestion);
-        break;
-      case LessonStepType.supportContent:
-        // TODO:
-        Navigator.pushReplacementNamed(context, Routes.librasToWordQuestion);
-        break;
-    }
   }
 
   @override
@@ -106,7 +77,7 @@ class LessonModalWidget extends StatelessWidget {
                   Container(
                     margin: EdgeInsets.only(top: 6),
                     child: ProgressBarWidget(
-                      color: LibrinoColors.mainOrange,
+                      color: LibrinoColors.main,
                       height: 15,
                       progression: 70,
                     ),
@@ -187,7 +158,7 @@ class LessonModalWidget extends StatelessWidget {
             ButtonWidget(
               onPress: () => onButtonPress(context),
               title: 'Praticar',
-              height: Sizes.defaultButtonSize,
+              height: Sizes.defaultButtonHeight,
               width: double.infinity,
               leftIcon: Icon(
                 Icons.gamepad,

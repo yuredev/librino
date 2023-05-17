@@ -1,13 +1,35 @@
 import 'package:flutter/material.dart';
 import 'package:librino/core/constants/colors.dart';
+import 'package:librino/core/constants/mappings.dart';
 import 'package:librino/core/constants/sizes.dart';
+import 'package:librino/data/models/play_lesson_dto.dart';
+import 'package:librino/presentation/utils/presentation_utils.dart';
+import 'package:librino/presentation/utils/sound_utils.dart';
 import 'package:librino/presentation/widgets/shared/button_widget.dart';
 import 'package:librino/presentation/widgets/shared/lesson_topbar_widget.dart';
 import 'package:librino/presentation/widgets/shared/librino_scaffold.dart';
 import 'package:librino/presentation/widgets/shared/question_title.dart';
 
 class LibrasToWordScreen extends StatelessWidget {
-  const LibrasToWordScreen({super.key});
+  final PlayLessonDTO playLessonDTO;
+
+  const LibrasToWordScreen({super.key, required this.playLessonDTO});
+
+  void onButtonPress(BuildContext context) {
+    if (playLessonDTO.steps.isEmpty) {
+      Navigator.pop(context);
+      SoundUtils.play('win.mp3');
+      // TODO: mostrar modal de conclusão
+      return;
+    }
+    final firstStep = playLessonDTO.steps.removeAt(0);
+    Navigator.pushReplacementNamed(
+      context,
+      lessonTypeToScreenNameMap[firstStep.type]!,
+      arguments: playLessonDTO,
+    );
+    PresentationUtils.showQuestionResultFeedback(context, true);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +46,10 @@ class LibrasToWordScreen extends StatelessWidget {
                     margin: const EdgeInsets.only(
                       bottom: 26,
                     ),
-                    child: LessonTopBarWidget(lifesNumber: 5, progression: 45),
+                    child: LessonTopBarWidget(
+                      lifesNumber: 5,
+                      progression: 45,
+                    ),
                   ),
                   Container(
                     padding: const EdgeInsets.only(right: 20),
@@ -91,8 +116,8 @@ class LibrasToWordScreen extends StatelessWidget {
               child: ButtonWidget(
                 title: 'Checar',
                 width: double.infinity,
-                height: Sizes.defaultButtonSize,
-                onPress: () {},
+                height: Sizes.defaultButtonHeight,
+                onPress: () => onButtonPress(context),
               ),
             ),
           ],

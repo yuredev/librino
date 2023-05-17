@@ -18,6 +18,5 @@ class LibrasToPhraseQuestion extends LessonStep {
   factory LibrasToPhraseQuestion.fromJson(Map<String, dynamic> json) =>
       _$LibrasToPhraseQuestionFromJson(json);
 
-  @override
   Map<String, dynamic> toJson() => _$LibrasToPhraseQuestionToJson(this);
 }

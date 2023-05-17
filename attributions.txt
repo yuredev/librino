@@ -14,6 +14,9 @@ professions.png:
 user.png:
 <a href="https://www.flaticon.com/free-icons/user" title="user icons">User icons created by Vectors Market - Flaticon</a>
 
+user2.png:
+<a href="https://www.flaticon.com/free-icons/avatar" title="avatar icons">Avatar icons created by Freepik - Flaticon</a>
+
 house.png
 <a href="https://www.flaticon.com/free-icons/household" title="household icons">Household icons created by Becris - Flaticon</a>
 
@@ -22,3 +25,9 @@ establishment.png
 
 clothes.png
 <a href="https://www.flaticon.com/free-icons/hanger" title="hanger icons">Hanger icons created by Freepik - Flaticon</a>
+
+signals.jpg
+<a href="https://www.vecteezy.com/free-vector/sign-language">Sign Language Vectors by Vecteezy</a>
+
+signal_classes.jpg
+<a href="https://www.vecteezy.com/free-vector/sign-language">Sign Language Vectors by Vecteezy</a>

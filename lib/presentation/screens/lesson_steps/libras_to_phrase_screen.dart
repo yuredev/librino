@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:librino/core/constants/colors.dart';
+import 'package:librino/core/constants/mappings.dart';
 import 'package:librino/core/constants/sizes.dart';
+import 'package:librino/data/models/play_lesson_dto.dart';
+import 'package:librino/presentation/utils/presentation_utils.dart';
+import 'package:librino/presentation/utils/sound_utils.dart';
 import 'package:librino/presentation/widgets/shared/button_widget.dart';
 import 'package:librino/presentation/widgets/shared/lesson_topbar_widget.dart';
 import 'package:librino/presentation/widgets/shared/librino_scaffold.dart';
@@ -10,7 +14,12 @@ import 'package:reorderables/reorderables.dart';
 import 'package:video_player/video_player.dart';
 
 class LibrasToPhraseScreen extends StatefulWidget {
-  const LibrasToPhraseScreen({super.key});
+  final PlayLessonDTO playLessonDTO;
+
+  const LibrasToPhraseScreen({
+    super.key,
+    required this.playLessonDTO,
+  });
 
   @override
   State<LibrasToPhraseScreen> createState() => _LibrasToPhraseScreenState();
@@ -41,6 +50,22 @@ class _LibrasToPhraseScreenState extends State<LibrasToPhraseScreen> {
     initializeVideo();
   }
 
+  void onButtonPress() {
+    if (widget.playLessonDTO.steps.isEmpty) {
+      Navigator.pop(context);
+      SoundUtils.play('win.mp3');
+      // TODO: mostrar modal de conclusão
+      return;
+    }
+    final firstStep = widget.playLessonDTO.steps.removeAt(0);
+    Navigator.pushReplacementNamed(
+      context,
+      lessonTypeToScreenNameMap[firstStep.type]!,
+      arguments: widget.playLessonDTO,
+    );
+    PresentationUtils.showQuestionResultFeedback(context, false);
+  }
+
   Future<void> initializeVideo() async {
     await videoCtrl.initialize();
     setState(() {});
@@ -53,7 +78,12 @@ class _LibrasToPhraseScreenState extends State<LibrasToPhraseScreen> {
         child: Column(
           children: [
             Container(
-              padding: const EdgeInsets.fromLTRB(23, 40, 23, 0),
+              padding: const EdgeInsets.fromLTRB(
+                Sizes.defaultScreenHorizontalMargin,
+                40,
+                Sizes.defaultScreenHorizontalMargin,
+                0,
+              ),
               margin: const EdgeInsets.only(bottom: 20),
               child: Column(
                 children: [
@@ -163,6 +193,7 @@ class _LibrasToPhraseScreenState extends State<LibrasToPhraseScreen> {
                     child: const Divider(height: 0, thickness: 1),
                   ),
                   Wrap(
+                    alignment: WrapAlignment.center,
                     spacing: 7,
                     runSpacing: -4,
                     children: palavrasDisponiveis.map(
@@ -208,15 +239,15 @@ class _LibrasToPhraseScreenState extends State<LibrasToPhraseScreen> {
                   Container(
                     margin: const EdgeInsets.only(
                       top: 50,
-                      bottom: Sizes.defaultScreenBottomMargin,
+                      bottom: 16,
                     ),
                     child: ButtonWidget(
                       title: 'Checar',
-                      height: Sizes.defaultButtonSize,
+                      height: Sizes.defaultButtonHeight,
                       width: double.infinity,
-                      onPress: () {},
+                      onPress: onButtonPress,
                     ),
-                  )
+                  ),
                 ],
               ),
             ),

@@ -7,8 +7,8 @@ class ModalTopBarWidgetWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 40,
-      height: 4.5,
+      width: 45,
+      height: 3.7,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
         color: LibrinoColors.disabledGray,

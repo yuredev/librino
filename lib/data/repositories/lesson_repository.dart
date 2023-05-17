@@ -22,6 +22,7 @@ class LessonRepository {
             .first
             .data();
     final lesson = Lesson.fromJson(lessonMap);
+    lesson.steps.sort((a, b) => a.number - b.number);
     return lesson;
   }
 }

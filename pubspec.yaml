@@ -24,6 +24,10 @@ dependencies:
   video_player: ^2.5.3
   fluttertoast: ^8.2.1
   json_annotation: ^4.8.0
+  just_audio: ^0.9.31
+  flutter_html: ^2.1.2
+  share_plus: ^6.3.4
+  firebase_auth: ^4.6.0
 
 dev_dependencies:
   flutter_test:
@@ -37,3 +41,4 @@ flutter:
   assets:
     - assets/images/
     - assets/animations/
+    - assets/sounds/

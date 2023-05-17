@@ -1,17 +1,39 @@
 import 'package:get_it/get_it.dart';
 import 'package:librino/core/config/environment.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:librino/data/repositories/auth_repository.dart';
 import 'package:librino/data/repositories/lesson_repository.dart';
 import 'package:librino/data/repositories/module_repository.dart';
+import 'package:librino/data/repositories/user/fireauth_user_repository.dart';
+import 'package:librino/data/repositories/user/firestore_user_repository.dart';
+import 'package:librino/logic/cubits/auth/auth_cubit.dart';
+import 'package:librino/logic/cubits/global_alert/global_alert_cubit.dart';
 import 'package:librino/logic/cubits/lesson/load_lesson_cubit.dart';
 import 'package:librino/logic/cubits/module/load_modules_cubit.dart';
+import 'package:librino/logic/cubits/participants/load_participants_cubit.dart';
+import 'package:librino/logic/cubits/user/user_crud_cubit.dart';
 
 abstract class Bindings {
+  static T get<T extends Object>({String? instanceName}) {
+    return GetIt.I.get<T>(instanceName: instanceName);
+  }
+
+  static void set<T extends Object>(T object, {String? instanceName}) {
+    GetIt.I.registerLazySingleton<T>(() => object, instanceName: instanceName);
+  }
+
   static Future<void> init(EnvironmentSettings settings) async {
-    GetIt.I.registerLazySingleton(() => FirebaseFirestore.instance);
-    GetIt.I.registerLazySingleton(() => ModuleRepository());
-    GetIt.I.registerLazySingleton(() => LessonRepository());
-    GetIt.I.registerLazySingleton(() => LoadLessonCubit());
-    GetIt.I.registerLazySingleton(() => LoadModulesCubit());
+    set(FirebaseFirestore.instance);
+    set(FirestoreUserRepository());
+    set(FireAuthUserRepository());
+    set(AuthRepository());
+    set(GlobalAlertCubit());
+    set(AuthCubit());
+    set(UserCRUDCubit());
+    set(ModuleRepository());
+    set(LessonRepository());
+    set(LoadLessonCubit());
+    set(LoadModulesCubit());
+    set(LoadParticipantsCubit());
   }
 }

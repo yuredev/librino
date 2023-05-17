@@ -15,3 +15,10 @@ linter:
     prefer_const_constructors: false
     prefer_const_literals_to_create_immutables: false
     avoid_print: false
+    always_declare_return_types: true
+    avoid_redundant_argument_values: true
+    avoid_annotating_with_dynamic: true
+
+analyzer:
+  exclude:
+    - "**.g.dart"

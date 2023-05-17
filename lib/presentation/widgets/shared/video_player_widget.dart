@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:librino/core/constants/colors.dart';
-import 'package:librino/presentation/visual_alerts.dart';
+import 'package:librino/presentation/utils/presentation_utils.dart';
 import 'package:video_player/video_player.dart';
 
 class VideoPlayerWidget extends StatefulWidget {
@@ -73,7 +73,7 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
             playerCtrl,
             allowScrubbing: false,
             colors: VideoProgressColors(
-              playedColor: LibrinoColors.mainOrange,
+              playedColor: LibrinoColors.main,
             ),
           ),
         ],
@@ -142,7 +142,7 @@ class _ControlsOverlayState extends State<_ControlsOverlay> {
           child: InkWell(
             onTap: () {
               if (widget.shouldLimitReplays && replaysNumber == 0) {
-                VisualAlerts.showToast('Sem reproduções restantes');
+                PresentationUtils.showToast('Sem reproduções restantes');
                 return;
               }
               if (!widget.controller.value.isPlaying) {

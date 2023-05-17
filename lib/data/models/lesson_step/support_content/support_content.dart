@@ -18,7 +18,6 @@ class SupportContent extends LessonStep {
   factory SupportContent.fromJson(Map<String, dynamic> json) =>
       _$SupportContentFromJson(json);
 
-  @override
   Map<String, dynamic> toJson() => _$SupportContentToJson(this);
 
   @override

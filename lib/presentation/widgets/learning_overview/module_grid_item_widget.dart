@@ -28,7 +28,7 @@ class ModuleGridItemWidget extends StatelessWidget {
       onTap: onPress,
       borderRadius: 20,
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 0),
+        padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -70,7 +70,7 @@ class ModuleGridItemWidget extends StatelessWidget {
             isLoading
                 ? GrayBarWidget(height: 14, width: double.infinity)
                 : ProgressBarWidget(
-                    color: LibrinoColors.mainOrange,
+                    color: LibrinoColors.main,
                     height: 12,
                     progression: conclusionPercentage!,
                   )

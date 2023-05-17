@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:librino/core/constants/colors.dart';
+import 'package:librino/presentation/utils/sound_utils.dart';
 import 'package:librino/presentation/widgets/shared/button_widget.dart';
 import 'package:librino/presentation/widgets/shared/info_dialog_widget.dart';
 import 'package:librino/presentation/widgets/shared/locked_loading_widget.dart';
 import 'package:librino/presentation/widgets/shared/yes_not_dialog_widget.dart';
 
-abstract class VisualAlerts {
+abstract class PresentationUtils {
   static void showSnackBar(
     BuildContext context,
     String message, {
@@ -22,8 +23,25 @@ abstract class VisualAlerts {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       content: Text(message),
       duration: Duration(seconds: 3),
-      backgroundColor: isErrorMessage ? Colors.red : null,
+      backgroundColor: isErrorMessage ? Colors.red : LibrinoColors.mainDeeper,
     ));
+  }
+
+  static void showQuestionResultFeedback(
+    BuildContext context,
+    bool isCorrect,
+  ) {
+    ScaffoldMessenger.of(context).hideCurrentSnackBar();
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          isCorrect ? 'Parabéns! Você Acertou.' : 'Resposta incorreta :(',
+        ),
+        duration: Duration(seconds: 3),
+        backgroundColor: isCorrect ? Colors.green : Colors.red,
+      ),
+    );
+    SoundUtils.play(isCorrect ? 'correct.mp3' : 'incorrect.mp3');
   }
 
   static void showLockedLoading(BuildContext context, {required String text}) {
@@ -75,19 +93,15 @@ abstract class VisualAlerts {
             ButtonWidget(
               title: 'Cancelar',
               color: LibrinoColors.buttonGray,
-              textColor: Colors.white,
               height: 46,
               fontSize: 16,
-              borderRadius: 5,
               onPress: () => Navigator.pop(context, false),
             ),
             ButtonWidget(
               title: confirmTitle,
               color: confirmColor,
-              textColor: Colors.white,
               height: 46,
               fontSize: 16,
-              borderRadius: 5,
               onPress: () => Navigator.pop(context, true),
             ),
           ],

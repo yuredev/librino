@@ -1,4 +1,3 @@
-
 import 'package:json_annotation/json_annotation.dart';
 
 enum LessonStepType {
@@ -13,3 +12,9 @@ enum LessonStepType {
   @JsonValue(4)
   supportContent,
 }
+
+enum GenderIdentity { man, woman, nonBinary, other }
+
+enum ProfileType { instructor, studant }
+
+enum AuditoryAbility { hearer, deaf }

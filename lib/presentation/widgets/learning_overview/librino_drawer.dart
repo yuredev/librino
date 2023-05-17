@@ -2,12 +2,12 @@
 import 'package:flutter/material.dart';
 
 import 'package:librino/core/constants/colors.dart';
-import 'package:librino/data/models/user.dart';
-import 'package:librino/presentation/visual_alerts.dart';
+import 'package:librino/data/models/user/librino_user.dart';
+import 'package:librino/presentation/utils/presentation_utils.dart';
 import 'package:librino/presentation/widgets/shared/button_widget.dart';
 
 class LibrinoDrawer extends StatelessWidget {
-  final User user;
+  final LibrinoUser user;
 
   const LibrinoDrawer({
     Key? key,
@@ -48,7 +48,7 @@ class LibrinoDrawer extends StatelessWidget {
                     Container(
                       margin: const EdgeInsets.only(bottom: 10),
                       child: Image.asset(
-                        'assets/images/user.png',
+                        'assets/images/user2.png',
                         width: consts.maxWidth * .42,
                       ),
                     ),
@@ -135,7 +135,7 @@ class LibrinoDrawer extends StatelessWidget {
                           alignment: Alignment.center,
                         ),
                         onPressed: () async {
-                          VisualAlerts.showYesNotDialog(
+                          PresentationUtils.showYesNotDialog(
                             context,
                             title: 'Deseja sair?',
                             description:

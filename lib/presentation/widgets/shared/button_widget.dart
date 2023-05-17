@@ -27,7 +27,7 @@ class ButtonWidget extends StatelessWidget {
     this.onPress,
     required this.title,
     this.isEnabled = true,
-    this.color = LibrinoColors.mainOrange,
+    this.color = LibrinoColors.main,
     this.textColor = Colors.white,
     this.titleMargin,
     this.fontSize,
@@ -56,7 +56,6 @@ class ButtonWidget extends StatelessWidget {
       child = loadingText != null
           ? Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 FittedBox(child: CircularProgressIndicator(color: textColor)),
                 const SizedBox(width: 8),
@@ -81,8 +80,7 @@ class ButtonWidget extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             if (leftIcon != null) leftIcon!,
-            if (leftIcon != null)
-              SizedBox(width: iconTitleSpacing ?? 6),
+            if (leftIcon != null) SizedBox(width: iconTitleSpacing ?? 6),
             Container(
               margin: titleMargin,
               child: Text(
@@ -90,8 +88,7 @@ class ButtonWidget extends StatelessWidget {
                 style: estiloFonte,
               ),
             ),
-            if (rightIcon != null)
-              SizedBox(width: iconTitleSpacing ?? 6),
+            if (rightIcon != null) SizedBox(width: iconTitleSpacing ?? 6),
             if (rightIcon != null) rightIcon!,
           ],
         ),

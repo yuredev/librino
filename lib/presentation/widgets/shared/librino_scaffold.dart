@@ -8,7 +8,8 @@ class LibrinoScaffold extends StatelessWidget {
   final Widget? rightDrawer;
   final Widget? floatingActionButton;
   final FloatingActionButtonLocation? floatingActionButtonLocation;
-  final BottomNavigationBar? bottomNavigationBar;
+  final Widget? bottomNavigationBar;
+  final bool resizeToAvoidBottomInset;
 
   const LibrinoScaffold({
     Key? key,
@@ -19,6 +20,7 @@ class LibrinoScaffold extends StatelessWidget {
     this.floatingActionButtonLocation,
     this.backgroundColor = LibrinoColors.backgroundWhite,
     this.bottomNavigationBar,
+    this.resizeToAvoidBottomInset = true,
   }) : super(key: key);
 
   @override
@@ -32,6 +34,7 @@ class LibrinoScaffold extends StatelessWidget {
       floatingActionButton: floatingActionButton,
       floatingActionButtonLocation: floatingActionButtonLocation,
       bottomNavigationBar: bottomNavigationBar,
+      resizeToAvoidBottomInset: resizeToAvoidBottomInset,
     );
   }
 }
