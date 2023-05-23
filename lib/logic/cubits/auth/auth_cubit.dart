@@ -16,17 +16,12 @@ class AuthCubit extends Cubit<AuthState> {
 
   AuthCubit() : super(LoggedOutState());
 
-  // TODO: criar método SignOut
-  // Future<void> signOut() {
-
-  // }
-
   Future<void> signIn({
     required String email,
     required String password,
   }) async {
     try {
-      emit(LoggingState());
+      emit(LoggingInState());
       final fireAuthUser =
           await _authRepository.signIn(email: email, password: password);
       final firestoreUser = await _firestoreUserRepository.getById(
@@ -63,6 +58,20 @@ class AuthCubit extends Cubit<AuthState> {
         message = 'Erro inesperado ao realizar o login';
       }
       emit(LoginErrorState(message));
+    }
+  }
+
+  Future<void> signOut() async {
+    try {
+      final userName = (state as LoggedInState).user.name;
+      emit(LoggingOutState());
+      await _authRepository.signOut();
+      _globalAlertCubit.fire('Tchau $userName! volte sempre');
+      emit(LoggedOutState());
+    } catch (e) {
+      print(e);
+      _globalAlertCubit.fire('Erro ao sair da sessão');
+      emit(LoginErrorState('Erro ao sair da sessão'));
     }
   }
 }

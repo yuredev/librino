@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 
-// TODO: 
+// TODO:
 class AuthRepository {
   Future<User> signIn({
     required String email,
@@ -13,12 +13,9 @@ class AuthRepository {
     );
     var user = userCredential.user;
     return user!;
-    try {} on FirebaseAuthException catch (e) {
-      if (e.code == 'user-not-found') {
-        print('No user found for that email.');
-      } else if (e.code == 'wrong-password') {
-        print('Wrong password provided.');
-      }
-    }
+  }
+
+  Future<void> signOut() async {
+    FirebaseAuth.instance.signOut();
   }
 }

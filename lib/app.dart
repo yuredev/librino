@@ -11,7 +11,7 @@ class LibrinoApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: Themes.light,
-      initialRoute: Routes.register,
+      initialRoute: Routes.login,
       onGenerateRoute: Routes.onGenerateRoute,
       builder: (context, child) => GlobalAlertsHandler(child: child),
     );

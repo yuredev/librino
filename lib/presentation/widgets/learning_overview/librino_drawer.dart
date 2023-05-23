@@ -1,8 +1,10 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:librino/core/constants/colors.dart';
 import 'package:librino/data/models/user/librino_user.dart';
+import 'package:librino/logic/cubits/auth/auth_cubit.dart';
 import 'package:librino/presentation/utils/presentation_utils.dart';
 import 'package:librino/presentation/widgets/shared/button_widget.dart';
 
@@ -16,6 +18,7 @@ class LibrinoDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final AuthCubit authCubit = context.read();
     final btnStyle = TextButton.styleFrom(
       alignment: Alignment.topLeft,
       padding: EdgeInsets.symmetric(
@@ -135,12 +138,17 @@ class LibrinoDrawer extends StatelessWidget {
                           alignment: Alignment.center,
                         ),
                         onPressed: () async {
-                          PresentationUtils.showYesNotDialog(
-                            context,
-                            title: 'Deseja sair?',
-                            description:
-                                'Você precisará se autenticar novamente para usar o app',
-                          );
+                          final deveSair =
+                              await PresentationUtils.showYesNotDialog(
+                                    context,
+                                    title: 'Deseja sair?',
+                                    description:
+                                        'Você precisará se autenticar novamente para usar o app',
+                                  ) ??
+                                  false;
+                          if (deveSair) {
+                            authCubit.signOut();
+                          }
                         },
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,

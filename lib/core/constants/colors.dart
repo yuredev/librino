@@ -9,7 +9,7 @@ abstract class LibrinoColors {
   static const deepOrange = Color.fromARGB(255, 57, 102, 170);
   static const lightGray = Color(0xFFEFEFEF);
   static const backgroundGray = Color(0xFFF3F7FF);
-  static const statusBarGray = Color.fromARGB(255, 247, 247, 247);
+  static const grayStatusBar = Color.fromARGB(255, 247, 247, 247);
   static const disabledGray = Color(0xFFD1D1D1);
   static const backgroundWhite = Color.fromARGB(255, 253, 253, 255);
   static const alertYellow = Color(0xFFE3A702);

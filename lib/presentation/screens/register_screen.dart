@@ -559,7 +559,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     onPress: () => submit(context),
                     isLoading: state is CreatingUserState,
                     loadingText: 'Submetendo...',
-                    padding: EdgeInsets.symmetric(vertical: 14),
+                    padding: const EdgeInsets.symmetric(vertical: 14),
                   ),
                 ),
               ),
