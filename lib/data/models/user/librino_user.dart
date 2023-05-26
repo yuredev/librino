@@ -1,6 +1,10 @@
 import 'package:equatable/equatable.dart';
+import 'package:json_annotation/json_annotation.dart';
 import 'package:librino/core/enums/enums.dart';
 
+part 'librino_user.g.dart';
+
+@JsonSerializable()
 class LibrinoUser extends Equatable {
   final AuditoryAbility auditoryAbility;
   final GenderIdentity? genderIdentity;
@@ -32,4 +36,9 @@ class LibrinoUser extends Equatable {
         photoURL,
         profileType,
       ];
+
+  factory LibrinoUser.fromJson(Map<String, dynamic> json) =>
+      _$LibrinoUserFromJson(json);
+
+  Map<String, dynamic> toJson() => _$LibrinoUserToJson(this);
 }

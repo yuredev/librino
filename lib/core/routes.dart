@@ -16,7 +16,7 @@ import 'package:librino/presentation/screens/lesson_steps/phrase_to_libras_scree
 import 'package:librino/presentation/screens/lesson_steps/support_content_screen.dart';
 import 'package:librino/presentation/screens/lesson_steps/word_to_libras_screen.dart';
 import 'package:librino/presentation/screens/introduction_screen.dart';
-import 'package:librino/presentation/screens/login_page.dart';
+import 'package:librino/presentation/screens/login_screen.dart';
 import 'package:librino/presentation/screens/register_screen.dart';
 
 abstract class Routes {
@@ -45,7 +45,7 @@ abstract class Routes {
         return MaterialPageRoute(builder: (ctx) {
           return BlocProvider<AuthCubit>.value(
             value: Bindings.get(),
-            child: LoginPage(),
+            child: LoginScreen(),
           );
         });
       case register:
@@ -64,7 +64,8 @@ abstract class Routes {
             return MultiBlocProvider(
               providers: [
                 BlocProvider<LoadModulesCubit>.value(value: Bindings.get()),
-                BlocProvider<LoadLessonCubit>.value(value: Bindings.get())
+                BlocProvider<LoadLessonCubit>.value(value: Bindings.get()),
+                BlocProvider<AuthCubit>.value(value: Bindings.get())
               ],
               child: InitialScreen(),
             );

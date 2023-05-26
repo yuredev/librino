@@ -14,7 +14,7 @@ class LibrinoScaffold extends StatelessWidget {
   const LibrinoScaffold({
     Key? key,
     required this.body,
-    this.statusBarColor = LibrinoColors.statusBarGray,
+    this.statusBarColor = LibrinoColors.grayStatusBar,
     this.rightDrawer,
     this.floatingActionButton,
     this.floatingActionButtonLocation,

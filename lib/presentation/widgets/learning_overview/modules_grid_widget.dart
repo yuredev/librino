@@ -24,7 +24,6 @@ class _ModulesGridWidgetState extends State<ModulesGridWidget> {
   void onLoadLesson(BuildContext context, LessonState state) {
     if (state is LessonLoadError) {
       Navigator.pop(context); // loading
-      PresentationUtils.showSnackBar(context, state.message);
     } else if (state is LessonLoaded) {
       Navigator.pop(context); // loading
       PresentationUtils.showBottomModal(
