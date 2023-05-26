@@ -27,6 +27,8 @@ class UserCRUDCubit extends Cubit<UserCRUDState> {
   }) async {
     try {
       emit(CreatingUserState());
+      name = name.replaceRange(0, 1, name[0].toUpperCase());
+      surname = surname.replaceRange(0, 1, surname[0].toUpperCase());
       final fireAuthUser = await _fireAuthRepository.create(
         name: name,
         email: email,

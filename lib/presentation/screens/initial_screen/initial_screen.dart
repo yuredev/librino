@@ -48,16 +48,34 @@ class _InitialScreenState extends State<InitialScreen> {
     const iconsSize = 30.0;
     return LibrinoScaffold(
       backgroundColor: LibrinoColors.backgroundGray,
-      floatingActionButton: activeTab == 2
-          ? FloatingActionButton(
-              onPressed: () {},
-              backgroundColor: LibrinoColors.deepOrange,
-              child: Icon(
-                Icons.search,
-                color: Colors.white,
-              ),
-            )
-          : null,
+      floatingActionButton: BlocBuilder<AuthCubit, AuthState>(
+        buildWhen: (_, state) => state is LoggedInState,
+        builder: (context, state) {
+          final user = (state as LoggedInState).user;
+          return activeTab == 1
+              ? FloatingActionButton(
+                  onPressed: () {},
+                  backgroundColor: LibrinoColors.deepOrange,
+                  child: Icon(
+                    Icons.search,
+                    color: Colors.white,
+                  ),
+                )
+              : user.profileType == ProfileType.instructor
+                  ? FloatingActionButton.extended(
+                      onPressed: () {},
+                      icon: Icon(Icons.add),
+                      label: Text(
+                        'Criar',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 16,
+                        ),
+                      ),
+                    )
+                  : const SizedBox();
+        },
+      ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: activeTab,
         onTap: (index) {

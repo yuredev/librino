@@ -24,11 +24,12 @@ class LoggedOutState extends AuthState {
 
 class LoggedInState extends AuthState {
   final LibrinoUser user;
+  final String token;
 
-  const LoggedInState(this.user);
+  const LoggedInState(this.user, this.token);
 
   @override
-  List<Object?> get props => [user];
+  List<Object?> get props => [user, token];
 }
 
 class LoginErrorState extends AuthState {

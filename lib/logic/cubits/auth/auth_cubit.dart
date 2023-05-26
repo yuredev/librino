@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:librino/core/bindings.dart';
+import 'package:librino/core/constants/storage_keys.dart';
 import 'package:librino/core/enums/enums.dart';
 import 'package:librino/data/models/user/librino_user.dart';
 import 'package:librino/data/repositories/auth_repository.dart';
@@ -9,7 +10,7 @@ import 'package:librino/logic/cubits/auth/auth_state.dart';
 import 'package:librino/logic/cubits/global_alert/global_alert_cubit.dart';
 
 // TODO: converter em HydratedCubit?    (pesquisar como funciona as sessões do Firebase, se são para sempre)
-class AuthCubit extends Cubit<AuthState> {
+class AuthCubit extends HydratedCubit<AuthState> {
   final AuthRepository _authRepository = Bindings.get();
   final FirestoreUserRepository _firestoreUserRepository = Bindings.get();
   final GlobalAlertCubit _globalAlertCubit = Bindings.get();
@@ -34,7 +35,7 @@ class AuthCubit extends Cubit<AuthState> {
         auditoryAbility: firestoreUser.auditoryAbility,
         email: fireAuthUser.email!,
         id: fireAuthUser.uid,
-        profileType: firestoreUser.roles == [0, 1]
+        profileType: firestoreUser.roles.contains(1)
             ? ProfileType.instructor
             : ProfileType.studant,
         name: fireAuthUser.displayName!,
@@ -42,7 +43,7 @@ class AuthCubit extends Cubit<AuthState> {
         genderIdentity: firestoreUser.genderIdentity,
         photoURL: fireAuthUser.photoURL,
       );
-      emit(LoggedInState(user));
+      emit(LoggedInState(user, fireAuthUser.refreshToken!));
     } catch (e) {
       print(e);
       late final String message;
@@ -73,5 +74,31 @@ class AuthCubit extends Cubit<AuthState> {
       _globalAlertCubit.fire('Erro ao sair da sessão');
       emit(LoginErrorState('Erro ao sair da sessão'));
     }
+  }
+
+  @override
+  AuthState? fromJson(Map<String, dynamic> json) {
+    if (![json[StorageKeys.signedUser], json[StorageKeys.token]]
+        .contains(null)) {
+      return LoggedInState(
+        LibrinoUser.fromJson(json[StorageKeys.signedUser]),
+        json[StorageKeys.token],
+      );
+    }
+    return LoggedOutState();
+  }
+
+  @override
+  Map<String, dynamic>? toJson(AuthState state) {
+    if (state is LoggedInState) {
+      return {
+        StorageKeys.signedUser: state.user.toJson(),
+        StorageKeys.token: state.token,
+      };
+    }
+    return {
+      StorageKeys.signedUser: null,
+      StorageKeys.token: null,
+    };
   }
 }

@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:librino/core/bindings.dart';
 import 'package:librino/core/constants/colors.dart';
 import 'package:librino/core/constants/sizes.dart';
 import 'package:librino/core/routes.dart';
 import 'package:librino/logic/cubits/auth/auth_cubit.dart';
 import 'package:librino/logic/cubits/auth/auth_state.dart';
+import 'package:librino/logic/validators/login_validator.dart';
 import 'package:librino/presentation/widgets/shared/button_widget.dart';
 import 'package:librino/presentation/widgets/shared/librino_scaffold.dart';
 
@@ -14,6 +16,7 @@ class LoginScreen extends StatefulWidget {
   @override
   State<LoginScreen> createState() => _LoginScreenState();
 }
+
 
 class _LoginScreenState extends State<LoginScreen> {
   final formKey = GlobalKey<FormState>();
@@ -98,6 +101,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     Container(
                       margin: const EdgeInsets.only(bottom: 16),
                       child: TextFormField(
+                        validator: LoginValidator.validateEmail,
                         autocorrect: false,
                         controller: emailCtrl,
                         style: TextStyle(fontSize: 16),
@@ -140,6 +144,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     Container(
                       margin: const EdgeInsets.only(bottom: 2),
                       child: TextFormField(
+                        validator: LoginValidator.validatePassword,
                         focusNode: passwordFocus,
                         autocorrect: false,
                         controller: passwordCtrl,

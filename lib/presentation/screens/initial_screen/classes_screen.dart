@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:librino/core/constants/colors.dart';
 import 'package:librino/core/constants/sizes.dart';
-import 'package:librino/core/enums/enums.dart';
-import 'package:librino/data/models/user/librino_user.dart';
+import 'package:librino/logic/cubits/auth/auth_cubit.dart';
+import 'package:librino/logic/cubits/auth/auth_state.dart';
 import 'package:librino/presentation/widgets/classes/class_widget.dart';
 import 'package:librino/presentation/widgets/shared/initial_app_bar.dart';
 
@@ -20,19 +21,17 @@ class ClassesScreen extends StatelessWidget {
           SliverList(
             delegate: SliverChildListDelegate(
               [
-                InitialAppBar(
-                  conclusionPercentage: 80,
-                  compact: true,
-                  secondLineText: 'Estas são suas turmas',
-                  user: LibrinoUser(
-                    auditoryAbility: AuditoryAbility.deaf,
-                    email: 'yurematias26@gmail.com',
-                    id: 'SJGFSIJ935FJ',
-                    name: 'Yure',
-                    surname: 'Matias',
-                    profileType: ProfileType.studant,
-                    genderIdentity: GenderIdentity.man,
-                  ),
+                BlocBuilder<AuthCubit, AuthState>(
+                  builder: (context, state) {
+                    final user = (state as LoggedInState).user;
+                    return InitialAppBar(
+                      conclusionPercentage: 80,
+                      compact: true,
+                      user: user,
+                      firstLineText: 'Olá ${user.name},',
+                      secondLineText: 'Estas são suas turmas',
+                    );
+                  },
                 ),
               ],
             ),

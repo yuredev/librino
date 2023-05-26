@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:librino/core/constants/colors.dart';
 import 'package:librino/core/constants/sizes.dart';
+import 'package:librino/core/enums/enums.dart';
 import 'package:librino/data/models/user/librino_user.dart';
 
 class InitialAppBar extends StatelessWidget {
@@ -13,8 +14,8 @@ class InitialAppBar extends StatelessWidget {
   const InitialAppBar({
     super.key,
     required this.user,
-    this.firstLineText = 'Olá Yure Matias',
-    this.secondLineText = 'Continue aprendendo!',
+    required this.firstLineText,
+    required this.secondLineText,
     this.compact = false,
     required this.conclusionPercentage,
   });
@@ -85,16 +86,20 @@ class InitialAppBar extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text(
-                        'Perfil estudante',
+                      Text(
+                        user.profileType == ProfileType.studant
+                            ? 'Perfil estudante'
+                            : 'Perfil instrutor',
                         style: TextStyle(
                           color: LibrinoColors.subtitleLightGray,
                           fontWeight: FontWeight.w500,
                           fontSize: 12,
                         ),
                       ),
-                      const Icon(
-                        Icons.school_outlined,
+                      Icon(
+                        user.profileType == ProfileType.studant
+                            ? Icons.school_outlined
+                            : Icons.cast_for_education,
                         color: LibrinoColors.subtitleLightGray,
                         size: 18,
                       ),
