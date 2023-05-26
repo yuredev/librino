@@ -28,7 +28,7 @@ class ClassesScreen extends StatelessWidget {
                       conclusionPercentage: 80,
                       compact: true,
                       user: user,
-                      firstLineText: 'Olá ${user.name},',
+                      firstLineText: 'Olá ${user.name}',
                       secondLineText: 'Estas são suas turmas',
                     );
                   },

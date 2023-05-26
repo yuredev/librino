@@ -53,7 +53,7 @@ class _ModulesGridWidgetState extends State<ModulesGridWidget> {
                         title: 'Sem resultados',
                         subtitle:
                             'Parece que não há conteúdo na turma selecionada',
-                        imageWidth: consts.maxWidth * 0.7,
+                        imageWidth: consts.maxWidth * .5,
                       )
                     : GridView.count(
                         physics: const NeverScrollableScrollPhysics(),

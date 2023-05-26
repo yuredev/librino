@@ -52,28 +52,42 @@ class _InitialScreenState extends State<InitialScreen> {
         buildWhen: (_, state) => state is LoggedInState,
         builder: (context, state) {
           final user = (state as LoggedInState).user;
-          return activeTab == 1
-              ? FloatingActionButton(
-                  onPressed: () {},
-                  backgroundColor: LibrinoColors.deepOrange,
-                  child: Icon(
-                    Icons.search,
-                    color: Colors.white,
-                  ),
-                )
-              : user.profileType == ProfileType.instructor
-                  ? FloatingActionButton.extended(
-                      onPressed: () {},
-                      icon: Icon(Icons.add),
-                      label: Text(
-                        'Criar',
-                        style: TextStyle(
-                          fontWeight: FontWeight.w600,
-                          fontSize: 16,
-                        ),
+          if (activeTab == 1) {
+            return user.isInstructor
+                ? FloatingActionButton(
+                    onPressed: () {
+                      Navigator.pushNamed(
+                        context,
+                        Routes.createClass,
+                      );
+                    },
+                    child: const Icon(
+                      Icons.add,
+                      color: Colors.white,
+                    ),
+                  )
+                : FloatingActionButton(
+                    onPressed: () {},
+                    child: const Icon(
+                      Icons.search,
+                      color: Colors.white,
+                    ),
+                  );
+          } else {
+            return user.profileType == ProfileType.instructor
+                ? FloatingActionButton.extended(
+                    onPressed: () {},
+                    icon: const Icon(Icons.add),
+                    label: const Text(
+                      'Criar',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 16,
                       ),
-                    )
-                  : const SizedBox();
+                    ),
+                  )
+                : const SizedBox();
+          }
         },
       ),
       bottomNavigationBar: BottomNavigationBar(
@@ -89,13 +103,6 @@ class _InitialScreenState extends State<InitialScreen> {
             ),
             label: 'Aprendizado',
           ),
-          // BottomNavigationBarItem(
-          //   icon: const Icon(
-          //     Icons.leaderboard,
-          //     size: iconsSize,
-          //   ),
-          //   label: 'Ranking',
-          // ),
           BottomNavigationBarItem(
             icon: const Icon(
               Icons.groups,
