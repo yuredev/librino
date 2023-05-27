@@ -536,15 +536,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       current is UserCreatedState,
                   listener: (context, state) async {
                     if (state is UserCreatedState) {
-                      await Future.delayed(
-                        Duration(seconds: 2),
-                        () {},
-                      );
+                      await Future.delayed(Duration(milliseconds: 500), () {});
                       if (context.mounted) {
                         PresentationUtils.showLockedLoading(
                           context,
                           text: 'Entrando na conta...',
                         );
+                      }
+                      await Future.delayed(Duration(seconds: 1), () {});
+                      if (context.mounted) {
                         authCubit.signIn(
                           email: state.user.email,
                           password: passwordCtrl.text,

@@ -28,7 +28,7 @@ class LibrinoScaffold extends StatelessWidget {
     return Scaffold(
       key: key,
       backgroundColor: backgroundColor,
-      appBar: _VoidAppBarWidget(corStatusBar: statusBarColor),
+      appBar: _VoidAppBarWidget(statusBarColor: statusBarColor),
       body: body,
       endDrawer: rightDrawer,
       floatingActionButton: floatingActionButton,
@@ -40,16 +40,16 @@ class LibrinoScaffold extends StatelessWidget {
 }
 
 class _VoidAppBarWidget extends StatelessWidget implements PreferredSizeWidget {
-  final Color corStatusBar;
+  final Color statusBarColor;
 
   const _VoidAppBarWidget({
     Key? key,
-    required this.corStatusBar,
+    required this.statusBarColor,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Container(color: corStatusBar);
+    return Container(color: statusBarColor);
   }
 
   @override

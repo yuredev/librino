@@ -9,6 +9,8 @@ class ButtonWidget extends StatelessWidget {
   final Widget? rightIcon;
   final double borderRadius;
   final Color color;
+  final Color? borderColor;
+  final double? borderWidth;
   final Color textColor;
   final double? fontSize;
   final FontWeight? fontWeight;
@@ -42,12 +44,14 @@ class ButtonWidget extends StatelessWidget {
     this.loadingText,
     this.isLoading = false,
     this.borderRadius = 5,
+    this.borderColor,
+    this.borderWidth,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final estiloFonte = GoogleFonts.roboto(
-      fontSize: fontSize ?? 20,
+      fontSize: fontSize ?? 18,
       fontWeight: fontWeight ?? FontWeight.w700,
       color: onPress == null ? Colors.white : textColor,
     );
@@ -112,6 +116,12 @@ class ButtonWidget extends StatelessWidget {
           tapTargetSize: MaterialTapTargetSize.shrinkWrap,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(borderRadius),
+            side: borderColor != null || borderWidth == 0
+                ? BorderSide(
+                    color: borderColor ?? Colors.black,
+                    width: borderWidth ?? 1,
+                  )
+                : BorderSide.none,
           ),
         ),
         child: child,

@@ -26,6 +26,8 @@ class LibrinoUser extends Equatable {
     this.photoURL,
   });
 
+  bool get isInstructor => profileType == ProfileType.instructor;
+
   @override
   List<Object?> get props => [
         auditoryAbility,

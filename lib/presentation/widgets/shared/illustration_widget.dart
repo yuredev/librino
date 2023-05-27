@@ -72,7 +72,7 @@ class IllustrationWidget extends StatelessWidget {
                 subtitle!,
                 textAlign: subtitleAlignment,
                 style: TextStyle(
-                  fontSize: fontSize - 3.5,
+                  fontSize: fontSize - 3,
                   color: LibrinoColors.subtitleGray,
                 ),
               ),

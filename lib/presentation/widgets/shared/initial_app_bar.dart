@@ -98,8 +98,8 @@ class InitialAppBar extends StatelessWidget {
                       ),
                       Icon(
                         user.profileType == ProfileType.studant
-                            ? Icons.school_outlined
-                            : Icons.cast_for_education,
+                            ? Icons.local_library_outlined
+                            : Icons.school_outlined,
                         color: LibrinoColors.subtitleLightGray,
                         size: 18,
                       ),

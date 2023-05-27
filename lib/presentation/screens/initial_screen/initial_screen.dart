@@ -6,6 +6,12 @@ import 'package:librino/core/routes.dart';
 import 'package:librino/data/models/user/librino_user.dart';
 import 'package:librino/logic/cubits/auth/auth_cubit.dart';
 import 'package:librino/logic/cubits/auth/auth_state.dart';
+import 'package:librino/logic/cubits/class/load/load_classes_cubit.dart';
+import 'package:librino/logic/cubits/class/load/load_classes_state.dart';
+import 'package:librino/logic/cubits/class/load_default/load_default_class_cubit.dart';
+import 'package:librino/logic/cubits/class/load_default/load_default_class_state.dart';
+import 'package:librino/logic/cubits/class/select/select_class_cubit.dart';
+import 'package:librino/logic/cubits/class/select/select_class_state.dart';
 import 'package:librino/logic/cubits/module/load_modules_cubit.dart';
 import 'package:librino/presentation/screens/initial_screen/classes_screen.dart';
 import 'package:librino/presentation/screens/initial_screen/learning_overview_screen.dart';
@@ -22,17 +28,33 @@ class InitialScreen extends StatefulWidget {
 }
 
 class _InitialScreenState extends State<InitialScreen> {
-  late final listCubit = context.read<LoadModulesCubit>();
+  late final LoadModulesCubit loadModulesCubit = context.read();
+  late final LoadClassesCubit loadClassesCubit = context.read();
+  late final SelectClassCubit selectClassCubit = context.read();
+  late final LoadDefaultClassCubit loadDefaultClassCubit = context.read();
+
   late final List<Widget> tabs;
   var activeTab = 0;
 
   @override
   void initState() {
-    listCubit.loadFromClass(defaultClass);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      loadDefaultClassCubit.load();
+      loadModulesCubit.loadFromClass(defaultClass);
+      loadClassesCubit.load();
+    });
     tabs = [
-      LearningOverviewScreen(listCubit: listCubit),
-      // RankingScreen(),
-      ClassesScreen(),
+      LearningOverviewScreen(
+        listCubit: loadModulesCubit,
+        switchTabCallback: () => setState(
+          () => activeTab = 1,
+        ),
+      ),
+      ClassesScreen(
+        switchTabCallback: () => setState(
+          () => activeTab = 0,
+        ),
+      ),
     ];
     super.initState();
   }
@@ -40,6 +62,15 @@ class _InitialScreenState extends State<InitialScreen> {
   void onAuthListen(BuildContext context, AuthState state) {
     if (state is LoggedOutState) {
       Navigator.pushReplacementNamed(context, Routes.login);
+    }
+  }
+
+  void onLoadDefaultClassListen(
+      BuildContext context, LoadDefaultClassState state) {
+    if (state is DefaultClassLoadedState) {
+      selectClassCubit.select(state.clazz);
+    } else if (state is ErrorAtLoadDefaultClassState) {
+      // TODO: fazer algo caso não seja possível encontrar a turma padrão?
     }
   }
 
@@ -52,28 +83,42 @@ class _InitialScreenState extends State<InitialScreen> {
         buildWhen: (_, state) => state is LoggedInState,
         builder: (context, state) {
           final user = (state as LoggedInState).user;
-          return activeTab == 1
-              ? FloatingActionButton(
-                  onPressed: () {},
-                  backgroundColor: LibrinoColors.deepOrange,
-                  child: Icon(
-                    Icons.search,
-                    color: Colors.white,
-                  ),
-                )
-              : user.profileType == ProfileType.instructor
-                  ? FloatingActionButton.extended(
-                      onPressed: () {},
-                      icon: Icon(Icons.add),
-                      label: Text(
-                        'Criar',
-                        style: TextStyle(
-                          fontWeight: FontWeight.w600,
-                          fontSize: 16,
-                        ),
+          if (activeTab == 1) {
+            return user.isInstructor
+                ? FloatingActionButton(
+                    onPressed: () {
+                      Navigator.pushNamed(
+                        context,
+                        Routes.createClass,
+                      );
+                    },
+                    child: const Icon(
+                      Icons.add,
+                      color: Colors.white,
+                    ),
+                  )
+                : FloatingActionButton(
+                    onPressed: () {},
+                    child: const Icon(
+                      Icons.search,
+                      color: Colors.white,
+                    ),
+                  );
+          } else {
+            return user.profileType == ProfileType.instructor
+                ? FloatingActionButton.extended(
+                    onPressed: () {},
+                    icon: const Icon(Icons.add),
+                    label: const Text(
+                      'Criar',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 16,
                       ),
-                    )
-                  : const SizedBox();
+                    ),
+                  )
+                : const SizedBox();
+          }
         },
       ),
       bottomNavigationBar: BottomNavigationBar(
@@ -89,13 +134,6 @@ class _InitialScreenState extends State<InitialScreen> {
             ),
             label: 'Aprendizado',
           ),
-          // BottomNavigationBarItem(
-          //   icon: const Icon(
-          //     Icons.leaderboard,
-          //     size: iconsSize,
-          //   ),
-          //   label: 'Ranking',
-          // ),
           BottomNavigationBarItem(
             icon: const Icon(
               Icons.groups,
@@ -105,21 +143,32 @@ class _InitialScreenState extends State<InitialScreen> {
           ),
         ],
       ),
-      rightDrawer: LibrinoDrawer(
-        user: LibrinoUser(
-          auditoryAbility: AuditoryAbility.deaf,
-          email: 'yurematias26@gmail.com',
-          id: 'SJGFSIJ935FJ',
-          name: 'Yure',
-          surname: 'Matias',
-          profileType: ProfileType.studant,
-          genderIdentity: GenderIdentity.man,
+      rightDrawer: BlocBuilder<AuthCubit, AuthState>(
+        buildWhen: (previous, current) => current is LoggedInState,
+        builder: (context, state) => LibrinoDrawer(
+          user: (state as LoggedInState).user,
         ),
       ),
-      body: BlocListener<AuthCubit, AuthState>(
-        listenWhen: (previous, current) => current is LoggedOutState,
-        listener: onAuthListen,
-        child: tabs[activeTab],
+      body: BlocBuilder<AuthCubit, AuthState>(
+        buildWhen: (previous, current) => current is LoggedInState,
+        builder: (previous, authState) => MultiBlocListener(
+          listeners: [
+            BlocListener<AuthCubit, AuthState>(
+              listenWhen: (previous, current) => current is LoggedOutState,
+              listener: onAuthListen,
+              child: tabs[activeTab],
+            ),
+            BlocListener<LoadDefaultClassCubit, LoadDefaultClassState>(
+              listenWhen: (_, state) =>
+                  selectClassCubit.state.clazz == null &&
+                  (authState as LoggedInState).user.profileType ==
+                      ProfileType.studant,
+              listener: onLoadDefaultClassListen,
+              child: tabs[activeTab],
+            ),
+          ],
+          child: tabs[activeTab],
+        ),
       ),
     );
   }

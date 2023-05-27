@@ -1,13 +1,25 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:librino/core/constants/colors.dart';
 import 'package:librino/core/constants/sizes.dart';
 import 'package:librino/core/routes.dart';
 import 'package:librino/data/models/class/class.dart';
+import 'package:librino/logic/cubits/class/select/select_class_cubit.dart';
+import 'package:librino/presentation/utils/presentation_utils.dart';
 import 'package:librino/presentation/widgets/shared/button_widget.dart';
 import 'package:librino/presentation/widgets/shared/modal_top_bar_widget.dart';
 
 class SelectClassModal extends StatelessWidget {
-  const SelectClassModal({super.key});
+  final Class clazz;
+  final SelectClassCubit cubit;
+  final void Function() switchTabCallback;
+
+  const SelectClassModal({
+    Key? key,
+    required this.clazz,
+    required this.cubit,
+    required this.switchTabCallback,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +44,7 @@ class SelectClassModal extends StatelessWidget {
                 bottom: 24,
               ),
               child: Text(
-                'Turma LIBRAS A3853-JADIF',
+                clazz.name,
                 style: TextStyle(
                   fontSize: 16.5,
                   fontWeight: FontWeight.bold,
@@ -54,7 +66,7 @@ class SelectClassModal extends StatelessWidget {
                 ),
                 children: [
                   TextSpan(
-                    text: 'Fulano da Silva',
+                    text: clazz.ownerName,
                     style: TextStyle(
                       fontWeight: FontWeight.w400,
                     ),
@@ -63,6 +75,7 @@ class SelectClassModal extends StatelessWidget {
               ),
             ),
           ),
+          // TODO:
           RichText(
             text: TextSpan(
               text: 'N° de participantes: ',
@@ -87,21 +100,14 @@ class SelectClassModal extends StatelessWidget {
               bottom: 16,
             ),
             child: ButtonWidget(
-              title: 'Ver turma',
+              title: 'Ver Turma',
               width: double.infinity,
               height: Sizes.defaultButtonHeight,
               onPress: () {
                 Navigator.pushNamed(
                   context,
                   Routes.classDetails,
-                  arguments: {
-                    'class': Class(
-                      description:
-                          'lorem ipsilum dolor conseq asag mmvndj iw3iwwr aso da tas vasfj',
-                      id: '343446439JAJJFA44t-0-0VSKOKOSF_k34k035556[]~;;s',
-                      name: 'A3853-JADIF',
-                    )
-                  },
+                  arguments: {'class': clazz},
                 );
               },
               color: LibrinoColors.buttonGray,
@@ -112,10 +118,14 @@ class SelectClassModal extends StatelessWidget {
               bottom: 13,
             ),
             child: ButtonWidget(
-              title: 'Tornar turma ativa',
+              title: 'Selecionar Turma',
               width: double.infinity,
               height: Sizes.defaultButtonHeight,
-              onPress: () {},
+              onPress: () {
+                cubit.select(clazz);
+                PresentationUtils.showToast('${clazz.name} selecionada!');
+                Navigator.pop(context);
+              },
             ),
           )
         ],

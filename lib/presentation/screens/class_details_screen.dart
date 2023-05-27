@@ -32,7 +32,7 @@ class _ClassDetailsScreenState extends State<ClassDetailsScreen> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      loadCubit.loadFromClass(widget.clazz.id);
+      loadCubit.loadFromClass(widget.clazz.id!);
     });
   }
 
@@ -101,7 +101,7 @@ class _ClassDetailsScreenState extends State<ClassDetailsScreen> {
       ),
       body: BlocBuilder<LoadParticipantsCubit, LoadParticipantsState>(
         builder: (context, state) => RefreshIndicator(
-          onRefresh: () => loadCubit.loadFromClass(widget.clazz.id),
+          onRefresh: () => loadCubit.loadFromClass(widget.clazz.id!),
           child: CustomScrollView(
             slivers: [
               SliverList(

@@ -25,6 +25,7 @@ abstract class LibrinoColors {
   static const grayPlaceholder = Color(0xFFC3C3C3);
   static const iconGray = Color(0xFFB7B7B7);
   static const subtitleGray = Color(0xFF909090);
+  static const subtitleDarkGray = Color.fromARGB(255, 90, 90, 90);
   static const subtitleLightGray = Color(0xFFBEBEBE);
   static const lightPurple = Color(0xFFCFD4EE);
   static const toastGray = Color(0xFF666666);
