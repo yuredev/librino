@@ -17,6 +17,14 @@ class AuthCubit extends HydratedCubit<AuthState> {
 
   AuthCubit() : super(LoggedOutState());
 
+  LibrinoUser? get signedUser {
+    if (state is LoggedInState) {
+      return (state as LoggedInState).user;
+    } else {
+      return null;
+    }
+  }
+
   Future<void> signIn({
     required String email,
     required String password,

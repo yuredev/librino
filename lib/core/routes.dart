@@ -5,6 +5,9 @@ import 'package:librino/data/models/class/class.dart';
 import 'package:librino/data/models/play_lesson_dto.dart';
 import 'package:librino/logic/cubits/auth/auth_cubit.dart';
 import 'package:librino/logic/cubits/class/crud/class_crud_cubit.dart';
+import 'package:librino/logic/cubits/class/load/load_classes_cubit.dart';
+import 'package:librino/logic/cubits/class/load_default/load_default_class_cubit.dart';
+import 'package:librino/logic/cubits/class/select/select_class_cubit.dart';
 import 'package:librino/logic/cubits/lesson/load_lesson_cubit.dart';
 import 'package:librino/logic/cubits/module/load_modules_cubit.dart';
 import 'package:librino/logic/cubits/participants/load_participants_cubit.dart';
@@ -68,7 +71,10 @@ abstract class Routes {
               providers: [
                 BlocProvider<LoadModulesCubit>.value(value: Bindings.get()),
                 BlocProvider<LoadLessonCubit>.value(value: Bindings.get()),
-                BlocProvider<AuthCubit>.value(value: Bindings.get())
+                BlocProvider<LoadClassesCubit>.value(value: Bindings.get()),
+                BlocProvider<LoadDefaultClassCubit>.value(value: Bindings.get()),
+                BlocProvider<AuthCubit>.value(value: Bindings.get()),
+                BlocProvider<SelectClassCubit>.value(value: Bindings.get()),
               ],
               child: InitialScreen(),
             );

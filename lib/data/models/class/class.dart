@@ -10,18 +10,23 @@ class Class extends Equatable {
   final String description;
   final String? id;
   final String? ownerId;
+  final String? ownerName;
 
   const Class({
     required this.description,
     this.id,
     required this.name,
     this.ownerId,
+    this.ownerName,
   });
 
   @override
   List<Object?> get props => [
         description,
         id,
+        ownerId,
+        name,
+        ownerName,
       ];
 
   factory Class.fromJson(Map<String, dynamic> json) => _$ClassFromJson(json);
@@ -33,12 +38,14 @@ class Class extends Equatable {
     String? description,
     String? id,
     String? ownerId,
+    String? ownerName,
   }) {
     return Class(
       name: name ?? this.name,
       description: description ?? this.description,
       id: id ?? this.id,
       ownerId: ownerId ?? this.ownerId,
+      ownerName: ownerName ?? this.ownerName,
     );
   }
 }

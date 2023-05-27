@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:librino/core/bindings.dart';
+import 'package:librino/core/constants/firebase_constants.dart';
 import 'package:librino/data/models/class/class.dart';
 
 class ClassRepository {
@@ -10,5 +11,24 @@ class ClassRepository {
     final snapshot = await docRef.get();
     final userData = snapshot.data();
     return Class.fromJson(userData!);
+  }
+
+  Future<Class> getDefault() async {
+    final classes = _collection
+        .where(
+          'id',
+          isEqualTo: FirebaseConstants.defaultClassId,
+        )
+        .limit(1);
+    final querySnap = await classes.get();
+    final all = querySnap.docs.map((e) => Class.fromJson(e.data())).toList();
+    return all.first;
+  }
+
+  Future<List<Class>> getFromInstructor(String instructorId) async {
+    final classes = _collection.where('ownerId', isEqualTo: instructorId);
+    final querySnap = await classes.get();
+    final all = querySnap.docs.map((e) => Class.fromJson(e.data())).toList();
+    return all;
   }
 }

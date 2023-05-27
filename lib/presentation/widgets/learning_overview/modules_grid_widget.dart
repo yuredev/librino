@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:librino/data/models/module/module.dart';
+import 'package:librino/logic/cubits/class/select/select_class_cubit.dart';
+import 'package:librino/logic/cubits/class/select/select_class_state.dart';
 import 'package:librino/logic/cubits/lesson/lesson_state.dart';
 import 'package:librino/logic/cubits/lesson/load_lesson_cubit.dart';
 import 'package:librino/logic/cubits/module/load_modules_cubit.dart';
@@ -48,12 +50,15 @@ class _ModulesGridWidgetState extends State<ModulesGridWidget> {
             builder: (context, state) {
               if (state is HomeModulesListLoaded) {
                 return state.modules.isEmpty
-                    ? IllustrationWidget(
-                        illustrationName: 'no-data.png',
-                        title: 'Sem resultados',
-                        subtitle:
-                            'Parece que não há conteúdo na turma selecionada',
-                        imageWidth: consts.maxWidth * .5,
+                    ? BlocBuilder<SelectClassCubit, SelectClassState>(
+                        builder: (context, state) => IllustrationWidget(
+                          illustrationName: 'no-data.png',
+                          title: 'Sem resultados',
+                          subtitle: state.clazz == null
+                              ? 'Nenhuma turma foi selecionada. Selecione uma turma para ver seu conteúdo'
+                              : 'Parece que não há nada postado aqui',
+                          imageWidth: consts.maxWidth * .47,
+                        ),
                       )
                     : GridView.count(
                         physics: const NeverScrollableScrollPhysics(),

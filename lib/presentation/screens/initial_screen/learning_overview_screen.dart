@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:librino/core/constants/colors.dart';
 import 'package:librino/core/constants/sizes.dart';
 import 'package:librino/core/enums/enums.dart';
 import 'package:librino/logic/cubits/auth/auth_cubit.dart';
 import 'package:librino/logic/cubits/auth/auth_state.dart';
+import 'package:librino/logic/cubits/class/select/select_class_cubit.dart';
+import 'package:librino/logic/cubits/class/select/select_class_state.dart';
 import 'package:librino/logic/cubits/module/load_modules_cubit.dart';
 import 'package:librino/presentation/widgets/shared/initial_app_bar.dart';
 import 'package:librino/presentation/widgets/learning_overview/modules_grid_widget.dart';
@@ -12,10 +15,12 @@ import 'package:librino/presentation/widgets/shared/refreshable_scrollview_widge
 const defaultClass = 'ZuNAujmyuUYeRfJdJKdi';
 
 class LearningOverviewScreen extends StatefulWidget {
+  final void Function() switchTabCallback;
   final LoadModulesCubit listCubit;
 
   const LearningOverviewScreen({
     required this.listCubit,
+    required this.switchTabCallback,
   });
 
   @override
@@ -57,20 +62,25 @@ class _LearningOverviewScreenState extends State<LearningOverviewScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    //TODO: mudar texto
                     Container(
-                      margin: const EdgeInsets.only(bottom: 18, left: 6),
+                      margin: const EdgeInsets.only(bottom: 35, left: 6),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Container(
-                            child: Text(
-                              user.profileType == ProfileType.studant
-                                  ? 'Seu aprendizado'
-                                  : 'Conteúdo da turma: X',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 14.5,
+                          BlocBuilder<SelectClassCubit, SelectClassState>(
+                            builder: (context, state) => Flexible(
+                              child: Text(
+                                state.clazz?.name ??
+                                    'Nenhuma turma selecionada',
+                                style: TextStyle(
+                                  fontWeight: state.clazz == null
+                                      ? null
+                                      : FontWeight.bold,
+                                  fontSize: 14.5,
+                                  color: state.clazz == null
+                                      ? LibrinoColors.subtitleGray
+                                      : null,
+                                ),
                               ),
                             ),
                           ),
@@ -84,7 +94,7 @@ class _LearningOverviewScreenState extends State<LearningOverviewScreen> {
                                   vertical: 4,
                                 ),
                               ),
-                              onPressed: () {},
+                              onPressed: widget.switchTabCallback,
                               child: Text(
                                 'Mudar turma',
                                 style: TextStyle(
