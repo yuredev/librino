@@ -9,8 +9,10 @@ class ClassRepository {
   Future<Class> create(Class clazz) async {
     final docRef = await _collection.add(clazz.toJson());
     final snapshot = await docRef.get();
-    final userData = snapshot.data();
-    return Class.fromJson(userData!);
+    final data = snapshot.data()!;
+    data.update('id', (_) => docRef.id);
+    await docRef.update(data);
+    return Class.fromJson(data);
   }
 
   Future<Class> getDefault() async {
@@ -30,5 +32,22 @@ class ClassRepository {
     final querySnap = await classes.get();
     final all = querySnap.docs.map((e) => Class.fromJson(e.data())).toList();
     return all;
+  }
+
+  Future<Class?> getById(String id) async {
+    if (id == FirebaseConstants.defaultClassId) return null;
+    final classes = _collection.where('id', isEqualTo: id);
+    try {
+      final querySnap = await classes.get();
+      final all = querySnap.docs.map((e) => Class.fromJson(e.data())).toList();
+      return all.first;
+    } catch (e) {
+      if (e is StateError && e.message == 'No element') {
+        return null;
+      } else {
+        print(e);
+        rethrow;
+      }
+    }
   }
 }

@@ -28,6 +28,8 @@ class LibrinoUser extends Equatable {
 
   bool get isInstructor => profileType == ProfileType.instructor;
 
+  String get completeName => '$name $surname';
+
   @override
   List<Object?> get props => [
         auditoryAbility,

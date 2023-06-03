@@ -47,7 +47,7 @@ class _LearningOverviewScreenState extends State<LearningOverviewScreen> {
               InitialAppBar(
                 conclusionPercentage: 80,
                 user: user,
-                firstLineText: 'Olá ${user.name}',
+                firstLineText: 'Olá ${user.name},',
                 secondLineText: user.profileType == ProfileType.studant
                     ? 'Continue aprendendo!'
                     : 'Continue criando!',

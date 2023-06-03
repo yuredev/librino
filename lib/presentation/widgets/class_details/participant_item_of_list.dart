@@ -45,7 +45,7 @@ class ParticipantItemOfListWidget extends StatelessWidget {
               isLoading
                   ? Container(
                       margin: const EdgeInsets.only(bottom: 8),
-                      child: GrayBarWidget(
+                      child: const GrayBarWidget(
                         height: 15,
                         width: 190,
                       ),
@@ -58,7 +58,7 @@ class ParticipantItemOfListWidget extends StatelessWidget {
                       ),
                     ),
               isLoading
-                  ? GrayBarWidget(
+                  ? const GrayBarWidget(
                       height: 15,
                       width: 150,
                     )

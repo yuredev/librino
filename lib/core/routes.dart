@@ -4,13 +4,16 @@ import 'package:librino/core/bindings.dart';
 import 'package:librino/data/models/class/class.dart';
 import 'package:librino/data/models/play_lesson_dto.dart';
 import 'package:librino/logic/cubits/auth/auth_cubit.dart';
-import 'package:librino/logic/cubits/class/crud/class_crud_cubit.dart';
+import 'package:librino/logic/cubits/class/actions/class_actions_cubit.dart';
 import 'package:librino/logic/cubits/class/load/load_classes_cubit.dart';
 import 'package:librino/logic/cubits/class/load_default/load_default_class_cubit.dart';
+import 'package:librino/logic/cubits/class/search/search_class_cubit.dart';
 import 'package:librino/logic/cubits/class/select/select_class_cubit.dart';
 import 'package:librino/logic/cubits/lesson/load_lesson_cubit.dart';
 import 'package:librino/logic/cubits/module/load_modules_cubit.dart';
 import 'package:librino/logic/cubits/participants/load_participants_cubit.dart';
+import 'package:librino/logic/cubits/subscription/actions/subscription_actions_cubit.dart';
+import 'package:librino/logic/cubits/subscription/load/load_subscriptions_cubit.dart';
 import 'package:librino/logic/cubits/user/user_crud_cubit.dart';
 import 'package:librino/presentation/screens/class_details_screen.dart';
 import 'package:librino/presentation/screens/create_class_screen.dart';
@@ -23,6 +26,7 @@ import 'package:librino/presentation/screens/lesson_steps/word_to_libras_screen.
 import 'package:librino/presentation/screens/introduction_screen.dart';
 import 'package:librino/presentation/screens/login_screen.dart';
 import 'package:librino/presentation/screens/register_screen.dart';
+import 'package:librino/presentation/screens/search_class_screen.dart';
 
 abstract class Routes {
   static const home = '/home';
@@ -31,6 +35,7 @@ abstract class Routes {
   static const classDetails = '/class-details';
   static const login = '/login';
   static const createClass = '/create-class';
+  static const searchClass = '/search-class';
   // Lesson
   static const supportContent = '/support-content';
   static const librasToPhraseQuestion = '/libras-to-phrase-question';
@@ -72,9 +77,15 @@ abstract class Routes {
                 BlocProvider<LoadModulesCubit>.value(value: Bindings.get()),
                 BlocProvider<LoadLessonCubit>.value(value: Bindings.get()),
                 BlocProvider<LoadClassesCubit>.value(value: Bindings.get()),
-                BlocProvider<LoadDefaultClassCubit>.value(value: Bindings.get()),
                 BlocProvider<AuthCubit>.value(value: Bindings.get()),
                 BlocProvider<SelectClassCubit>.value(value: Bindings.get()),
+                BlocProvider<SubscriptionActionsCubit>.value(value: Bindings.get()),
+                BlocProvider<LoadDefaultClassCubit>.value(
+                  value: Bindings.get(),
+                ),
+                BlocProvider<LoadSubscriptionsCubit>.value(
+                  value: Bindings.get(),
+                ),
               ],
               child: InitialScreen(),
             );
@@ -122,9 +133,20 @@ abstract class Routes {
         );
       case createClass:
         return MaterialPageRoute(
-          builder: (ctx) => BlocProvider<ClassCRUDCubit>.value(
+          builder: (ctx) => BlocProvider<ClassActionsCubit>.value(
             value: Bindings.get(),
             child: CreateClassScreen(),
+          ),
+        );
+      case searchClass:
+        return MaterialPageRoute(
+          builder: (ctx) => MultiBlocProvider(
+            providers: [
+              BlocProvider<SubscriptionActionsCubit>.value(
+                  value: Bindings.get()),
+              BlocProvider<SearchClassCubit>.value(value: Bindings.get()),
+            ],
+            child: SearchClassScreen(),
           ),
         );
     }

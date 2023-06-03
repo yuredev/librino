@@ -10,9 +10,9 @@ class SelectClassCubit extends HydratedCubit<SelectClassState> {
 
   SelectClassCubit() : super(SelectClassState(null));
 
-  void select(Class clazz) {
+  void select(Class? clazz) {
     emit(SelectClassState(clazz));
-    _loadModulesCubit.loadFromClass(clazz.id!);
+    if (clazz != null) _loadModulesCubit.loadFromClass(clazz.id!);
   }
 
   @override

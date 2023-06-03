@@ -3,25 +3,22 @@ import 'package:librino/core/bindings.dart';
 import 'package:librino/data/models/class/class.dart';
 import 'package:librino/data/repositories/class_repository.dart';
 import 'package:librino/logic/cubits/auth/auth_cubit.dart';
-import 'package:librino/logic/cubits/class/crud/class_crud_state.dart';
+import 'package:librino/logic/cubits/class/actions/class_actions_state.dart';
 import 'package:librino/logic/cubits/class/load/load_classes_cubit.dart';
 import 'package:librino/logic/cubits/global_alert/global_alert_cubit.dart';
-import 'package:uuid/uuid.dart';
 
-class ClassCRUDCubit extends Cubit<ClassCRUDState> {
+class ClassActionsCubit extends Cubit<ClassActionsState> {
   final ClassRepository _classRepository = Bindings.get();
   final GlobalAlertCubit _globalAlertCubit = Bindings.get();
   final LoadClassesCubit _loadClassesCubit = Bindings.get();
   final AuthCubit _authCubit = Bindings.get();
-  final _uuid = Uuid();
 
-  ClassCRUDCubit() : super(InitialClassCRUDState());
+  ClassActionsCubit() : super(InitialClassActionsState());
 
   Future<void> create(Class clazz) async {
     try {
       emit(CreatingClassState());
       final classToCreate = clazz.copyWith(
-        id: _uuid.v4(),
         ownerId: _authCubit.signedUser!.id,
       );
       final createdClass = await _classRepository.create(classToCreate);

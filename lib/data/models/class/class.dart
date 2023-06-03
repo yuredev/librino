@@ -10,6 +10,7 @@ class Class extends Equatable {
   final String description;
   final String? id;
   final String? ownerId;
+  @JsonKey(includeToJson: false)
   final String? ownerName;
 
   const Class({

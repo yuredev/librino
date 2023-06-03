@@ -5,11 +5,14 @@ abstract class LibrinoColors {
   static const mainBlue = Color(0xFF457AC9);
   static const main = Color(0xFF457AC9);
   static const mainDeeper = Color.fromARGB(255, 52, 92, 151);
+  static const classFoundBlue = Color.fromARGB(255, 114, 128, 136);
   // static const deepOrange = Color(0xFFFF7940);
   static const deepOrange = Color.fromARGB(255, 57, 102, 170);
   static const lightGray = Color(0xFFEFEFEF);
+  static const lightGrayDarker = Color(0xFFEEEEEE);
   static const backgroundGray = Color(0xFFF3F7FF);
-  static const grayStatusBar = Color.fromARGB(255, 247, 247, 247);
+  static const statusBarGray = Color.fromARGB(255, 247, 247, 247);
+  static const inforCardGray = Color(0xFFF0F0F5);
   static const disabledGray = Color(0xFFD1D1D1);
   static const backgroundWhite = Color.fromARGB(255, 253, 253, 255);
   static const alertYellow = Color(0xFFE3A702);
@@ -30,4 +33,6 @@ abstract class LibrinoColors {
   static const lightPurple = Color(0xFFCFD4EE);
   static const toastGray = Color(0xFF666666);
   static const validationErrorRed = Color.fromARGB(255, 200, 10, 10);
+  static const textLightGray = Color.fromARGB(255, 209, 209, 209);
+  static const whiteRed = Color.fromARGB(255, 255, 226, 224);
 }

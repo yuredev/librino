@@ -41,6 +41,7 @@ class UserCRUDCubit extends Cubit<UserCRUDState> {
           roles: profileType == ProfileType.instructor ? [0, 1] : [0],
           genderIdentity: genderIdentity,
           surname: surname,
+          name: name,
         ),
       );
       _globalAlertCubit.fire('Conta criada com sucesso!');

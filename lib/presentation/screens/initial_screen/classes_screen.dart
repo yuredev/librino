@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_html/flutter_html.dart';
 import 'package:librino/core/constants/colors.dart';
 import 'package:librino/core/constants/sizes.dart';
 import 'package:librino/logic/cubits/auth/auth_cubit.dart';
@@ -29,13 +28,14 @@ class ClassesScreen extends StatelessWidget {
               delegate: SliverChildListDelegate(
                 [
                   BlocBuilder<AuthCubit, AuthState>(
+                    buildWhen: (previous, current) => current is LoggedInState,
                     builder: (context, state) {
                       final user = (state as LoggedInState).user;
                       return InitialAppBar(
                         conclusionPercentage: 80,
                         compact: true,
                         user: user,
-                        firstLineText: 'Olá ${user.name}',
+                        firstLineText: 'Olá ${user.name},',
                         secondLineText: 'Estas são suas turmas',
                       );
                     },
@@ -78,8 +78,8 @@ class ClassesScreen extends StatelessWidget {
                                     margin: const EdgeInsets.only(right: 12),
                                     child: Icon(
                                       Icons.group_off,
-                                      color:
-                                          LibrinoColors.iconGray.withOpacity(0.5),
+                                      color: LibrinoColors.iconGray
+                                          .withOpacity(0.5),
                                       size: 30,
                                     ),
                                   ),
@@ -153,13 +153,36 @@ class ClassesScreen extends StatelessWidget {
                   ),
                 ),
               )
+            else if (state is ErrorAtLoadClassesState)
+              SliverPadding(
+                padding: const EdgeInsets.only(
+                  left: Sizes.defaultScreenHorizontalMargin,
+                  right: Sizes.defaultScreenHorizontalMargin,
+                  bottom: Sizes.defaultScreenBottomMargin,
+                  top: 20,
+                ),
+                sliver: SliverList(
+                  delegate: SliverChildListDelegate(
+                    [
+                      IllustrationWidget(
+                        illustrationName: 'error.json',
+                        title: state.errorMessage,
+                        subtitle: 'Verifique sua conexão com a internet',
+                        isAnimation: true,
+                        imageWidth: MediaQuery.of(context).size.width * .65,
+                      )
+                    ],
+                  ),
+                ),
+              )
             else if (state is ClassesLoadedState && state.classes.isEmpty)
               SliverPadding(
                 padding: const EdgeInsets.only(
-                    left: Sizes.defaultScreenHorizontalMargin,
-                    right: Sizes.defaultScreenHorizontalMargin,
-                    bottom: Sizes.defaultScreenBottomMargin,
-                    top: 20),
+                  left: Sizes.defaultScreenHorizontalMargin,
+                  right: Sizes.defaultScreenHorizontalMargin,
+                  bottom: Sizes.defaultScreenBottomMargin,
+                  top: 20,
+                ),
                 sliver: SliverList(
                   delegate: SliverChildListDelegate([
                     BlocBuilder<AuthCubit, AuthState>(

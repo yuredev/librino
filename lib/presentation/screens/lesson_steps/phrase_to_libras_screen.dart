@@ -8,7 +8,6 @@ import 'package:librino/presentation/utils/sound_utils.dart';
 import 'package:librino/presentation/widgets/shared/button_widget.dart';
 import 'package:librino/presentation/widgets/shared/lesson_topbar_widget.dart';
 import 'package:librino/presentation/widgets/shared/librino_scaffold.dart';
-import 'package:librino/presentation/widgets/shared/question_scaffold.dart';
 import 'package:librino/presentation/widgets/shared/question_title.dart';
 import 'package:reorderables/reorderables.dart';
 
@@ -134,7 +133,6 @@ class _PhraseToLibrasScreenState extends State<PhraseToLibrasScreen> {
                           child: Image.network(
                             'https://thumbs.gfycat.com/MiniatureInconsequentialIceblueredtopzebra-size_restricted.gif',
                             fit: BoxFit.cover,
-                            filterQuality: FilterQuality.low,
                           ),
                         ),
                       ),

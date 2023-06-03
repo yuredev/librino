@@ -15,5 +15,6 @@ abstract class LoginValidator {
     if (password == null || password.isEmpty) {
       return 'Preencha a senha';
     }
+    return null;
   }
 }
