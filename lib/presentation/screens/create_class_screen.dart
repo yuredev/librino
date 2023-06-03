@@ -3,8 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:librino/core/constants/colors.dart';
 import 'package:librino/core/constants/sizes.dart';
 import 'package:librino/data/models/class/class.dart';
-import 'package:librino/logic/cubits/class/crud/class_crud_cubit.dart';
-import 'package:librino/logic/cubits/class/crud/class_crud_state.dart';
+import 'package:librino/logic/cubits/class/actions/class_actions_cubit.dart';
+import 'package:librino/logic/cubits/class/actions/class_actions_state.dart';
 import 'package:librino/logic/validators/create_class_validator.dart';
 import 'package:librino/presentation/screens/class_succefully_created_screen.dart';
 import 'package:librino/presentation/widgets/shared/button_widget.dart';
@@ -19,7 +19,7 @@ class CreateClassScreen extends StatefulWidget {
 class _CreateClassScreenState extends State<CreateClassScreen> {
   final nameCtrl = TextEditingController();
   final descriptionCtrl = TextEditingController();
-  late final ClassCRUDCubit classCRUDCubit = context.read();
+  late final ClassActionsCubit classCRUDCubit = context.read();
   final formKey = GlobalKey<FormState>();
 
   void submit(BuildContext context) {
@@ -33,7 +33,7 @@ class _CreateClassScreenState extends State<CreateClassScreen> {
     }
   }
 
-  void onClassCRUDListen(BuildContext context, ClassCRUDState state) {
+  void onClassCRUDListen(BuildContext context, ClassActionsState state) {
     if (state is ClassCreatedState) {
       Navigator.pushReplacement(
         context,
@@ -144,7 +144,7 @@ class _CreateClassScreenState extends State<CreateClassScreen> {
                 ),
                 Container(
                   margin: const EdgeInsets.only(top: 46),
-                  child: BlocConsumer<ClassCRUDCubit, ClassCRUDState>(
+                  child: BlocConsumer<ClassActionsCubit, ClassActionsState>(
                     listener: onClassCRUDListen,
                     builder: (context, state) => ButtonWidget(
                       title: 'Cadastrar Turma',

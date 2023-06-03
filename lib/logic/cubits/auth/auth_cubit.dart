@@ -7,12 +7,14 @@ import 'package:librino/data/models/user/librino_user.dart';
 import 'package:librino/data/repositories/auth_repository.dart';
 import 'package:librino/data/repositories/user/firestore_user_repository.dart';
 import 'package:librino/logic/cubits/auth/auth_state.dart';
+import 'package:librino/logic/cubits/class/select/select_class_cubit.dart';
 import 'package:librino/logic/cubits/global_alert/global_alert_cubit.dart';
 
-// TODO: converter em HydratedCubit?    (pesquisar como funciona as sessões do Firebase, se são para sempre)
+// TODO: pesquisar como funciona as sessões do Firebase, se são para sempre
 class AuthCubit extends HydratedCubit<AuthState> {
   final AuthRepository _authRepository = Bindings.get();
   final FirestoreUserRepository _firestoreUserRepository = Bindings.get();
+  final SelectClassCubit _selectClassCubit = Bindings.get();
   final GlobalAlertCubit _globalAlertCubit = Bindings.get();
 
   AuthCubit() : super(LoggedOutState());
@@ -75,6 +77,7 @@ class AuthCubit extends HydratedCubit<AuthState> {
       final userName = (state as LoggedInState).user.name;
       emit(LoggingOutState());
       await _authRepository.signOut();
+      _selectClassCubit.select(null);
       _globalAlertCubit.fire('Tchau $userName! volte sempre');
       emit(LoggedOutState());
     } catch (e) {

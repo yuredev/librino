@@ -5,17 +5,21 @@ import 'package:librino/data/repositories/auth_repository.dart';
 import 'package:librino/data/repositories/class_repository.dart';
 import 'package:librino/data/repositories/lesson_repository.dart';
 import 'package:librino/data/repositories/module_repository.dart';
+import 'package:librino/data/repositories/subscription_repository.dart';
 import 'package:librino/data/repositories/user/fireauth_user_repository.dart';
 import 'package:librino/data/repositories/user/firestore_user_repository.dart';
 import 'package:librino/logic/cubits/auth/auth_cubit.dart';
-import 'package:librino/logic/cubits/class/crud/class_crud_cubit.dart';
+import 'package:librino/logic/cubits/class/actions/class_actions_cubit.dart';
 import 'package:librino/logic/cubits/class/load/load_classes_cubit.dart';
 import 'package:librino/logic/cubits/class/load_default/load_default_class_cubit.dart';
+import 'package:librino/logic/cubits/class/search/search_class_cubit.dart';
 import 'package:librino/logic/cubits/class/select/select_class_cubit.dart';
 import 'package:librino/logic/cubits/global_alert/global_alert_cubit.dart';
 import 'package:librino/logic/cubits/lesson/load_lesson_cubit.dart';
 import 'package:librino/logic/cubits/module/load_modules_cubit.dart';
 import 'package:librino/logic/cubits/participants/load_participants_cubit.dart';
+import 'package:librino/logic/cubits/subscription/actions/subscription_actions_cubit.dart';
+import 'package:librino/logic/cubits/subscription/load/load_subscriptions_cubit.dart';
 import 'package:librino/logic/cubits/user/user_crud_cubit.dart';
 
 abstract class Bindings {
@@ -33,17 +37,21 @@ abstract class Bindings {
     set(FireAuthUserRepository());
     set(ClassRepository());
     set(AuthRepository());
-    set(GlobalAlertCubit());
-    set(AuthCubit());
-    set(UserCRUDCubit());
+    set(SubscriptionRepository());
     set(ModuleRepository());
     set(LessonRepository());
-    set(LoadLessonCubit());
+    set(GlobalAlertCubit());
     set(LoadModulesCubit());
     set(SelectClassCubit());
+    set(AuthCubit());
+    set(UserCRUDCubit());
+    set(LoadLessonCubit());
+    set(SearchClassCubit());
+    set(LoadSubscriptionsCubit());
+    set(SubscriptionActionsCubit());
     set(LoadClassesCubit());
     set(LoadDefaultClassCubit());
     set(LoadParticipantsCubit());
-    set(ClassCRUDCubit());
+    set(ClassActionsCubit());
   }
 }

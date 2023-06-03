@@ -18,3 +18,5 @@ enum GenderIdentity { man, woman, nonBinary, other }
 enum ProfileType { instructor, studant }
 
 enum AuditoryAbility { hearer, deaf }
+
+enum SubscriptionStage { requested, approved, repproved }

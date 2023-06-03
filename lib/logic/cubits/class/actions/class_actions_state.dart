@@ -1,21 +1,21 @@
 import 'package:equatable/equatable.dart';
 import 'package:librino/data/models/class/class.dart';
 
-abstract class ClassCRUDState extends Equatable {
-  const ClassCRUDState();
+abstract class ClassActionsState extends Equatable {
+  const ClassActionsState();
 }
 
-class InitialClassCRUDState extends ClassCRUDState {
+class InitialClassActionsState extends ClassActionsState {
   @override
   List<Object?> get props => [];
 }
 
-class CreatingClassState extends ClassCRUDState {
+class CreatingClassState extends ClassActionsState {
   @override
   List<Object?> get props => [];
 }
 
-class ClassCreatedState extends ClassCRUDState {
+class ClassCreatedState extends ClassActionsState {
   final Class clazz;
 
   const ClassCreatedState(this.clazz);
@@ -24,7 +24,7 @@ class ClassCreatedState extends ClassCRUDState {
   List<Object?> get props => [];
 }
 
-class ErrorCreatingClassState extends ClassCRUDState {
+class ErrorCreatingClassState extends ClassActionsState {
   final String errorMessage;
 
   const ErrorCreatingClassState(this.errorMessage);

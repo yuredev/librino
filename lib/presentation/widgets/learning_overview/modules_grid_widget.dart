@@ -6,7 +6,7 @@ import 'package:librino/logic/cubits/class/select/select_class_state.dart';
 import 'package:librino/logic/cubits/lesson/lesson_state.dart';
 import 'package:librino/logic/cubits/lesson/load_lesson_cubit.dart';
 import 'package:librino/logic/cubits/module/load_modules_cubit.dart';
-import 'package:librino/logic/cubits/module/module_state.dart';
+import 'package:librino/logic/cubits/module/load_modules_state.dart';
 import 'package:librino/presentation/utils/presentation_utils.dart';
 import 'package:librino/presentation/widgets/learning_overview/lesson_modal_widget.dart';
 import 'package:librino/presentation/widgets/learning_overview/module_grid_item_widget.dart';
@@ -46,7 +46,7 @@ class _ModulesGridWidgetState extends State<ModulesGridWidget> {
       listener: onLoadLesson,
       child: LayoutBuilder(
         builder: (_, consts) {
-          return BlocBuilder<LoadModulesCubit, ModuleState>(
+          return BlocBuilder<LoadModulesCubit, LoadModulesState>(
             builder: (context, state) {
               if (state is HomeModulesListLoaded) {
                 return state.modules.isEmpty
@@ -89,7 +89,7 @@ class _ModulesGridWidgetState extends State<ModulesGridWidget> {
               }
               if (state is HomeModulesListError) {
                 return IllustrationWidget(
-                  illustrationName: 'no-internet.json',
+                  illustrationName: 'error.json',
                   isAnimation: true,
                   title: state.message,
                   imageWidth: consts.maxWidth * 0.49,

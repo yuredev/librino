@@ -3,18 +3,17 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:librino/core/constants/colors.dart';
 import 'package:librino/core/enums/enums.dart';
 import 'package:librino/core/routes.dart';
-import 'package:librino/data/models/user/librino_user.dart';
 import 'package:librino/logic/cubits/auth/auth_cubit.dart';
 import 'package:librino/logic/cubits/auth/auth_state.dart';
 import 'package:librino/logic/cubits/class/load/load_classes_cubit.dart';
-import 'package:librino/logic/cubits/class/load/load_classes_state.dart';
 import 'package:librino/logic/cubits/class/load_default/load_default_class_cubit.dart';
 import 'package:librino/logic/cubits/class/load_default/load_default_class_state.dart';
 import 'package:librino/logic/cubits/class/select/select_class_cubit.dart';
-import 'package:librino/logic/cubits/class/select/select_class_state.dart';
 import 'package:librino/logic/cubits/module/load_modules_cubit.dart';
+import 'package:librino/logic/cubits/subscription/load/load_subscriptions_cubit.dart';
 import 'package:librino/presentation/screens/initial_screen/classes_screen.dart';
 import 'package:librino/presentation/screens/initial_screen/learning_overview_screen.dart';
+import 'package:librino/presentation/screens/subscription_requests_screen.dart';
 import 'package:librino/presentation/widgets/learning_overview/librino_drawer.dart';
 import 'package:librino/presentation/widgets/shared/librino_scaffold.dart';
 
@@ -32,16 +31,19 @@ class _InitialScreenState extends State<InitialScreen> {
   late final LoadClassesCubit loadClassesCubit = context.read();
   late final SelectClassCubit selectClassCubit = context.read();
   late final LoadDefaultClassCubit loadDefaultClassCubit = context.read();
+  late final LoadSubscriptionsCubit loadSubscriptionsCubit = context.read();
 
   late final List<Widget> tabs;
   var activeTab = 0;
 
   @override
   void initState() {
+    super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       loadDefaultClassCubit.load();
       loadModulesCubit.loadFromClass(defaultClass);
       loadClassesCubit.load();
+      loadSubscriptionsCubit.load();
     });
     tabs = [
       LearningOverviewScreen(
@@ -55,8 +57,8 @@ class _InitialScreenState extends State<InitialScreen> {
           () => activeTab = 0,
         ),
       ),
+      SubscriptionRequestsScreen(),
     ];
-    super.initState();
   }
 
   void onAuthListen(BuildContext context, AuthState state) {
@@ -86,39 +88,46 @@ class _InitialScreenState extends State<InitialScreen> {
           if (activeTab == 1) {
             return user.isInstructor
                 ? FloatingActionButton(
-                    onPressed: () {
-                      Navigator.pushNamed(
-                        context,
-                        Routes.createClass,
-                      );
-                    },
-                    child: const Icon(
-                      Icons.add,
-                      color: Colors.white,
+                    onPressed: () =>
+                        Navigator.pushNamed(context, Routes.createClass),
+                    child: Tooltip(
+                      message: 'Adicionar turma',
+                      child: const Icon(
+                        Icons.add,
+                        color: Colors.white,
+                      ),
                     ),
                   )
                 : FloatingActionButton(
-                    onPressed: () {},
-                    child: const Icon(
-                      Icons.search,
-                      color: Colors.white,
+                    onPressed: () =>
+                        Navigator.pushNamed(context, Routes.searchClass),
+                    child: Tooltip(
+                      message: 'Procurar turma',
+                      child: const Icon(
+                        Icons.search,
+                        color: Colors.white,
+                      ),
                     ),
                   );
-          } else {
+          } else if (activeTab == 0) {
             return user.profileType == ProfileType.instructor
                 ? FloatingActionButton.extended(
                     onPressed: () {},
                     icon: const Icon(Icons.add),
-                    label: const Text(
-                      'Criar',
-                      style: TextStyle(
-                        fontWeight: FontWeight.w600,
-                        fontSize: 16,
+                    label: Tooltip(
+                      message: 'Criar conteúdo para a turma',
+                      child: const Text(
+                        'Criar',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 16,
+                        ),
                       ),
                     ),
                   )
                 : const SizedBox();
           }
+          return SizedBox();
         },
       ),
       bottomNavigationBar: BottomNavigationBar(
@@ -127,19 +136,17 @@ class _InitialScreenState extends State<InitialScreen> {
           setState(() => activeTab = index);
         },
         items: [
-          BottomNavigationBarItem(
-            icon: const Icon(
-              Icons.menu_book,
-              size: iconsSize,
-            ),
+          const BottomNavigationBarItem(
+            icon: Icon(Icons.menu_book, size: iconsSize),
             label: 'Aprendizado',
           ),
-          BottomNavigationBarItem(
-            icon: const Icon(
-              Icons.groups,
-              size: iconsSize,
-            ),
+          const BottomNavigationBarItem(
+            icon: Icon(Icons.groups, size: iconsSize),
             label: 'Turmas',
+          ),
+          const BottomNavigationBarItem(
+            icon: Icon(Icons.notifications_active, size: iconsSize),
+            label: 'Solicitações',
           ),
         ],
       ),

@@ -9,13 +9,17 @@ class InitialAppBar extends StatelessWidget {
   final double? conclusionPercentage;
   final bool compact;
   final String firstLineText;
-  final String secondLineText;
+  final String? secondLineText;
+  final double? firstLineTextSize;
+  final Widget? bottomWidget;
 
   const InitialAppBar({
     super.key,
     required this.user,
+    this.bottomWidget,
     required this.firstLineText,
-    required this.secondLineText,
+    this.firstLineTextSize,
+    this.secondLineText,
     this.compact = false,
     required this.conclusionPercentage,
   });
@@ -26,19 +30,20 @@ class InitialAppBar extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          '$firstLineText,',
+          firstLineText,
           style: TextStyle(
             fontWeight: FontWeight.bold,
-            fontSize: compact ? 13 : 15,
+            fontSize: firstLineTextSize ?? (compact ? 13 : 15),
           ),
         ),
-        Text(
-          secondLineText,
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: compact ? 18 : 22,
+        if (secondLineText != null && secondLineText!.isNotEmpty)
+          Text(
+            secondLineText!,
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: compact ? 18 : 22,
+            ),
           ),
-        ),
       ],
     );
     return Container(
@@ -128,7 +133,8 @@ class InitialAppBar extends StatelessWidget {
             Container(
               margin: const EdgeInsets.only(top: Sizes.defaultScreenTopMargin),
               child: messageWidget,
-            )
+            ),
+          if (bottomWidget != null) bottomWidget!,
         ],
       ),
     );

@@ -108,7 +108,7 @@ class ClassWidget extends StatelessWidget {
                       child: isLoading
                           ? const GrayBarWidget(height: 17.5, width: 160)
                           : buildField(
-                              'Professor: ',
+                              'Instrutor: ',
                               clazz?.id == FirebaseConstants.defaultClassId
                                   ? 'Equipe Librino'
                                   : clazz?.ownerName ?? '--'),

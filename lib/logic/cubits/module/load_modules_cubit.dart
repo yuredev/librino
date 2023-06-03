@@ -1,9 +1,9 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:librino/data/repositories/module_repository.dart';
-import './module_state.dart';
+import 'load_modules_state.dart';
 
-class LoadModulesCubit extends Cubit<ModuleState> {
+class LoadModulesCubit extends Cubit<LoadModulesState> {
   final _moduleRepository = GetIt.I.get<ModuleRepository>();
 
   LoadModulesCubit() : super(LoadingHomeModulesList());
@@ -16,10 +16,8 @@ class LoadModulesCubit extends Cubit<ModuleState> {
       emit(HomeModulesListLoaded(modules));
     } catch (e) {
       print(e);
-      // TODO: verificar quando é erro de conexão
-      // O firebase não usa DIO :|
       emit(HomeModulesListError(
-        message: 'Erro de conexão ao buscar os modulos',
+        message: 'Erro ao buscar os modulos de aprendizado',
         isNetworkError: true,
       ));
     }
