@@ -7,7 +7,7 @@ import 'package:librino/logic/cubits/auth/auth_cubit.dart';
 import 'package:librino/logic/cubits/auth/auth_state.dart';
 import 'package:librino/logic/cubits/class/select/select_class_cubit.dart';
 import 'package:librino/logic/cubits/class/select/select_class_state.dart';
-import 'package:librino/logic/cubits/module/load_modules_cubit.dart';
+import 'package:librino/logic/cubits/module/load/load_modules_cubit.dart';
 import 'package:librino/presentation/widgets/shared/initial_app_bar.dart';
 import 'package:librino/presentation/widgets/learning_overview/modules_grid_widget.dart';
 import 'package:librino/presentation/widgets/shared/refreshable_scrollview_widget.dart';

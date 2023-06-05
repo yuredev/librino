@@ -3,7 +3,7 @@ import 'package:librino/core/bindings.dart';
 import 'package:librino/core/constants/storage_keys.dart';
 import 'package:librino/data/models/class/class.dart';
 import 'package:librino/logic/cubits/class/select/select_class_state.dart';
-import 'package:librino/logic/cubits/module/load_modules_cubit.dart';
+import 'package:librino/logic/cubits/module/load/load_modules_cubit.dart';
 
 class SelectClassCubit extends HydratedCubit<SelectClassState> {
   final LoadModulesCubit _loadModulesCubit = Bindings.get();

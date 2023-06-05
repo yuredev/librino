@@ -2,13 +2,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:librino/core/bindings.dart';
 import 'package:librino/data/repositories/lesson_repository.dart';
 import 'package:librino/logic/cubits/global_alert/global_alert_cubit.dart';
-import 'package:librino/logic/cubits/lesson/lesson_state.dart';
+import 'package:librino/logic/cubits/lesson/load/load_lesson_state.dart';
 
-class LoadLessonCubit extends Cubit<LessonState> {
+class LoadSingleLessonCubit extends Cubit<LoadLessonState> {
   final GlobalAlertCubit _globalAlertCubit = Bindings.get();
   final LessonRepository _lessonRepository = Bindings.get();
 
-  LoadLessonCubit() : super(LoadinglLesson());
+  LoadSingleLessonCubit() : super(InitialLoadLessonState());
 
   Future<void> loadLesson(
     String classId,
@@ -16,10 +16,10 @@ class LoadLessonCubit extends Cubit<LessonState> {
     int lessonNumber,
   ) async {
     try {
-      emit(LoadinglLesson());
+      emit(LoadinglLessonState());
       final lesson =
           await _lessonRepository.getLesson(classId, moduleId, lessonNumber);
-      emit(LessonLoaded(lesson));
+      emit(LessonLoadedState(lesson));
     } catch (e) {
       print(e);
       _globalAlertCubit.fire(
@@ -32,4 +32,6 @@ class LoadLessonCubit extends Cubit<LessonState> {
       ));
     }
   }
+
+  void load() {}
 }

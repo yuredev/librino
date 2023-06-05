@@ -1,6 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
 
-// TODO:
 class AuthRepository {
   Future<User> signIn({
     required String email,

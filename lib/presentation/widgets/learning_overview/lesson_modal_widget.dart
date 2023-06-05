@@ -51,7 +51,9 @@ class LessonModalWidget extends StatelessWidget {
               child: Column(
                 children: [
                   Flexible(
-                    child: Image.network(module.imageUrl),
+                    child: module.imageUrl == null
+                        ? Image.asset('assets/images/hand.png')
+                        : Image.network(module.imageUrl!),
                   ),
                   Container(
                     margin: const EdgeInsets.only(top: 12),

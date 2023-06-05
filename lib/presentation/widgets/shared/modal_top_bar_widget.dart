@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:librino/core/constants/colors.dart';
 
-class ModalTopBarWidgetWidget extends StatelessWidget {
-  const ModalTopBarWidgetWidget({Key? key}) : super(key: key);
+class ModalTopBarWidget extends StatelessWidget {
+  const ModalTopBarWidget({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

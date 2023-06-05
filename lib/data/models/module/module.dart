@@ -6,20 +6,31 @@ part 'module.g.dart';
 
 @JsonSerializable()
 class Module extends Equatable {
-  final String id;
+  final String? id;
   final String title;
-  final String imageUrl;
-  final int number;
+  final String description;
+  final String? imageUrl;
+  final int index;
+  final String classId;
 
   const Module({
-    required this.id,
-    required this.imageUrl,
+    this.id,
+    this.imageUrl,
     required this.title,
-    required this.number,
+    required this.description,
+    required this.index,
+    required this.classId,
   });
 
   @override
-  List<Object?> get props => [title, imageUrl];
+  List<Object?> get props => [
+        id,
+        imageUrl,
+        title,
+        description,
+        index,
+        classId,
+      ];
 
   factory Module.fromJson(Map<String, dynamic> json) => _$ModuleFromJson(json);
 
@@ -28,14 +39,18 @@ class Module extends Equatable {
   Module copyWith({
     String? id,
     String? title,
+    String? description,
     String? imageUrl,
-    int? number,
+    int? index,
+    String? classId,
   }) {
     return Module(
       id: id ?? this.id,
       title: title ?? this.title,
+      description: description ?? this.description,
       imageUrl: imageUrl ?? this.imageUrl,
-      number: number ?? this.number,
+      index: index ?? this.index,
+      classId: classId ?? this.classId,
     );
   }
 }

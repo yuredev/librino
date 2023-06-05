@@ -9,11 +9,13 @@ import 'package:librino/logic/cubits/class/load/load_classes_cubit.dart';
 import 'package:librino/logic/cubits/class/load_default/load_default_class_cubit.dart';
 import 'package:librino/logic/cubits/class/load_default/load_default_class_state.dart';
 import 'package:librino/logic/cubits/class/select/select_class_cubit.dart';
-import 'package:librino/logic/cubits/module/load_modules_cubit.dart';
+import 'package:librino/logic/cubits/class/select/select_class_state.dart';
+import 'package:librino/logic/cubits/module/load/load_modules_cubit.dart';
 import 'package:librino/logic/cubits/subscription/load/load_subscriptions_cubit.dart';
 import 'package:librino/presentation/screens/initial_screen/classes_screen.dart';
 import 'package:librino/presentation/screens/initial_screen/learning_overview_screen.dart';
 import 'package:librino/presentation/screens/subscription_requests_screen.dart';
+import 'package:librino/presentation/utils/presentation_utils.dart';
 import 'package:librino/presentation/widgets/learning_overview/librino_drawer.dart';
 import 'package:librino/presentation/widgets/shared/librino_scaffold.dart';
 
@@ -111,16 +113,32 @@ class _InitialScreenState extends State<InitialScreen> {
                   );
           } else if (activeTab == 0) {
             return user.profileType == ProfileType.instructor
-                ? FloatingActionButton.extended(
-                    onPressed: () {},
-                    icon: const Icon(Icons.add),
-                    label: Tooltip(
-                      message: 'Criar conteúdo para a turma',
-                      child: const Text(
-                        'Criar',
-                        style: TextStyle(
-                          fontWeight: FontWeight.w600,
-                          fontSize: 16,
+                ? BlocBuilder<SelectClassCubit, SelectClassState>(
+                    builder: (context, state) => FloatingActionButton.extended(
+                      onPressed: () {
+                        if (state.clazz == null) {
+                          PresentationUtils.showSnackBar(
+                            context,
+                            'Nenhuma turma selecionada!',
+                            isErrorMessage: true,
+                          );
+                          return;
+                        }
+                        Navigator.pushNamed(
+                          context,
+                          Routes.createModule,
+                          arguments: {'class': state.clazz},
+                        );
+                      },
+                      icon: const Icon(Icons.add),
+                      label: Tooltip(
+                        message: 'Criar conteúdo para a turma',
+                        child: const Text(
+                          'Criar',
+                          style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 16,
+                          ),
                         ),
                       ),
                     ),

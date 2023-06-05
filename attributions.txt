@@ -31,3 +31,9 @@ signals.jpg
 
 teams.png
 <a href="https://www.vecteezy.com/free-vector/sign-language">Sign Language Vectors by Vecteezy</a>
+
+hand.png
+<a href="https://www.flaticon.com/free-icons/hand" title="hand icons">Hand icons created by Freepik - Flaticon</a>
+
+logo.png
+<a href="https://www.flaticon.com/free-icons/letter-l" title="letter-l icons">Letter-l icons created by Vitaly Gorbachev - Flaticon</a>

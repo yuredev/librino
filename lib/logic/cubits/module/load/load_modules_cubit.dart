@@ -12,7 +12,7 @@ class LoadModulesCubit extends Cubit<LoadModulesState> {
     try {
       emit(LoadingHomeModulesList());
       final modules = await _moduleRepository.getFromClass(classId);
-      modules.sort((a, b) => a.number - b.number);
+      modules.sort((a, b) => a.index - b.index);
       emit(HomeModulesListLoaded(modules));
     } catch (e) {
       print(e);

@@ -1,3 +1,4 @@
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get_it/get_it.dart';
 import 'package:librino/core/config/environment.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -15,8 +16,11 @@ import 'package:librino/logic/cubits/class/load_default/load_default_class_cubit
 import 'package:librino/logic/cubits/class/search/search_class_cubit.dart';
 import 'package:librino/logic/cubits/class/select/select_class_cubit.dart';
 import 'package:librino/logic/cubits/global_alert/global_alert_cubit.dart';
-import 'package:librino/logic/cubits/lesson/load_lesson_cubit.dart';
-import 'package:librino/logic/cubits/module/load_modules_cubit.dart';
+import 'package:librino/logic/cubits/lesson/actions/lesson_actions_cubit.dart';
+import 'package:librino/logic/cubits/lesson/load/load_lessons_cubit.dart';
+import 'package:librino/logic/cubits/lesson/load/load_single_lesson_cubit.dart';
+import 'package:librino/logic/cubits/module/actions/module_actions_cubit.dart';
+import 'package:librino/logic/cubits/module/load/load_modules_cubit.dart';
 import 'package:librino/logic/cubits/participants/load_participants_cubit.dart';
 import 'package:librino/logic/cubits/subscription/actions/subscription_actions_cubit.dart';
 import 'package:librino/logic/cubits/subscription/load/load_subscriptions_cubit.dart';
@@ -33,6 +37,7 @@ abstract class Bindings {
 
   static Future<void> init(EnvironmentSettings settings) async {
     set(FirebaseFirestore.instance);
+    set(FirebaseStorage.instance.ref());
     set(FirestoreUserRepository());
     set(FireAuthUserRepository());
     set(ClassRepository());
@@ -41,11 +46,14 @@ abstract class Bindings {
     set(ModuleRepository());
     set(LessonRepository());
     set(GlobalAlertCubit());
+    set(LessonActionsCubit());
     set(LoadModulesCubit());
     set(SelectClassCubit());
+    set(ModuleActionsCubit());
     set(AuthCubit());
     set(UserCRUDCubit());
-    set(LoadLessonCubit());
+    set(LoadSingleLessonCubit());
+    set(LoadLessonsCubit());
     set(SearchClassCubit());
     set(LoadSubscriptionsCubit());
     set(SubscriptionActionsCubit());

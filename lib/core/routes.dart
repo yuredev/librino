@@ -9,14 +9,19 @@ import 'package:librino/logic/cubits/class/load/load_classes_cubit.dart';
 import 'package:librino/logic/cubits/class/load_default/load_default_class_cubit.dart';
 import 'package:librino/logic/cubits/class/search/search_class_cubit.dart';
 import 'package:librino/logic/cubits/class/select/select_class_cubit.dart';
-import 'package:librino/logic/cubits/lesson/load_lesson_cubit.dart';
-import 'package:librino/logic/cubits/module/load_modules_cubit.dart';
+import 'package:librino/logic/cubits/lesson/actions/lesson_actions_cubit.dart';
+import 'package:librino/logic/cubits/lesson/load/load_lessons_cubit.dart';
+import 'package:librino/logic/cubits/lesson/load/load_single_lesson_cubit.dart';
+import 'package:librino/logic/cubits/module/actions/module_actions_cubit.dart';
+import 'package:librino/logic/cubits/module/load/load_modules_cubit.dart';
 import 'package:librino/logic/cubits/participants/load_participants_cubit.dart';
 import 'package:librino/logic/cubits/subscription/actions/subscription_actions_cubit.dart';
 import 'package:librino/logic/cubits/subscription/load/load_subscriptions_cubit.dart';
 import 'package:librino/logic/cubits/user/user_crud_cubit.dart';
 import 'package:librino/presentation/screens/class_details_screen.dart';
 import 'package:librino/presentation/screens/create_class_screen.dart';
+import 'package:librino/presentation/screens/add_lessons_to_module_screen.dart';
+import 'package:librino/presentation/screens/create_module_screen.dart';
 import 'package:librino/presentation/screens/initial_screen/initial_screen.dart';
 import 'package:librino/presentation/screens/lesson_steps/libras_to_phrase_screen.dart';
 import 'package:librino/presentation/screens/lesson_steps/libras_to_word_screen.dart';
@@ -36,6 +41,8 @@ abstract class Routes {
   static const login = '/login';
   static const createClass = '/create-class';
   static const searchClass = '/search-class';
+  static const createModule = '/create-module';
+  static const addLessonsToModule = '/create-lesson';
   // Lesson
   static const supportContent = '/support-content';
   static const librasToPhraseQuestion = '/libras-to-phrase-question';
@@ -75,11 +82,12 @@ abstract class Routes {
             return MultiBlocProvider(
               providers: [
                 BlocProvider<LoadModulesCubit>.value(value: Bindings.get()),
-                BlocProvider<LoadLessonCubit>.value(value: Bindings.get()),
+                BlocProvider<LoadSingleLessonCubit>.value(value: Bindings.get()),
                 BlocProvider<LoadClassesCubit>.value(value: Bindings.get()),
                 BlocProvider<AuthCubit>.value(value: Bindings.get()),
                 BlocProvider<SelectClassCubit>.value(value: Bindings.get()),
-                BlocProvider<SubscriptionActionsCubit>.value(value: Bindings.get()),
+                BlocProvider<SubscriptionActionsCubit>.value(
+                    value: Bindings.get()),
                 BlocProvider<LoadDefaultClassCubit>.value(
                   value: Bindings.get(),
                 ),
@@ -143,10 +151,27 @@ abstract class Routes {
           builder: (ctx) => MultiBlocProvider(
             providers: [
               BlocProvider<SubscriptionActionsCubit>.value(
-                  value: Bindings.get()),
+                value: Bindings.get(),
+              ),
               BlocProvider<SearchClassCubit>.value(value: Bindings.get()),
             ],
             child: SearchClassScreen(),
+          ),
+        );
+      case createModule:
+        return MaterialPageRoute(
+          builder: (ctx) => BlocProvider<ModuleActionsCubit>.value(
+            value: Bindings.get(),
+            child: CreateModuleScreen(
+              clazz: (settings.arguments as Map)['class'],
+            ),
+          ),
+        );
+      case addLessonsToModule:
+        return MaterialPageRoute(
+          builder: (ctx) => BlocProvider<LoadLessonsCubit>.value(
+            value: Bindings.get(),
+            child: AddLessonsToModuleScreen(),
           ),
         );
     }
