@@ -231,7 +231,13 @@ class _CreatePhraseToLIBRASScreenState
                 builder: (ctx, constraints) => ReorderableWrap(
                   spacing: 16,
                   runSpacing: 16,
-                  onReorder: (oldIndex, newIndex) {},
+                  onReorder: (oldIndex, newIndex) {
+                    final aux = answerFiles[oldIndex];
+                    setState(() {
+                      answerFiles[oldIndex] = answerFiles[newIndex];
+                      answerFiles[newIndex] = aux;
+                    });
+                  },
                   needsLongPressDraggable: false,
                   buildDraggableFeedback: (ctx, consts, widget) {
                     return Material(
