@@ -1,11 +1,13 @@
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get_it/get_it.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:librino/core/config/environment.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:librino/data/repositories/auth_repository.dart';
 import 'package:librino/data/repositories/class_repository.dart';
 import 'package:librino/data/repositories/lesson_repository.dart';
 import 'package:librino/data/repositories/module_repository.dart';
+import 'package:librino/data/repositories/question_repository.dart';
 import 'package:librino/data/repositories/subscription_repository.dart';
 import 'package:librino/data/repositories/user/fireauth_user_repository.dart';
 import 'package:librino/data/repositories/user/firestore_user_repository.dart';
@@ -22,6 +24,8 @@ import 'package:librino/logic/cubits/lesson/load/load_single_lesson_cubit.dart';
 import 'package:librino/logic/cubits/module/actions/module_actions_cubit.dart';
 import 'package:librino/logic/cubits/module/load/load_modules_cubit.dart';
 import 'package:librino/logic/cubits/participants/load_participants_cubit.dart';
+import 'package:librino/logic/cubits/question/actions/question_actions_cubit.dart';
+import 'package:librino/logic/cubits/question/load_questions/load_questions_base_cubit.dart';
 import 'package:librino/logic/cubits/subscription/actions/subscription_actions_cubit.dart';
 import 'package:librino/logic/cubits/subscription/load/load_subscriptions_cubit.dart';
 import 'package:librino/logic/cubits/user/user_crud_cubit.dart';
@@ -36,16 +40,19 @@ abstract class Bindings {
   }
 
   static Future<void> init(EnvironmentSettings settings) async {
+    set(ImagePicker());
     set(FirebaseFirestore.instance);
     set(FirebaseStorage.instance.ref());
     set(FirestoreUserRepository());
     set(FireAuthUserRepository());
     set(ClassRepository());
+    set(QuestionRepository());
     set(AuthRepository());
     set(SubscriptionRepository());
     set(ModuleRepository());
     set(LessonRepository());
     set(GlobalAlertCubit());
+    set(LoadQuestionBaseCubit());
     set(LessonActionsCubit());
     set(LoadModulesCubit());
     set(SelectClassCubit());
@@ -61,5 +68,6 @@ abstract class Bindings {
     set(LoadDefaultClassCubit());
     set(LoadParticipantsCubit());
     set(ClassActionsCubit());
+    set(QuestionActionsCubit());
   }
 }

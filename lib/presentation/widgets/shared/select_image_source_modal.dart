@@ -3,7 +3,14 @@ import 'package:librino/core/constants/colors.dart';
 import 'package:librino/presentation/widgets/shared/modal_top_bar_widget.dart';
 
 class SelectImageSourceModal extends StatelessWidget {
-  const SelectImageSourceModal({Key? key}) : super(key: key);
+  final String title;
+  final String firstOption;
+
+  const SelectImageSourceModal({
+    Key? key,
+    this.title = 'Adicionar foto',
+    this.firstOption = 'Tirar foto',
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +28,7 @@ class SelectImageSourceModal extends StatelessWidget {
           Container(
             padding: EdgeInsets.fromLTRB(18, 16, 18, 16),
             child: Text(
-              'Adicionar foto',
+              title,
               style: TextStyle(
                 color: LibrinoColors.main,
                 fontSize: 19,
@@ -32,7 +39,7 @@ class SelectImageSourceModal extends StatelessWidget {
           ListTile(
             leading: Icon(Icons.camera_alt),
             title: Text(
-              'Tirar foto',
+              firstOption,
               style: TextStyle(
                 fontSize: 15,
               ),
@@ -56,4 +63,3 @@ class SelectImageSourceModal extends StatelessWidget {
     );
   }
 }
-

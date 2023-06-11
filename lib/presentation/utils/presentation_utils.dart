@@ -155,18 +155,18 @@ abstract class PresentationUtils {
     );
   }
 
-  static void showToast(String texto) async {
+  static void showToast(String text) async {
     await Fluttertoast.cancel();
     Fluttertoast.showToast(
-      msg: texto,
+      msg: text,
       backgroundColor: LibrinoColors.toastGray,
       fontSize: 12,
       toastLength: Toast.LENGTH_SHORT,
     );
   }
 
-  static void showBottomModal(BuildContext context, Widget widget) {
-    showModalBottomSheet(
+  static Future<T?> showBottomModal<T>(BuildContext context, Widget widget) {
+    return showModalBottomSheet<T>(
       context: context,
       isScrollControlled: true,
       shape: const RoundedRectangleBorder(

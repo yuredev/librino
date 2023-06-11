@@ -37,10 +37,9 @@ class ModuleGridItemWidget extends StatelessWidget {
               margin: const EdgeInsets.only(bottom: spacing),
               child: isLoading
                   ? const GrayBarWidget(height: 45, width: 45)
-                  : Image.network(
-                      imageUrl!,
-                      height: 45,
-                    ),
+                  : imageUrl == null
+                      ? Image.asset('assets/images/hand.png')
+                      : Image.network(imageUrl!),
             ),
             Container(
               margin: const EdgeInsets.only(bottom: spacing - 5),

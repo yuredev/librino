@@ -2,11 +2,10 @@ import 'package:librino/core/enums/enums.dart';
 import 'package:librino/core/routes.dart';
 
 const lessonTypeToScreenNameMap = {
-  LessonStepType.librasToWord: Routes.librasToWordQuestion,
-  LessonStepType.librasToPhrase: Routes.librasToPhraseQuestion,
-  LessonStepType.wordToLibras: Routes.wordToLibrasQuestion,
-  LessonStepType.phraseToLibras: Routes.phraseToLibrasQuestion,
-  LessonStepType.supportContent: Routes.supportContent,
+  QuestionType.librasToWord: Routes.librasToWordQuestion,
+  QuestionType.librasToPhrase: Routes.librasToPhraseQuestion,
+  QuestionType.wordToLibras: Routes.wordToLibrasQuestion,
+  QuestionType.phraseToLibras: Routes.phraseToLibrasQuestion,
 };
 
 const genderIdentityToString = {
@@ -24,4 +23,11 @@ const audityAbilityToString = {
 const profileTypeToString = {
   ProfileType.instructor: 'Instrutor',
   ProfileType.studant: 'Estudante',
+};
+
+const questionTypeToString = {
+  QuestionType.librasToPhrase: 'LIBRAS -> Portugûes escrito (Frase)',
+  QuestionType.phraseToLibras: 'Portugûes escrito -> LIBRAS (Frase)',
+  QuestionType.wordToLibras: 'Portugûes escrito -> LIBRAS (Palavra)',
+  QuestionType.librasToWord: 'LIBRAS -> Portugûes escrito (Palavra)',
 };

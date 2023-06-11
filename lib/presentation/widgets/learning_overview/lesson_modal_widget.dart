@@ -27,7 +27,7 @@ class LessonModalWidget extends StatelessWidget {
       lessonTypeToScreenNameMap[firstStep.type]!,
       arguments: PlayLessonDTO(
         lives: 3,
-        steps: steps,
+        questions: steps,
       ),
     );
   }

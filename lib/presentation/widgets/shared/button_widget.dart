@@ -67,10 +67,7 @@ class ButtonWidget extends StatelessWidget {
                   margin: titleMargin,
                   child: Text(
                     loadingText!,
-                    style: TextStyle(
-                      fontSize: fontSize ?? 20,
-                      color: onPress == null ? Colors.white : textColor,
-                    ),
+                    style: estiloFonte,
                   ),
                 ),
               ],
