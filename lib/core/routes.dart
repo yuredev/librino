@@ -250,6 +250,7 @@ abstract class Routes {
         return MaterialPageRoute(
           builder: (ctx) => PreviewQuestionScreen(
             question: (settings.arguments as Map)['question'],
+            readOnly: (settings.arguments as Map)['readOnly'] ?? false,
           ),
         );
     }

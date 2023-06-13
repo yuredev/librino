@@ -11,9 +11,16 @@ import 'package:librino/presentation/widgets/shared/librino_scaffold.dart';
 import 'package:librino/presentation/widgets/shared/question_title.dart';
 
 class LibrasToWordScreen extends StatelessWidget {
+  final Widget? floatingActionButton;
+  final bool readOnly;
   final PlayLessonDTO? playLessonDTO;
 
-  const LibrasToWordScreen({super.key, this.playLessonDTO});
+  const LibrasToWordScreen({
+    super.key,
+    this.playLessonDTO,
+    this.floatingActionButton,
+    this.readOnly = false,
+  });
 
   void onButtonPress(BuildContext context) {
     if (playLessonDTO!.questions.isEmpty) {
@@ -34,6 +41,8 @@ class LibrasToWordScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return LibrinoScaffold(
+      floatingActionButton: floatingActionButton,
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -42,15 +51,16 @@ class LibrasToWordScreen extends StatelessWidget {
               margin: const EdgeInsets.only(bottom: 20),
               child: Column(
                 children: [
-                  Container(
-                    margin: const EdgeInsets.only(
-                      bottom: 26,
+                  if (!readOnly)
+                    Container(
+                      margin: const EdgeInsets.only(
+                        bottom: 26,
+                      ),
+                      child: const LessonTopBarWidget(
+                        lifesNumber: 5,
+                        progression: 45,
+                      ),
                     ),
-                    child: LessonTopBarWidget(
-                      lifesNumber: 5,
-                      progression: 45,
-                    ),
-                  ),
                   Container(
                     padding: const EdgeInsets.only(right: 20),
                     child: const QuestionTitleWidget(
@@ -106,20 +116,21 @@ class LibrasToWordScreen extends StatelessWidget {
                 ),
               ),
             ),
-            Container(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 23,
+            if (!readOnly)
+              Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 23,
+                ),
+                margin: const EdgeInsets.only(
+                  bottom: Sizes.defaultScreenBottomMargin,
+                ),
+                child: ButtonWidget(
+                  title: 'Checar',
+                  width: double.infinity,
+                  height: Sizes.defaultButtonHeight,
+                  onPress: () => onButtonPress(context),
+                ),
               ),
-              margin: const EdgeInsets.only(
-                bottom: Sizes.defaultScreenBottomMargin,
-              ),
-              child: ButtonWidget(
-                title: 'Checar',
-                width: double.infinity,
-                height: Sizes.defaultButtonHeight,
-                onPress: () => onButtonPress(context),
-              ),
-            ),
           ],
         ),
       ),

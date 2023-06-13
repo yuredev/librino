@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:librino/core/constants/colors.dart';
 import 'package:librino/presentation/widgets/shared/gray_bar_widget.dart';
+import 'package:librino/presentation/widgets/shared/inkwell_widget.dart';
 import 'package:librino/presentation/widgets/shared/shimmer_widget.dart';
 
 class ListTileWidget extends StatelessWidget {
@@ -8,6 +9,7 @@ class ListTileWidget extends StatelessWidget {
   final String? subtitle;
   final IconData? icon;
   final void Function()? onTap;
+  final void Function()? onDelete;
   final double fontSize;
   final bool isLoading;
   final double elevation;
@@ -16,6 +18,7 @@ class ListTileWidget extends StatelessWidget {
 
   const ListTileWidget({
     super.key,
+    this.onDelete,
     this.isLoading = false,
     this.title,
     this.fontSize = 14,
@@ -45,7 +48,7 @@ class ListTileWidget extends StatelessWidget {
       minLeadingWidth: 0,
       title: isLoading
           ? Row(
-              children: [GrayBarWidget(height: 14, width: 225)],
+              children: [const GrayBarWidget(height: 14, width: 225)],
             )
           : Text(
               title!,
@@ -55,11 +58,27 @@ class ListTileWidget extends StatelessWidget {
                 color: LibrinoColors.textLightBlack,
               ),
             ),
+      trailing: onDelete == null
+          ? null
+          : InkWellWidget(
+              borderRadius: 50,
+              onTap: onDelete,
+              child: Tooltip(
+                message: 'Remover questão',
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Icon(
+                    Icons.delete_outline,
+                    color: Colors.red.withOpacity(0.5),
+                  ),
+                ),
+              ),
+            ),
       subtitle: Container(
         margin: const EdgeInsets.only(top: 4),
         child: isLoading
             ? Row(
-                children: [GrayBarWidget(height: 14, width: 150)],
+                children: [const GrayBarWidget(height: 14, width: 150)],
               )
             : subtitle == null
                 ? null

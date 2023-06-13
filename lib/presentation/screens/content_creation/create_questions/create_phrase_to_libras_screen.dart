@@ -11,7 +11,6 @@ import 'package:librino/core/bindings.dart';
 import 'package:librino/core/constants/colors.dart';
 import 'package:librino/core/constants/sizes.dart';
 import 'package:librino/core/enums/enums.dart';
-import 'package:librino/data/models/question/libras_to_phrase/libras_to_phrase_question.dart';
 import 'package:librino/data/models/question/phrase_to_libras/phrase_to_libras_question.dart';
 import 'package:librino/logic/cubits/question/actions/question_actions_cubit.dart';
 import 'package:librino/logic/cubits/question/actions/question_actions_state.dart';

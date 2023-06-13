@@ -13,7 +13,7 @@ class LoadQuestionBaseCubit extends Cubit<LoadQuestionsState> {
   Future<void> load(QuestionFilter filter, Question? question, int page) async {
     try {
       emit(LoadingPaginatedQuestionsState(page));
-      final questions = await _questionRepository.getAll(filter, question);
+      final questions = await _questionRepository.getAllPublic(filter, question);
       emit(PaginatedQuestionsLoadedState(questions, page));
     } catch (e) {
       print(e);

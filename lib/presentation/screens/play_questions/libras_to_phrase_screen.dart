@@ -83,34 +83,31 @@ class _LibrasToPhraseScreenState extends State<LibrasToPhraseScreen> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            if (widget.readOnly)
-              Container(
-                padding: const EdgeInsets.fromLTRB(
-                  Sizes.defaultScreenHorizontalMargin,
-                  40,
-                  Sizes.defaultScreenHorizontalMargin,
-                  0,
-                ),
-                margin: const EdgeInsets.only(bottom: 20),
-                child: Column(
-                  children: [
-                    if (!widget.readOnly)
-                      Container(
-                        margin: const EdgeInsets.only(
-                          bottom: 26,
-                        ),
-                        child:
-                            LessonTopBarWidget(lifesNumber: 5, progression: 75),
-                      ),
-                    Container(
-                      padding: const EdgeInsets.only(right: 20),
-                      child: const QuestionTitleWidget(
-                        'Qual a tradução deste sinal em português?',
-                      ),
-                    ),
-                  ],
-                ),
+            Container(
+              padding: const EdgeInsets.fromLTRB(
+                Sizes.defaultScreenHorizontalMargin,
+                40,
+                Sizes.defaultScreenHorizontalMargin,
+                0,
               ),
+              margin: const EdgeInsets.only(bottom: 20),
+              child: Column(
+                children: [
+                  if (!widget.readOnly)
+                    Container(
+                      margin: const EdgeInsets.only(bottom: 26),
+                      child:
+                          LessonTopBarWidget(lifesNumber: 5, progression: 75),
+                    ),
+                  Container(
+                    padding: const EdgeInsets.only(right: 20),
+                    child: const QuestionTitleWidget(
+                      'Qual a tradução deste sinal em português?',
+                    ),
+                  ),
+                ],
+              ),
+            ),
             Container(
               margin: const EdgeInsets.only(bottom: 26),
               color: LibrinoColors.backgroundGray,

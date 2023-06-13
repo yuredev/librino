@@ -12,14 +12,20 @@ import 'package:librino/presentation/widgets/shared/question_title.dart';
 import 'package:reorderables/reorderables.dart';
 
 class PhraseToLibrasScreen extends StatefulWidget {
+  final bool readOnly;
+  final Widget? floatingActionButton;
   final PlayLessonDTO? playLessonDTO;
 
-  const PhraseToLibrasScreen({super.key, this.playLessonDTO});
+  const PhraseToLibrasScreen({
+    super.key,
+    this.playLessonDTO,
+    this.readOnly = false,
+    this.floatingActionButton,
+  });
 
   @override
   State<PhraseToLibrasScreen> createState() => _PhraseToLibrasScreenState();
 }
-
 
 class _PhraseToLibrasScreenState extends State<PhraseToLibrasScreen> {
   void onButtonPress(BuildContext context) {
@@ -45,6 +51,8 @@ class _PhraseToLibrasScreenState extends State<PhraseToLibrasScreen> {
     final padding = MediaQuery.of(context).viewPadding;
     final height = fullHeight - padding.top - padding.bottom;
     return LibrinoScaffold(
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      floatingActionButton: widget.floatingActionButton,
       body: Container(
         height: height,
         padding: const EdgeInsets.only(
@@ -55,12 +63,13 @@ class _PhraseToLibrasScreenState extends State<PhraseToLibrasScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Container(
-              margin: const EdgeInsets.only(
-                bottom: 26,
+            if (!widget.readOnly)
+              Container(
+                margin: const EdgeInsets.only(
+                  bottom: 26,
+                ),
+                child: LessonTopBarWidget(lifesNumber: 5, progression: 70),
               ),
-              child: LessonTopBarWidget(lifesNumber: 5, progression: 70),
-            ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 4.0),
               child: Column(
@@ -74,33 +83,34 @@ class _PhraseToLibrasScreenState extends State<PhraseToLibrasScreen> {
                     margin: const EdgeInsets.only(bottom: 36),
                     child: Text('"Os cachorros comem carne"'),
                   ),
-                  Container(
-                    margin: const EdgeInsets.only(bottom: 22),
-                    child: Row(
-                      children: [
-                        Container(
-                          margin: const EdgeInsets.only(right: 10),
-                          padding: const EdgeInsets.all(4),
-                          decoration: BoxDecoration(
-                            color: LibrinoColors.lightPurple,
-                            borderRadius: BorderRadius.circular(8),
+                  if (!widget.readOnly)
+                    Container(
+                      margin: const EdgeInsets.only(bottom: 22),
+                      child: Row(
+                        children: [
+                          Container(
+                            margin: const EdgeInsets.only(right: 10),
+                            padding: const EdgeInsets.all(4),
+                            decoration: BoxDecoration(
+                              color: LibrinoColors.lightPurple,
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: Icon(
+                              Icons.lightbulb,
+                              size: 20,
+                              color: Colors.white,
+                            ),
                           ),
-                          child: Icon(
-                            Icons.lightbulb,
-                            size: 20,
-                            color: Colors.white,
+                          const Text(
+                            'Organize os sinais na ordem correta',
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: LibrinoColors.subtitleGray,
+                            ),
                           ),
-                        ),
-                        const Text(
-                          'Organize os sinais na ordem correta',
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: LibrinoColors.subtitleGray,
-                          ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
                   LayoutBuilder(
                     builder: (ctx, constraints) => ReorderableWrap(
                       spacing: 16,
@@ -141,19 +151,20 @@ class _PhraseToLibrasScreenState extends State<PhraseToLibrasScreen> {
                 ],
               ),
             ),
-            Spacer(),
-            Container(
-              margin: const EdgeInsets.only(
-                top: 50,
-                bottom: Sizes.defaultScreenBottomMargin,
-              ),
-              child: ButtonWidget(
-                title: 'Checar',
-                height: Sizes.defaultButtonHeight,
-                width: double.infinity,
-                onPress: () => onButtonPress(context),
-              ),
-            )
+            if (!widget.readOnly) Spacer(),
+            if (!widget.readOnly)
+              Container(
+                margin: const EdgeInsets.only(
+                  top: 50,
+                  bottom: Sizes.defaultScreenBottomMargin,
+                ),
+                child: ButtonWidget(
+                  title: 'Checar',
+                  height: Sizes.defaultButtonHeight,
+                  width: double.infinity,
+                  onPress: () => onButtonPress(context),
+                ),
+              )
           ],
         ),
       ),

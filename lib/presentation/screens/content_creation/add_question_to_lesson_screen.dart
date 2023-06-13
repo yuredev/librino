@@ -10,7 +10,6 @@ import 'package:librino/logic/cubits/question/actions/question_actions_cubit.dar
 import 'package:librino/logic/cubits/question/actions/question_actions_state.dart';
 import 'package:librino/logic/cubits/question/load_questions/load_questions_base_cubit.dart';
 import 'package:librino/logic/cubits/question/load_questions/load_questions_state.dart';
-import 'package:librino/presentation/utils/presentation_utils.dart';
 import 'package:librino/presentation/widgets/shared/illustration_widget.dart';
 import 'package:librino/presentation/widgets/shared/inkwell_widget.dart';
 import 'package:librino/presentation/widgets/shared/list_tile_widget.dart';
@@ -108,6 +107,7 @@ class _AddQuestionToLessonScreenState extends State<AddQuestionToLessonScreen> {
 
   void onQuestionCreated(BuildContext context, QuestionActionsState state) {
     if (state is QuestionCreatedState) {
+      Navigator.pop(context);
       Navigator.pop(context, state.question);
     }
   }
@@ -262,6 +262,7 @@ class _AddQuestionToLessonScreenState extends State<AddQuestionToLessonScreen> {
                             title: 'Sem questões cadastradas',
                             subtitle:
                                 'No momento não há questões cadastradas no banco de questões do Librino',
+                            imageWidth: MediaQuery.of(context).size.width * 0.41,
                           )
                         ],
                       ),

@@ -132,7 +132,7 @@ class _CreateLessonScreenState extends State<CreateLessonScreen> {
                   ),
                 ),
                 Container(
-                  margin: const EdgeInsets.only(bottom: 16),
+                  margin: const EdgeInsets.only(bottom: 48),
                   child: TextFormField(
                     controller: indexCtrl,
                     validator: CreateModuleValidator.validateIndex,
@@ -160,37 +160,39 @@ class _CreateLessonScreenState extends State<CreateLessonScreen> {
                     ),
                   ),
                 ),
-                Container(
-                  margin: const EdgeInsets.only(bottom: 48),
-                  child: Tooltip(
-                    message: 'Adicionar conteúdo de apoio para a lição',
-                    // TODO: adicionar preview do conteúdo de suporte?
-                    child: DottedButton(
-                      fillColor: LibrinoColors.backgroundWhite,
-                      borderColor: supportContentId == null
-                          ? LibrinoColors.iconGrayDarker
-                          : LibrinoColors.main,
-                      title: supportContentId == null
-                          ? 'Conteúdo de Apoio'
-                          : 'Conteúdo de Apoio Anexado',
-                      titleColor: supportContentId == null
-                          ? LibrinoColors.grayPlaceholder
-                          : LibrinoColors.main,
-                      icon: Container(
-                        margin: const EdgeInsets.only(right: 5, bottom: 3),
-                        child: Icon(
-                          supportContentId == null
-                              ? Icons.menu_book_sharp
-                              : Icons.done,
-                          color: supportContentId == null
-                              ? LibrinoColors.iconGrayDarker
-                              : LibrinoColors.main,
+                // TODO: funcionalidade a ser implementada no futuro?
+                if (false)
+                  Container(
+                    margin: const EdgeInsets.only(bottom: 48),
+                    child: Tooltip(
+                      message: 'Adicionar conteúdo de apoio para a lição',
+                      // TODO: adicionar preview do conteúdo de suporte?
+                      child: DottedButton(
+                        fillColor: LibrinoColors.backgroundWhite,
+                        borderColor: supportContentId == null
+                            ? LibrinoColors.iconGrayDarker
+                            : LibrinoColors.main,
+                        title: supportContentId == null
+                            ? 'Conteúdo de Apoio'
+                            : 'Conteúdo de Apoio Anexado',
+                        titleColor: supportContentId == null
+                            ? LibrinoColors.grayPlaceholder
+                            : LibrinoColors.main,
+                        icon: Container(
+                          margin: const EdgeInsets.only(right: 5, bottom: 3),
+                          child: Icon(
+                            supportContentId == null
+                                ? Icons.menu_book_sharp
+                                : Icons.done,
+                            color: supportContentId == null
+                                ? LibrinoColors.iconGrayDarker
+                                : LibrinoColors.main,
+                          ),
                         ),
+                        onPress: () {},
                       ),
-                      onPress: () {},
                     ),
                   ),
-                ),
                 Container(
                   margin: const EdgeInsets.only(bottom: 22),
                   child: const Text(
@@ -214,6 +216,31 @@ class _CreateLessonScreenState extends State<CreateLessonScreen> {
                           return Container(
                             margin: const EdgeInsets.only(bottom: 12),
                             child: ListTileWidget(
+                              onTap: () {
+                                Navigator.pushNamed(
+                                  context,
+                                  Routes.previewQuestion,
+                                  arguments: {
+                                    'question': q,
+                                    'readOnly': true,
+                                  },
+                                );
+                              },
+                              onDelete: () async {
+                                final shouldDelete =
+                                    await PresentationUtils.showYesNotDialog(
+                                          context,
+                                          title: 'Remover questão?',
+                                          description:
+                                              'Esta questão será removida desta lição',
+                                        ) ??
+                                        false;
+                                if (shouldDelete) {
+                                  setState(() => questions.removeAt(index));
+                                  PresentationUtils.showToast(
+                                      'Questão removida');
+                                }
+                              },
                               title: q.label,
                               subtitle: questionTypeToString[q.type],
                               icon: Icons.sign_language_outlined,

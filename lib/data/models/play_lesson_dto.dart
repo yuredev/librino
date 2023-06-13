@@ -3,11 +3,11 @@ import 'package:equatable/equatable.dart';
 import 'package:librino/data/models/question/question.dart';
 
 class PlayLessonDTO extends Equatable {
-  final int lives;
+  final int? lives;
   final List<Question> questions;
 
   const PlayLessonDTO({
-    required this.lives,
+    this.lives,
     required this.questions,
   });
 
