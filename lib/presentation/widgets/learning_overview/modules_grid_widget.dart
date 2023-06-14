@@ -3,10 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:librino/data/models/module/module.dart';
 import 'package:librino/logic/cubits/class/select/select_class_cubit.dart';
 import 'package:librino/logic/cubits/class/select/select_class_state.dart';
-import 'package:librino/logic/cubits/lesson/lesson_state.dart';
-import 'package:librino/logic/cubits/lesson/load_lesson_cubit.dart';
-import 'package:librino/logic/cubits/module/load_modules_cubit.dart';
-import 'package:librino/logic/cubits/module/load_modules_state.dart';
+import 'package:librino/logic/cubits/lesson/load/load_lesson_state.dart';
+import 'package:librino/logic/cubits/lesson/load/load_single_lesson_cubit.dart';
+import 'package:librino/logic/cubits/module/load/load_modules_cubit.dart';
+import 'package:librino/logic/cubits/module/load/load_modules_state.dart';
 import 'package:librino/presentation/utils/presentation_utils.dart';
 import 'package:librino/presentation/widgets/learning_overview/lesson_modal_widget.dart';
 import 'package:librino/presentation/widgets/learning_overview/module_grid_item_widget.dart';
@@ -20,19 +20,19 @@ class ModulesGridWidget extends StatefulWidget {
 }
 
 class _ModulesGridWidgetState extends State<ModulesGridWidget> {
-  late final LoadLessonCubit loadLessonCubit = context.read();
+  late final LoadSingleLessonCubit loadLessonCubit = context.read();
   Module? module;
 
-  void onLoadLesson(BuildContext context, LessonState state) {
+  void onLoadLesson(BuildContext context, LoadLessonState state) {
     if (state is LessonLoadError) {
       Navigator.pop(context); // loading
-    } else if (state is LessonLoaded) {
+    } else if (state is LessonLoadedState) {
       Navigator.pop(context); // loading
       PresentationUtils.showBottomModal(
         context,
         LessonModalWidget(state.lesson, module: module!),
       );
-    } else if (state is LoadinglLesson) {
+    } else if (state is LoadinglLessonState) {
       PresentationUtils.showLockedLoading(
         context,
         text: '',
@@ -42,7 +42,7 @@ class _ModulesGridWidgetState extends State<ModulesGridWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<LoadLessonCubit, LessonState>(
+    return BlocListener<LoadSingleLessonCubit, LoadLessonState>(
       listener: onLoadLesson,
       child: LayoutBuilder(
         builder: (_, consts) {
@@ -70,14 +70,12 @@ class _ModulesGridWidgetState extends State<ModulesGridWidget> {
                             .map(
                               (m) => ModuleGridItemWidget(
                                 onPress: () {
-                                  setState(() {
-                                    module = m;
-                                  });
-                                  loadLessonCubit.loadLesson(
-                                    'ZuNAujmyuUYeRfJdJKdi',
-                                    m.id,
-                                    0,
-                                  );
+                                  setState(() => module = m);
+                                  // loadLessonCubit.loadLesson(
+                                  //   'ZuNAujmyuUYeRfJdJKdi',
+                                  //   m.id,
+                                  //   0,
+                                  // );
                                 },
                                 title: m.title,
                                 conclusionPercentage: 65,

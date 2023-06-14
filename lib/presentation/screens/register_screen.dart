@@ -112,7 +112,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: LibrinoColors.deepOrange,
+        backgroundColor: LibrinoColors.deepBlue,
         centerTitle: true,
         title: const Text(
           'Cadastrar-se',

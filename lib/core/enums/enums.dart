@@ -1,6 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 
-enum LessonStepType {
+enum QuestionType {
   @JsonValue(0)
   librasToWord,
   @JsonValue(1)
@@ -9,8 +9,6 @@ enum LessonStepType {
   wordToLibras,
   @JsonValue(3)
   phraseToLibras,
-  @JsonValue(4)
-  supportContent,
 }
 
 enum GenderIdentity { man, woman, nonBinary, other }

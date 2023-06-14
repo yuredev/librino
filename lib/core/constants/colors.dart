@@ -7,7 +7,7 @@ abstract class LibrinoColors {
   static const mainDeeper = Color.fromARGB(255, 52, 92, 151);
   static const classFoundBlue = Color.fromARGB(255, 114, 128, 136);
   // static const deepOrange = Color(0xFFFF7940);
-  static const deepOrange = Color.fromARGB(255, 57, 102, 170);
+  static const deepBlue = Color.fromARGB(255, 57, 102, 170);
   static const lightGray = Color(0xFFEFEFEF);
   static const lightGrayDarker = Color(0xFFEEEEEE);
   static const backgroundGray = Color(0xFFF3F7FF);
@@ -27,6 +27,7 @@ abstract class LibrinoColors {
   static const shimmerGray = Color(0xFFEBEBEB);
   static const grayPlaceholder = Color(0xFFC3C3C3);
   static const iconGray = Color(0xFFB7B7B7);
+  static const iconGrayDarker = Color(0xFFB4B4B4);
   static const subtitleGray = Color(0xFF909090);
   static const subtitleDarkGray = Color.fromARGB(255, 90, 90, 90);
   static const subtitleLightGray = Color(0xFFBEBEBE);

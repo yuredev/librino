@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:librino/core/constants/colors.dart';
 import 'package:librino/presentation/utils/presentation_utils.dart';
@@ -8,10 +10,12 @@ class VideoPlayerWidget extends StatefulWidget {
   final double playbackSpeed;
   final int replaysNumber;
   final bool shouldLimitReplays;
+  final bool isFromNetwork;
 
   const VideoPlayerWidget({
     super.key,
     required this.videoPath,
+    this.isFromNetwork = true,
     this.playbackSpeed = 1,
     this.replaysNumber = 3,
     this.shouldLimitReplays = false,
@@ -27,12 +31,19 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
   @override
   void initState() {
     super.initState();
-    playerCtrl = VideoPlayerController.network(
-      widget.videoPath,
-      videoPlayerOptions: VideoPlayerOptions(
-        mixWithOthers: true,
-      ),
-    );
+    playerCtrl = widget.isFromNetwork
+        ? VideoPlayerController.network(
+            widget.videoPath,
+            videoPlayerOptions: VideoPlayerOptions(
+              mixWithOthers: true,
+            ),
+          )
+        : VideoPlayerController.file(
+            File(widget.videoPath),
+            videoPlayerOptions: VideoPlayerOptions(
+              mixWithOthers: true,
+            ),
+          );
     playerCtrl.addListener(() => setState(() {}));
     initializePlayer();
   }

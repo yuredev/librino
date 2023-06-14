@@ -1,26 +1,26 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:equatable/equatable.dart';
-import 'package:librino/data/models/lesson_step/abstract_lesson_step/lesson_step.dart';
+import 'package:librino/data/models/question/question.dart';
 
 class PlayLessonDTO extends Equatable {
-  final int lives;
-  final List<LessonStep> steps;
+  final int? lives;
+  final List<Question> questions;
 
   const PlayLessonDTO({
-    required this.lives,
-    required this.steps,
+    this.lives,
+    required this.questions,
   });
 
   PlayLessonDTO copyWith({
     int? lives,
-    List<LessonStep>? steps,
+    List<Question>? questions,
   }) {
     return PlayLessonDTO(
       lives: lives ?? this.lives,
-      steps: steps ?? this.steps,
+      questions: questions ?? this.questions,
     );
   }
 
   @override
-  List<Object?> get props => [lives, steps];
+  List<Object?> get props => [lives, questions];
 }

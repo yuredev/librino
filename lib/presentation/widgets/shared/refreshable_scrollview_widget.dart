@@ -3,11 +3,13 @@ import 'package:flutter/material.dart';
 class RefreshableScrollViewWidget extends StatelessWidget {
   final Future<void> Function() onRefresh;
   final Widget child;
+  final EdgeInsets? padding;
 
   const RefreshableScrollViewWidget({
     Key? key,
     required this.onRefresh,
     required this.child,
+    this.padding,
   }) : super(key: key);
 
   @override
@@ -17,6 +19,7 @@ class RefreshableScrollViewWidget extends StatelessWidget {
       child: Container(
         constraints: BoxConstraints.expand(),
         child: SingleChildScrollView(
+          padding: padding,
           physics: const AlwaysScrollableScrollPhysics(),
           child: child,
         ),
@@ -24,4 +27,3 @@ class RefreshableScrollViewWidget extends StatelessWidget {
     );
   }
 }
-

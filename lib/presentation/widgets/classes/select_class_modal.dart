@@ -35,7 +35,7 @@ class SelectClassModal extends StatelessWidget {
               margin: const EdgeInsets.only(
                 bottom: topBarSpacing,
               ),
-              child: ModalTopBarWidgetWidget(),
+              child: ModalTopBarWidget(),
             ),
           ),
           Center(

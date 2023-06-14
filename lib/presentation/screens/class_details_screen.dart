@@ -58,14 +58,14 @@ class _ClassDetailsScreenState extends State<ClassDetailsScreen> {
       appBar: AppBar(
         bottomOpacity: 0,
         elevation: 0,
-        backgroundColor: LibrinoColors.deepOrange,
+        backgroundColor: LibrinoColors.deepBlue,
         titleTextStyle: TextStyle(color: Colors.white),
         actionsIconTheme: IconThemeData(color: Colors.white),
         iconTheme: IconThemeData(color: Colors.white),
         shape: RoundedRectangleBorder(
           side: BorderSide(
             width: 0, // important
-            color: LibrinoColors.deepOrange, // Color of your appbar
+            color: LibrinoColors.deepBlue, // Color of your appbar
           ),
         ),
         centerTitle: true,
@@ -108,7 +108,7 @@ class _ClassDetailsScreenState extends State<ClassDetailsScreen> {
                 delegate: SliverChildListDelegate(
                   [
                     Container(
-                      color: LibrinoColors.deepOrange,
+                      color: LibrinoColors.deepBlue,
                       padding: EdgeInsets.symmetric(
                         horizontal: Sizes.defaultScreenHorizontalMargin,
                         vertical: 16,
