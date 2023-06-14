@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:librino/core/constants/colors.dart';
+import 'package:librino/logic/cubits/auth/auth_cubit.dart';
+import 'package:librino/logic/cubits/auth/auth_state.dart';
 import 'package:librino/presentation/widgets/shared/gray_bar_widget.dart';
 import 'package:librino/presentation/widgets/shared/inkwell_widget.dart';
 import 'package:librino/presentation/widgets/shared/progress_bar_widget.dart';
@@ -29,51 +32,68 @@ class ModuleGridItemWidget extends StatelessWidget {
       borderRadius: 20,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              margin: const EdgeInsets.only(bottom: spacing),
-              child: isLoading
-                  ? const GrayBarWidget(height: 45, width: 45)
-                  : imageUrl == null
-                      ? Image.asset('assets/images/hand.png')
-                      : Image.network(imageUrl!),
-            ),
-            Container(
-              margin: const EdgeInsets.only(bottom: spacing - 5),
-              child: isLoading
-                  ? const GrayBarWidget(height: 12, width: 90)
-                  : Text(
-                      title!,
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 12,
-                      ),
-                    ),
-            ),
-            Container(
-              margin: const EdgeInsets.only(bottom: spacing),
-              child: isLoading
-                  ? const GrayBarWidget(height: 12, width: 90)
-                  : Text(
-                      'Você completou ${conclusionPercentage!.floor()}%',
-                      style: TextStyle(
-                        fontWeight: FontWeight.w500,
-                        fontSize: 10,
-                        color: LibrinoColors.subtitleGray,
-                      ),
-                    ),
-            ),
-            isLoading
-                ? GrayBarWidget(height: 14, width: double.infinity)
-                : ProgressBarWidget(
-                    color: LibrinoColors.main,
-                    height: 12,
-                    progression: conclusionPercentage!,
-                  )
-          ],
+        child: BlocBuilder<AuthCubit, AuthState>(
+          builder: (context, state) {
+            final user = (state as LoggedInState).user;
+            return Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                LayoutBuilder(
+                  builder: (context, constraints) => Container(
+                    margin: const EdgeInsets.only(bottom: spacing),
+                    child: isLoading
+                        ? const GrayBarWidget(height: 45, width: 45)
+                        : imageUrl == null
+                            ? Image.asset(
+                                'assets/images/hand.png',
+                                width: constraints.maxWidth * 0.58,
+                                height: constraints.maxWidth * 0.58,
+                              )
+                            : Image.network(
+                                imageUrl!,
+                                width: constraints.maxWidth * 0.58,
+                                height: constraints.maxWidth * 0.58,
+                              ),
+                  ),
+                ),
+                Container(
+                  margin: const EdgeInsets.only(bottom: spacing - 5),
+                  child: isLoading
+                      ? const GrayBarWidget(height: 12, width: 90)
+                      : Text(
+                          title!,
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 12,
+                          ),
+                        ),
+                ),
+                if (!user.isInstructor)
+                  Container(
+                    margin: const EdgeInsets.only(bottom: spacing),
+                    child: isLoading
+                        ? const GrayBarWidget(height: 12, width: 90)
+                        : Text(
+                            'Você completou ${conclusionPercentage!.floor()}%',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 10,
+                              color: LibrinoColors.subtitleGray,
+                            ),
+                          ),
+                  ),
+                if (!user.isInstructor)
+                  isLoading
+                      ? GrayBarWidget(height: 14, width: double.infinity)
+                      : ProgressBarWidget(
+                          color: LibrinoColors.main,
+                          height: 12,
+                          progression: conclusionPercentage!,
+                        )
+              ],
+            );
+          },
         ),
       ),
     );

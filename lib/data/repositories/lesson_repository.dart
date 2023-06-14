@@ -35,7 +35,12 @@ class LessonRepository {
   }
 
   Future<Lesson> create(Lesson lesson) async {
-    throw UnimplementedError();
+    final docRef = await getCollection(lesson.moduleId).add(lesson.toJson());
+    final snapshot = await docRef.get();
+    final data = snapshot.data()!;
+    data.update('id', (_) => docRef.id);
+    await docRef.update(data);
+    return Lesson.fromJson(data);
   }
 
   Future<List<Lesson>> getFromModule(String moduleId) async {
@@ -43,5 +48,12 @@ class LessonRepository {
     final lessons =
         snapshot.docs.map((e) => Lesson.fromJson(e.data())).toList();
     return lessons;
+  }
+
+  Future<void> updateList(List<Lesson> lessons) async {
+    for (final l in lessons) {
+      final docRef = getCollection(lessons.first.moduleId).doc(l.id);
+      await docRef.update(l.toJson());
+    }
   }
 }

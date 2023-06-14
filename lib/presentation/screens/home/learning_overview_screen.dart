@@ -29,14 +29,11 @@ class LearningOverviewScreen extends StatefulWidget {
 
 class _LearningOverviewScreenState extends State<LearningOverviewScreen> {
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return RefreshableScrollViewWidget(
-      onRefresh: () async => widget.listCubit.loadFromClass(defaultClass),
+      onRefresh: () async {
+        return widget.listCubit.load();
+      },
       child: BlocBuilder<AuthCubit, AuthState>(
         buildWhen: (_, state) => state is LoggedInState,
         builder: (context, state) {
@@ -63,7 +60,7 @@ class _LearningOverviewScreenState extends State<LearningOverviewScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(
-                      margin: const EdgeInsets.only(bottom: 35, left: 6),
+                      margin: const EdgeInsets.only(bottom: 20, left: 6),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -109,7 +106,7 @@ class _LearningOverviewScreenState extends State<LearningOverviewScreen> {
                     ),
                     Container(
                       margin: const EdgeInsets.only(
-                        bottom: Sizes.defaultScreenBottomMargin,
+                        bottom: Sizes.defaultScreenBottomMargin * 3,
                       ),
                       child: ModulesGridWidget(),
                     )

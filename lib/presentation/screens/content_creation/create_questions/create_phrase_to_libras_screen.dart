@@ -76,6 +76,7 @@ class _CreatePhraseToLIBRASScreenState
   }
 
   void attachVideo() async {
+    FocusScope.of(context).unfocus();
     final shouldGetFromGallery = await showModalBottomSheet<bool>(
       context: context,
       builder: (context) => SelectImageSourceModal(

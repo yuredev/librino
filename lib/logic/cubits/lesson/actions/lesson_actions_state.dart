@@ -32,3 +32,20 @@ class CreateLessonErrorState extends LessonActionsState {
   @override
   List<Object?> get props => [errorMessage];
 }
+
+class UpdatingLessonsOrderState extends LessonActionsState {
+  @override
+  List<Object?> get props => [];
+}
+class LessonsOrderUpdatedState extends LessonActionsState {
+  @override
+  List<Object?> get props => [];
+}
+class LessonOrderUpdateErrorState extends LessonActionsState {
+  final String errorMessage;
+
+  const LessonOrderUpdateErrorState(this.errorMessage);
+
+  @override
+  List<Object?> get props => [errorMessage];
+}

@@ -133,8 +133,13 @@ class _AddQuestionToLessonScreenState extends State<AddQuestionToLessonScreen> {
           onPressed: () {
             Navigator.pushNamed(context, Routes.selectQuestionType);
           },
-          label: const Text('Criar',
-              style: TextStyle(fontWeight: FontWeight.bold)),
+          label: const Text(
+            'Criar',
+            style: TextStyle(
+              fontWeight: FontWeight.w600,
+              fontSize: 16,
+            ),
+          ),
           icon: const Icon(Icons.add),
         ),
       ),
@@ -262,7 +267,8 @@ class _AddQuestionToLessonScreenState extends State<AddQuestionToLessonScreen> {
                             title: 'Sem questões cadastradas',
                             subtitle:
                                 'No momento não há questões cadastradas no banco de questões do Librino',
-                            imageWidth: MediaQuery.of(context).size.width * 0.41,
+                            imageWidth:
+                                MediaQuery.of(context).size.width * 0.41,
                           )
                         ],
                       ),

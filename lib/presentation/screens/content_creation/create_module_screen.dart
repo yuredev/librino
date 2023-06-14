@@ -233,7 +233,7 @@ class _CreateModuleScreenState extends State<CreateModuleScreen> {
                   child: BlocConsumer<ModuleActionsCubit, ModuleActionsState>(
                     listener: onModuleActionsListen,
                     builder: (context, state) => ButtonWidget(
-                      title: 'Continuar',
+                      title: 'Cadastrar',
                       width: double.infinity,
                       height: Sizes.defaultButtonHeight,
                       onPress: () => submit(context),

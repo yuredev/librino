@@ -43,7 +43,7 @@ class _HomeState extends State<Home> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       loadDefaultClassCubit.load();
-      loadModulesCubit.loadFromClass(defaultClass);
+      loadModulesCubit.load();
       loadClassesCubit.load();
       loadSubscriptionsCubit.load();
     });

@@ -10,7 +10,6 @@ import 'package:librino/logic/cubits/module/load/load_modules_cubit.dart';
 
 class ModuleActionsCubit extends Cubit<ModuleActionsState> {
   final LoadModulesCubit _loadModulesCubit = Bindings.get();
-  final SelectClassCubit _selectClassCubit = Bindings.get();
   final GlobalAlertCubit _globalAlertCubit = Bindings.get();
   final ModuleRepository _moduleRepository = Bindings.get();
 
@@ -21,7 +20,7 @@ class ModuleActionsCubit extends Cubit<ModuleActionsState> {
       emit(CreatingModuleState());
       final moduleSaved = await _moduleRepository.create(module, image);
       _globalAlertCubit.fire('Modulo cadastrado com sucesso!');
-      _loadModulesCubit.loadFromClass(_selectClassCubit.state.clazz!.id!);
+      _loadModulesCubit.load();
       emit(ModuleCreatedState(moduleSaved));
     } catch (e) {
       print(e);

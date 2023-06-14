@@ -19,7 +19,7 @@ class LessonModalWidget extends StatelessWidget {
   });
 
   void onButtonPress(BuildContext context) async {
-    final steps = lesson.steps;
+    final steps = lesson.questions!;
     final firstStep = steps.removeAt(0);
 
     Navigator.pushReplacementNamed(
@@ -111,32 +111,32 @@ class LessonModalWidget extends StatelessWidget {
                           ),
                         ],
                       ),
-                      Icon(
-                        Icons.star,
-                        size: 18,
-                        color: lesson.difficulty > 0
-                            ? LibrinoColors.starGold
-                            : LibrinoColors.disabledGray,
-                        shadows: [
-                          BoxShadow(
-                            blurRadius: 1,
-                            color: Colors.black.withOpacity(0.4),
-                          ),
-                        ],
-                      ),
-                      Icon(
-                        Icons.star,
-                        size: 18,
-                        color: lesson.difficulty > 1
-                            ? LibrinoColors.starGold
-                            : LibrinoColors.disabledGray,
-                        shadows: [
-                          BoxShadow(
-                            blurRadius: 1,
-                            color: Colors.black.withOpacity(0.4),
-                          ),
-                        ],
-                      ),
+                      // Icon(
+                      //   Icons.star,
+                      //   size: 18,
+                      //   color: lesson.difficulty > 0
+                      //       ? LibrinoColors.starGold
+                      //       : LibrinoColors.disabledGray,
+                      //   shadows: [
+                      //     BoxShadow(
+                      //       blurRadius: 1,
+                      //       color: Colors.black.withOpacity(0.4),
+                      //     ),
+                      //   ],
+                      // ),
+                      // Icon(
+                      //   Icons.star,
+                      //   size: 18,
+                      //   color: lesson.difficulty > 1
+                      //       ? LibrinoColors.starGold
+                      //       : LibrinoColors.disabledGray,
+                      //   shadows: [
+                      //     BoxShadow(
+                      //       blurRadius: 1,
+                      //       color: Colors.black.withOpacity(0.4),
+                      //     ),
+                      //   ],
+                      // ),
                     ],
                   ),
                   Container(
@@ -148,7 +148,7 @@ class LessonModalWidget extends StatelessWidget {
                           color: LibrinoColors.textLightBlack,
                         ),
                         children: [
-                          TextSpan(text: lesson.steps.length.toString()),
+                          TextSpan(text: lesson.questions!.length.toString()),
                         ],
                       ),
                     ),

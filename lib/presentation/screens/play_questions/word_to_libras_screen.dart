@@ -32,7 +32,7 @@ class WordToLibrasScreen extends StatelessWidget {
       // TODO: mostrar modal de conclusão
       return;
     }
-    final firstStep = playLessonDTO!.questions.removeAt(0);
+    final firstStep = playLessonDTO.questions.removeAt(0);
     Navigator.pushReplacementNamed(
       context,
       lessonTypeToScreenNameMap[firstStep.type]!,

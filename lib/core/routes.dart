@@ -9,6 +9,7 @@ import 'package:librino/logic/cubits/class/load/load_classes_cubit.dart';
 import 'package:librino/logic/cubits/class/load_default/load_default_class_cubit.dart';
 import 'package:librino/logic/cubits/class/search/search_class_cubit.dart';
 import 'package:librino/logic/cubits/class/select/select_class_cubit.dart';
+import 'package:librino/logic/cubits/lesson/actions/lesson_actions_cubit.dart';
 import 'package:librino/logic/cubits/lesson/load/load_lessons_cubit.dart';
 import 'package:librino/logic/cubits/lesson/load/load_single_lesson_cubit.dart';
 import 'package:librino/logic/cubits/module/actions/module_actions_cubit.dart';
@@ -191,8 +192,15 @@ abstract class Routes {
         );
       case addLessonsToModule:
         return MaterialPageRoute(
-          builder: (ctx) => BlocProvider<LoadLessonsCubit>.value(
-            value: Bindings.get(),
+          builder: (ctx) => MultiBlocProvider(
+            providers: [
+              BlocProvider<LoadLessonsCubit>.value(
+                value: Bindings.get(),
+              ),
+              BlocProvider<LessonActionsCubit>.value(
+                value: Bindings.get(),
+              ),
+            ],
             child: AddLessonsToModuleScreen(
               module: (settings.arguments as Map)['module'],
             ),
@@ -200,7 +208,13 @@ abstract class Routes {
         );
       case createLesson:
         return MaterialPageRoute(
-          builder: (ctx) => CreateLessonScreen(),
+          builder: (ctx) => BlocProvider<LessonActionsCubit>.value(
+            value: Bindings.get(),
+            child: CreateLessonScreen(
+              module: (settings.arguments as Map)['module'],
+              lessonCreationIndex: (settings.arguments as Map)['lessonCreationIndex'],
+            ),
+          ),
         );
       case addQuestionToLesson:
         return MaterialPageRoute(
