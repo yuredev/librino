@@ -34,6 +34,7 @@ import 'package:librino/presentation/screens/content_creation/create_questions/c
 import 'package:librino/presentation/screens/content_creation/create_questions/create_word_to_libras_screen.dart';
 import 'package:librino/presentation/screens/create_class_screen.dart';
 import 'package:librino/presentation/screens/home/home.dart';
+import 'package:librino/presentation/screens/lesson_result_screen.dart';
 import 'package:librino/presentation/screens/play_questions/libras_to_phrase_screen.dart';
 import 'package:librino/presentation/screens/play_questions/libras_to_word_screen.dart';
 import 'package:librino/presentation/screens/play_questions/phrase_to_libras_screen.dart';
@@ -75,6 +76,7 @@ abstract class Routes {
   static const phraseToLibrasQuestion = '/phrase-to-libras-question';
   static const wordToLibrasQuestion = '/word-to-libras-question';
   static const librasToWordQuestion = '/libras-to-word-question';
+  static const lessonResult = '/lesson-result';
 
   static Route? onGenerateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -280,6 +282,16 @@ abstract class Routes {
           builder: (context) {
             return CameraPage(settings.arguments as CameraDescription);
           },
+        );
+      case lessonResult:
+        return MaterialPageRoute(
+          builder: (context) => BlocProvider<LessonActionsCubit>.value(
+            value: Bindings.get(),
+            child: LessonResultScreen(
+              hasFailed: (settings.arguments as Map)['hasFailed'],
+              lessonId: (settings.arguments as Map)['lessonId'],
+            ),
+          ),
         );
     }
     return null;

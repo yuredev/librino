@@ -27,6 +27,10 @@ class AuthCubit extends HydratedCubit<AuthState> {
     }
   }
 
+  void updateUserState(LibrinoUser user) => emit(
+        LoggedInState(user, (state as LoggedInState).token),
+      );
+
   Future<void> signIn({
     required String email,
     required String password,

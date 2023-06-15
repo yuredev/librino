@@ -21,11 +21,13 @@ import 'package:librino/presentation/widgets/shared/shimmer_widget.dart';
 class LessonModalWidget extends StatefulWidget {
   final Lesson lesson;
   final Module module;
+  final bool readOnly;
 
   const LessonModalWidget(
     this.lesson, {
     super.key,
     required this.module,
+    required this.readOnly,
   });
 
   @override
@@ -38,7 +40,7 @@ class _LessonModalWidgetState extends State<LessonModalWidget> {
   void onButtonPress(BuildContext context, List<Question> questions) async {
     final first = questions[0];
 
-    Navigator.pushReplacementNamed(
+    await Navigator.pushReplacementNamed(
       context,
       lessonTypeToScreenNameMap[first.type]!,
       arguments: PlayLessonDTO(
@@ -47,6 +49,7 @@ class _LessonModalWidgetState extends State<LessonModalWidget> {
         currentQuestion: first,
         totalQuestions: widget.lesson.questionIds.length,
         index: 0,
+        lessonId: widget.lesson.id,
       ),
     );
   }
@@ -86,7 +89,8 @@ class _LessonModalWidgetState extends State<LessonModalWidget> {
                       ModalTopBarWidget(),
                       Container(
                         margin: const EdgeInsets.only(
-                            top: Sizes.modalBottomSheetDefaultTopPadding),
+                          top: Sizes.modalBottomSheetDefaultTopPadding,
+                        ),
                         child: IllustrationWidget(
                           illustrationName: 'error.json',
                           isAnimation: true,
@@ -118,6 +122,25 @@ class _LessonModalWidgetState extends State<LessonModalWidget> {
                             : Image.network(
                                 widget.module.imageUrl!,
                                 width: MediaQuery.of(context).size.width * 0.28,
+                                errorBuilder: (context, error, stackTrace) {
+                                  return Image.asset(
+                                    'assets/images/generic-module.png',
+                                    width: MediaQuery.of(context).size.width *
+                                        0.28,
+                                  );
+                                },
+                                loadingBuilder:
+                                    (context, child, loadingProgress) {
+                                  return ShimmerWidget(
+                                    child: GrayBarWidget(
+                                      height:
+                                          MediaQuery.of(context).size.width *
+                                              0.28,
+                                      width: MediaQuery.of(context).size.width *
+                                          0.28,
+                                    ),
+                                  );
+                                },
                               ),
                         Container(
                           margin: const EdgeInsets.only(top: 12),
@@ -141,12 +164,12 @@ class _LessonModalWidgetState extends State<LessonModalWidget> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
-                                  '${(getCompletedsCount(widget.module.lessons!, completedIds) / widget.module.lessons!.length)}'
+                                  '${(getCompletedsCount(widget.module.lessons!, completedIds) / widget.module.lessons!.length * 100).truncate()}'
                                   '% concluído',
                                 ),
                                 Text(
-                                  '${getCompletedsCount(widget.module.lessons!, completedIds)}/${widget.module.lessons!.length} '
-                                  'Lições concluídas',
+                                  '${getCompletedsCount(widget.module.lessons!, completedIds)} '
+                                  '${getCompletedsCount(widget.module.lessons!, completedIds) == 1 ? 'Lição concluída' : 'Lições concluídas'}',
                                 ),
                               ],
                             ),
@@ -159,7 +182,8 @@ class _LessonModalWidgetState extends State<LessonModalWidget> {
                                         widget.module.lessons!,
                                         completedIds,
                                       ) /
-                                      widget.module.lessons!.length,
+                                      widget.module.lessons!.length *
+                                      100,
                                 )),
                             Container(
                               margin: const EdgeInsets.only(top: 24),
@@ -285,22 +309,23 @@ class _LessonModalWidgetState extends State<LessonModalWidget> {
                     //     ),
                     //   ),
                     // ),
-                    ButtonWidget(
-                      onPress: () => questionsState is QuestionsLoadedState
-                          ? onButtonPress(context, questionsState.questions)
-                          : null,
-                      title: 'Jogar',
-                      height: Sizes.defaultButtonHeight,
-                      width: double.infinity,
-                      leftIcon: Icon(
-                        Icons.gamepad,
-                        color: Colors.white,
+                    if (!widget.readOnly)
+                      ButtonWidget(
+                        onPress: () => questionsState is QuestionsLoadedState
+                            ? onButtonPress(context, questionsState.questions)
+                            : null,
+                        title: 'Jogar',
+                        height: Sizes.defaultButtonHeight,
+                        width: double.infinity,
+                        leftIcon: Icon(
+                          Icons.gamepad,
+                          color: Colors.white,
+                        ),
+                        padding: EdgeInsets.symmetric(vertical: 14),
+                        loadingText: 'Carregando...',
+                        isLoading: questionsState is! QuestionsLoadedState,
+                        isEnabled: questionsState is QuestionsLoadedState,
                       ),
-                      padding: EdgeInsets.symmetric(vertical: 14),
-                      loadingText: 'Carregando...',
-                      isLoading: questionsState is! QuestionsLoadedState,
-                      isEnabled: questionsState is QuestionsLoadedState,
-                    ),
                   ],
                 ),
               ),

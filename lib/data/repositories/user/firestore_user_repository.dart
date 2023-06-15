@@ -13,8 +13,26 @@ class FirestoreUserRepository {
   }
 
   Future<FirestoreUser> getById(String id) async {
-    final snapshot = await _collection.where('id', isEqualTo: id).get();
-    final userData = snapshot.docs.first.data();
-    return FirestoreUser.fromJson(userData);
+    final ref = _collection.where('id', isEqualTo: id).limit(1);
+    final snapshot = await ref.get();
+    return FirestoreUser.fromJson(snapshot.docs.first.data());
+  }
+
+  Future<void> registerProgression(String lessonId, String userId) async {
+    try {
+      final ref = _collection.where('id', isEqualTo: userId);
+      final snapshot = (await ref.get()).docs.first;
+      final data = snapshot.data();
+      final completedLessonsIds = data['completedLessonsIds'] ?? <String>[];
+      completedLessonsIds.add(lessonId);
+      if (data['completedLessonsIds'] == null) {
+        data.putIfAbsent('completedLessonsIds', () => completedLessonsIds);
+      } else {
+        data.update('completedLessonsIds', (value) => completedLessonsIds);
+      }
+      await _collection.doc(snapshot.id).update(data);
+    } catch (e) {
+      rethrow;
+    }
   }
 }

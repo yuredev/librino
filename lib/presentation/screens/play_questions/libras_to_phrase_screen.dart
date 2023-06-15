@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:librino/core/constants/colors.dart';
 import 'package:librino/core/constants/mappings.dart';
 import 'package:librino/core/constants/sizes.dart';
+import 'package:librino/core/routes.dart';
+import 'package:librino/core/utils/array_utils.dart';
+import 'package:librino/core/utils/string_utils.dart';
 import 'package:librino/data/models/play_lesson_dto.dart';
 import 'package:librino/data/models/question/libras_to_phrase/libras_to_phrase_question.dart';
 import 'package:librino/presentation/utils/presentation_utils.dart';
@@ -12,7 +15,6 @@ import 'package:librino/presentation/widgets/shared/librino_scaffold.dart';
 import 'package:librino/presentation/widgets/shared/question_title.dart';
 import 'package:librino/presentation/widgets/shared/video_player_widget.dart';
 import 'package:reorderables/reorderables.dart';
-import 'package:video_player/video_player.dart';
 
 class LibrasToPhraseScreen extends StatefulWidget {
   final PlayLessonDTO playLessonDTO;
@@ -41,15 +43,16 @@ class _LibrasToPhraseScreenState extends State<LibrasToPhraseScreen> {
   }
 
   void initializeWords() {
-    words = [
+    words = ArrayUtils.shuffle([
       ...question.choices,
       ...question.answerText
           .trim()
           .replaceAll('  ', ' ')
           .replaceAll('   ', ' ')
           .replaceAll('    ', ' ')
-          .split(' '),
-    ];
+          .split(' ')
+          .map((e) => StringUtils.toTitle(e)),
+    ]);
   }
 
   LibrasToPhraseQuestion get question =>
@@ -61,9 +64,15 @@ class _LibrasToPhraseScreenState extends State<LibrasToPhraseScreen> {
     late final int lives;
     if (hasMissed()) {
       if (widget.playLessonDTO.lives == 1) {
-        Navigator.pop(context);
         SoundUtils.play('loss.mp3');
-        // TODO: mostrar modal de perdedor
+        Navigator.pushReplacementNamed(
+          context,
+          Routes.lessonResult,
+          arguments: {
+            'hasFailed': true,
+            'lessonId': widget.playLessonDTO.lessonId!,
+          },
+        );
         return;
       } else {
         PresentationUtils.showQuestionResultFeedback(context, false);
@@ -74,9 +83,15 @@ class _LibrasToPhraseScreenState extends State<LibrasToPhraseScreen> {
       PresentationUtils.showQuestionResultFeedback(context, true);
     }
     if (questions.isEmpty) {
-      Navigator.pop(context);
       SoundUtils.play('win.mp3');
-      // TODO: mostrar modal de conclusão
+      Navigator.pushReplacementNamed(
+        context,
+        Routes.lessonResult,
+        arguments: {
+          'hasFailed': false,
+          'lessonId': widget.playLessonDTO.lessonId!,
+        },
+      );
       return;
     } else {
       Navigator.pushReplacementNamed(
@@ -91,9 +106,9 @@ class _LibrasToPhraseScreenState extends State<LibrasToPhraseScreen> {
     }
   }
 
-  bool hasMissed() {
-    return selectedWords.join(' ') != question.answerText;
-  }
+  bool hasMissed() =>
+      selectedWords.join(' ').toLowerCase() !=
+      question.answerText.toLowerCase();
 
   @override
   Widget build(BuildContext context) {

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:librino/core/constants/colors.dart';
 import 'package:librino/core/constants/mappings.dart';
 import 'package:librino/core/constants/sizes.dart';
+import 'package:librino/core/routes.dart';
 import 'package:librino/data/models/play_lesson_dto.dart';
 import 'package:librino/data/models/question/word_to_libras/word_to_libras_question.dart';
 import 'package:librino/presentation/utils/presentation_utils.dart';
@@ -39,9 +40,15 @@ class _WordToLibrasScreenState extends State<WordToLibrasScreen> {
     late final int lives;
     if (hasMissed()) {
       if (widget.playLessonDTO.lives == 1) {
-        Navigator.pop(context);
         SoundUtils.play('loss.mp3');
-        // TODO: mostrar modal de perdedor
+        Navigator.pushReplacementNamed(
+          context,
+          Routes.lessonResult,
+          arguments: {
+            'hasFailed': true,
+            'lessonId': widget.playLessonDTO.lessonId!,
+          },
+        );
         return;
       } else {
         PresentationUtils.showQuestionResultFeedback(context, false);
@@ -52,9 +59,15 @@ class _WordToLibrasScreenState extends State<WordToLibrasScreen> {
       PresentationUtils.showQuestionResultFeedback(context, true);
     }
     if (questions.isEmpty) {
-      Navigator.pop(context);
       SoundUtils.play('win.mp3');
-      // TODO: mostrar modal de conclusão
+      Navigator.pushReplacementNamed(
+        context,
+        Routes.lessonResult,
+        arguments: {
+          'hasFailed': false,
+          'lessonId': widget.playLessonDTO.lessonId!,
+        },
+      );
       return;
     } else {
       Navigator.pushReplacementNamed(

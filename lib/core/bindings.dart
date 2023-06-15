@@ -56,10 +56,10 @@ abstract class Bindings {
     set(SelectClassCubit());
     set(LoadLessonQuestionsCubit());
     set(LoadQuestionBaseCubit());
-    set(LessonActionsCubit());
     set(LoadModulesCubit());
     set(ModuleActionsCubit());
     set(AuthCubit());
+    set(LessonActionsCubit());
     set(UserCRUDCubit());
     set(LoadSingleLessonCubit());
     set(LoadLessonsCubit());

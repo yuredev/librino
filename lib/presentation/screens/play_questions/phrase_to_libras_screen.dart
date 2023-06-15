@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:librino/core/constants/colors.dart';
 import 'package:librino/core/constants/mappings.dart';
 import 'package:librino/core/constants/sizes.dart';
+import 'package:librino/core/routes.dart';
+import 'package:librino/core/utils/array_utils.dart';
 import 'package:librino/data/models/play_lesson_dto.dart';
 import 'package:librino/data/models/question/phrase_to_libras/phrase_to_libras_question.dart';
 import 'package:librino/presentation/utils/presentation_utils.dart';
@@ -11,7 +13,6 @@ import 'package:librino/presentation/utils/sound_utils.dart';
 import 'package:librino/presentation/widgets/shared/button_widget.dart';
 import 'package:librino/presentation/widgets/shared/lesson_topbar_widget.dart';
 import 'package:librino/presentation/widgets/shared/librino_scaffold.dart';
-import 'package:librino/presentation/widgets/shared/question_title.dart';
 import 'package:reorderables/reorderables.dart';
 
 class PhraseToLibrasScreen extends StatefulWidget {
@@ -35,13 +36,19 @@ class _PhraseToLibrasScreenState extends State<PhraseToLibrasScreen> {
 
   void onButtonPress(BuildContext context) {
     final questions = widget.playLessonDTO.questions;
-    final question = questions.removeAt(0);
+    questions.removeAt(0);
     late final int lives;
     if (hasMissed()) {
       if (widget.playLessonDTO.lives == 1) {
-        Navigator.pop(context);
         SoundUtils.play('loss.mp3');
-        // TODO: mostrar modal de perdedor
+        Navigator.pushReplacementNamed(
+          context,
+          Routes.lessonResult,
+          arguments: {
+            'hasFailed': true,
+            'lessonId': widget.playLessonDTO.lessonId!,
+          },
+        );
         return;
       } else {
         PresentationUtils.showQuestionResultFeedback(context, false);
@@ -52,9 +59,15 @@ class _PhraseToLibrasScreenState extends State<PhraseToLibrasScreen> {
       PresentationUtils.showQuestionResultFeedback(context, true);
     }
     if (questions.isEmpty) {
-      Navigator.pop(context);
       SoundUtils.play('win.mp3');
-      // TODO: mostrar modal de conclusão
+      Navigator.pushReplacementNamed(
+        context,
+        Routes.lessonResult,
+        arguments: {
+          'hasFailed': false,
+          'lessonId': widget.playLessonDTO.lessonId!,
+        },
+      );
       return;
     } else {
       Navigator.pushReplacementNamed(
@@ -81,21 +94,7 @@ class _PhraseToLibrasScreenState extends State<PhraseToLibrasScreen> {
   @override
   void initState() {
     super.initState();
-    userAnswer = shuffleArray([...question.answerUrls!]);
-  }
-
-  List<T> shuffleArray<T>(List<T> array) {
-    var random = Random();
-
-    // Go through all elementsof list
-    for (var i = array.length - 1; i > 0; i--) {
-      // Pick a random number according to the lenght of list
-      final n = random.nextInt(i + 1);
-      final temp = array[i];
-      array[i] = array[n];
-      array[n] = temp;
-    }
-    return array;
+    userAnswer = ArrayUtils.shuffle([...question.answerUrls!]);
   }
 
   PhraseToLibrasQuestion get question =>

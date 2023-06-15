@@ -49,3 +49,31 @@ class LessonOrderUpdateErrorState extends LessonActionsState {
   @override
   List<Object?> get props => [errorMessage];
 }
+
+abstract class AbstractFinishLessonState extends LessonActionsState {
+  const AbstractFinishLessonState();
+}
+
+class FinishingLessonState extends AbstractFinishLessonState {
+
+  const FinishingLessonState();
+
+  @override
+  List<Object?> get props => [];
+}
+
+class LessonFinishedState extends AbstractFinishLessonState {
+
+  const LessonFinishedState();
+
+  @override
+  List<Object?> get props => [];
+}
+
+class FinishLessonErrorState extends AbstractFinishLessonState {
+
+  const FinishLessonErrorState();
+
+  @override
+  List<Object?> get props => [];
+}

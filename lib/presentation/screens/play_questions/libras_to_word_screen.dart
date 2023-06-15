@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:librino/core/constants/colors.dart';
 import 'package:librino/core/constants/mappings.dart';
 import 'package:librino/core/constants/sizes.dart';
+import 'package:librino/core/routes.dart';
 import 'package:librino/data/models/play_lesson_dto.dart';
 import 'package:librino/data/models/question/libras_to_word/libras_to_word_question.dart';
 import 'package:librino/presentation/utils/presentation_utils.dart';
@@ -33,13 +34,19 @@ class _LibrasToWordScreenState extends State<LibrasToWordScreen> {
 
   void onButtonPress(BuildContext context) {
     final questions = widget.playLessonDTO.questions;
-    final question = questions.removeAt(0);
+    questions.removeAt(0);
     late final int lives;
     if (hasMissed()) {
       if (widget.playLessonDTO.lives == 1) {
-        Navigator.pop(context);
         SoundUtils.play('loss.mp3');
-        // TODO: mostrar modal de perdedor
+        Navigator.pushReplacementNamed(
+          context,
+          Routes.lessonResult,
+          arguments: {
+            'hasFailed': true,
+            'lessonId': widget.playLessonDTO.lessonId!,
+          },
+        );
         return;
       } else {
         PresentationUtils.showQuestionResultFeedback(context, false);
@@ -50,9 +57,15 @@ class _LibrasToWordScreenState extends State<LibrasToWordScreen> {
       PresentationUtils.showQuestionResultFeedback(context, true);
     }
     if (questions.isEmpty) {
-      Navigator.pop(context);
       SoundUtils.play('win.mp3');
-      // TODO: mostrar modal de conclusão
+      Navigator.pushReplacementNamed(
+        context,
+        Routes.lessonResult,
+        arguments: {
+          'hasFailed': false,
+          'lessonId': widget.playLessonDTO.lessonId!,
+        },
+      );
       return;
     } else {
       Navigator.pushReplacementNamed(

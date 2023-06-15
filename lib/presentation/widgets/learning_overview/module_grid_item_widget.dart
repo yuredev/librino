@@ -56,6 +56,23 @@ class ModuleGridItemWidget extends StatelessWidget {
                                 width: constraints.maxWidth * 0.55,
                                 height: constraints.maxWidth * 0.55,
                                 fit: BoxFit.contain,
+                                errorBuilder: (context, error, stackTrace) {
+                                  return Image.asset(
+                                    'assets/images/generic-module.png',
+                                    width: constraints.maxWidth * 0.55,
+                                    height: constraints.maxWidth * 0.55,
+                                    fit: BoxFit.contain,
+                                  );
+                                },
+                                loadingBuilder:
+                                    (context, child, loadingProgress) {
+                                  return ShimmerWidget(
+                                    child: GrayBarWidget(
+                                      width: constraints.maxWidth * 0.55,
+                                      height: constraints.maxWidth * 0.55,
+                                    ),
+                                  );
+                                },
                               ),
                   ),
                 ),

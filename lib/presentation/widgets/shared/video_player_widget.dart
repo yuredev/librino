@@ -44,8 +44,10 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
               mixWithOthers: true,
             ),
           );
-    playerCtrl.addListener(() => setState(() {}));
-    initializePlayer();
+    if (mounted) {
+      playerCtrl.addListener(() => setState(() {}));
+      initializePlayer();
+    }
   }
 
   bool get shouldStartPlaying => !widget.shouldLimitReplays;

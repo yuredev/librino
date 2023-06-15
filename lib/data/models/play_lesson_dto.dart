@@ -9,11 +9,13 @@ class PlayLessonDTO extends Equatable {
   final Question currentQuestion;
   final int? totalQuestions;
   final int? index;
+  final String? lessonId;
 
   const PlayLessonDTO({
     this.lives,
     this.index,
     this.totalQuestions,
+    this.lessonId,
     required this.questions,
     required this.currentQuestion,
   });
@@ -25,21 +27,24 @@ class PlayLessonDTO extends Equatable {
         currentQuestion,
         totalQuestions,
         index,
+        lessonId,
       ];
 
   PlayLessonDTO copyWith({
     int? lives,
-    List<Question>? nextQuestions,
+    List<Question>? questions,
     Question? currentQuestion,
     int? totalQuestions,
     int? index,
+    String? lessonId,
   }) {
     return PlayLessonDTO(
       lives: lives ?? this.lives,
-      questions: nextQuestions ?? this.questions,
+      questions: questions ?? this.questions,
       currentQuestion: currentQuestion ?? this.currentQuestion,
       totalQuestions: totalQuestions ?? this.totalQuestions,
       index: index ?? this.index,
+      lessonId: lessonId ?? this.lessonId,
     );
   }
 }
