@@ -89,6 +89,7 @@ class _CreatePhraseToLIBRASScreenState
     }
     final pickedVideo = await Bindings.get<ImagePicker>().pickVideo(
       source: shouldGetFromGallery ? ImageSource.gallery : ImageSource.camera,
+      preferredCameraDevice: CameraDevice.front,
     );
     if (pickedVideo == null) return;
     final gifPath = pickedVideo.path.replaceAll('.mp4', '.gif');

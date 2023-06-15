@@ -14,10 +14,12 @@ class LibrinoUser extends Equatable {
   final String id;
   final String email;
   final String? photoURL;
+  final List<String> completedLessonsIds;
 
   const LibrinoUser({
     required this.auditoryAbility,
     this.genderIdentity,
+    required this.completedLessonsIds,
     required this.profileType,
     required this.name,
     required this.surname,

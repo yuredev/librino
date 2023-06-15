@@ -3,6 +3,7 @@ import 'package:librino/core/constants/colors.dart';
 import 'package:librino/core/constants/mappings.dart';
 import 'package:librino/core/constants/sizes.dart';
 import 'package:librino/data/models/play_lesson_dto.dart';
+import 'package:librino/data/models/question/libras_to_phrase/libras_to_phrase_question.dart';
 import 'package:librino/presentation/utils/presentation_utils.dart';
 import 'package:librino/presentation/utils/sound_utils.dart';
 import 'package:librino/presentation/widgets/shared/button_widget.dart';
@@ -14,14 +15,14 @@ import 'package:reorderables/reorderables.dart';
 import 'package:video_player/video_player.dart';
 
 class LibrasToPhraseScreen extends StatefulWidget {
-  final PlayLessonDTO? playLessonDTO;
+  final PlayLessonDTO playLessonDTO;
   final Widget? floatingActionButton;
   final bool readOnly;
 
   const LibrasToPhraseScreen({
     super.key,
     this.floatingActionButton,
-    this.playLessonDTO,
+    required this.playLessonDTO,
     this.readOnly = false,
   });
 
@@ -30,49 +31,68 @@ class LibrasToPhraseScreen extends StatefulWidget {
 }
 
 class _LibrasToPhraseScreenState extends State<LibrasToPhraseScreen> {
-  late final VideoPlayerController videoCtrl;
-  final palavrasSelecionadas = <String>[];
-  final palavrasDisponiveis = <String>[
-    'De',
-    'Menina',
-    'Noite',
-    'Futebol',
-    'Hollow',
-    'Cachorro',
-    'Cobra',
-    'Mordeu',
-    'O',
-    'Menino',
-  ];
+  final selectedWords = <String>[];
+  late final List<String> words;
 
   @override
   void initState() {
     super.initState();
-    videoCtrl = VideoPlayerController.network(
-      'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4',
-    );
-    initializeVideo();
+    initializeWords();
   }
 
-  void onButtonPress() {
-    if (widget.playLessonDTO!.questions.isEmpty) {
+  void initializeWords() {
+    words = [
+      ...question.choices,
+      ...question.answerText
+          .trim()
+          .replaceAll('  ', ' ')
+          .replaceAll('   ', ' ')
+          .replaceAll('    ', ' ')
+          .split(' '),
+    ];
+  }
+
+  LibrasToPhraseQuestion get question =>
+      widget.playLessonDTO.currentQuestion as LibrasToPhraseQuestion;
+
+  void onButtonPress(BuildContext context) {
+    final questions = widget.playLessonDTO.questions;
+    final question = questions.removeAt(0);
+    late final int lives;
+    if (hasMissed()) {
+      if (widget.playLessonDTO.lives == 1) {
+        Navigator.pop(context);
+        SoundUtils.play('loss.mp3');
+        // TODO: mostrar modal de perdedor
+        return;
+      } else {
+        PresentationUtils.showQuestionResultFeedback(context, false);
+      }
+      lives = widget.playLessonDTO.lives! - 1;
+    } else {
+      lives = widget.playLessonDTO.lives!;
+      PresentationUtils.showQuestionResultFeedback(context, true);
+    }
+    if (questions.isEmpty) {
       Navigator.pop(context);
       SoundUtils.play('win.mp3');
       // TODO: mostrar modal de conclusão
       return;
+    } else {
+      Navigator.pushReplacementNamed(
+        context,
+        lessonTypeToScreenNameMap[questions[0].type]!,
+        arguments: widget.playLessonDTO.copyWith(
+          index: widget.playLessonDTO.index! + 1,
+          lives: lives,
+          currentQuestion: questions[0],
+        ),
+      );
     }
-    final firstStep = widget.playLessonDTO!.questions.removeAt(0);
-    Navigator.pushReplacementNamed(
-      context,
-      lessonTypeToScreenNameMap[firstStep.type]!,
-      arguments: widget.playLessonDTO,
-    );
-    PresentationUtils.showQuestionResultFeedback(context, false);
   }
 
-  Future<void> initializeVideo() async {
-    await videoCtrl.initialize();
-    setState(() {});
+  bool hasMissed() {
+    return selectedWords.join(' ') != question.answerText;
   }
 
   @override
@@ -95,9 +115,15 @@ class _LibrasToPhraseScreenState extends State<LibrasToPhraseScreen> {
                 children: [
                   if (!widget.readOnly)
                     Container(
-                      margin: const EdgeInsets.only(bottom: 26),
-                      child:
-                          LessonTopBarWidget(lifesNumber: 5, progression: 75),
+                      margin: const EdgeInsets.only(
+                        bottom: 26,
+                      ),
+                      child: LessonTopBarWidget(
+                        lifesNumber: widget.playLessonDTO.lives!,
+                        progression: (widget.playLessonDTO.index! /
+                                widget.playLessonDTO.totalQuestions!) *
+                            100,
+                      ),
                     ),
                   Container(
                     padding: const EdgeInsets.only(right: 20),
@@ -118,15 +144,14 @@ class _LibrasToPhraseScreenState extends State<LibrasToPhraseScreen> {
               // height: 100,
               width: double.infinity,
               child: VideoPlayerWidget(
-                videoPath:
-                    'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4',
+                videoPath: question.assetUrl!,
               ),
             ),
             Padding(
               padding: const EdgeInsets.fromLTRB(23, 0, 23, 0),
               child: Column(
                 children: [
-                  if (palavrasSelecionadas.isEmpty)
+                  if (selectedWords.isEmpty)
                     LayoutBuilder(
                       builder: (context, constraints) => Container(
                         margin: const EdgeInsets.only(bottom: 26),
@@ -158,8 +183,14 @@ class _LibrasToPhraseScreenState extends State<LibrasToPhraseScreen> {
                         },
                         spacing: 7,
                         runSpacing: -4,
-                        onReorder: (int oldIndex, int newIndex) {},
-                        children: palavrasSelecionadas
+                        onReorder: (int oldIndex, int newIndex) {
+                          final aux = selectedWords[oldIndex];
+                          setState(() {
+                            selectedWords[oldIndex] = selectedWords[newIndex];
+                            selectedWords[newIndex] = aux;
+                          });
+                        },
+                        children: selectedWords
                             .map(
                               (e) => Theme(
                                 data: ThemeData(
@@ -169,7 +200,7 @@ class _LibrasToPhraseScreenState extends State<LibrasToPhraseScreen> {
                                 child: InkWell(
                                   onTap: () {
                                     setState(() {
-                                      palavrasSelecionadas.remove(e);
+                                      selectedWords.remove(e);
                                     });
                                   },
                                   child: Chip(
@@ -202,9 +233,9 @@ class _LibrasToPhraseScreenState extends State<LibrasToPhraseScreen> {
                     alignment: WrapAlignment.center,
                     spacing: 7,
                     runSpacing: -4,
-                    children: palavrasDisponiveis.map(
+                    children: words.map(
                       (e) {
-                        final isDisabled = palavrasSelecionadas.contains(e);
+                        final isDisabled = selectedWords.contains(e);
                         return Theme(
                           data: ThemeData(
                             splashColor: Colors.transparent,
@@ -212,9 +243,9 @@ class _LibrasToPhraseScreenState extends State<LibrasToPhraseScreen> {
                           ),
                           child: InkWell(
                             onTap: () {
-                              if (!palavrasSelecionadas.contains(e)) {
+                              if (!selectedWords.contains(e)) {
                                 setState(() {
-                                  palavrasSelecionadas.add(e);
+                                  selectedWords.add(e);
                                 });
                               }
                             },
@@ -252,7 +283,7 @@ class _LibrasToPhraseScreenState extends State<LibrasToPhraseScreen> {
                         title: 'Checar',
                         height: Sizes.defaultButtonHeight,
                         width: double.infinity,
-                        onPress: onButtonPress,
+                        onPress: () => onButtonPress(context),
                       ),
                     ),
                 ],

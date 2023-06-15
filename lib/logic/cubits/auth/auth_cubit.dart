@@ -52,6 +52,7 @@ class AuthCubit extends HydratedCubit<AuthState> {
         surname: firestoreUser.surname,
         genderIdentity: firestoreUser.genderIdentity,
         photoURL: fireAuthUser.photoURL,
+        completedLessonsIds: firestoreUser.completedLessonsIds ?? [],
       );
       emit(LoggedInState(user, fireAuthUser.refreshToken!));
     } catch (e) {

@@ -46,14 +46,16 @@ class ModuleGridItemWidget extends StatelessWidget {
                         ? const GrayBarWidget(height: 45, width: 45)
                         : imageUrl == null
                             ? Image.asset(
-                                'assets/images/hand.png',
-                                width: constraints.maxWidth * 0.58,
-                                height: constraints.maxWidth * 0.58,
+                                'assets/images/generic-module.png',
+                                width: constraints.maxWidth * 0.55,
+                                height: constraints.maxWidth * 0.55,
+                                fit: BoxFit.contain,
                               )
                             : Image.network(
                                 imageUrl!,
-                                width: constraints.maxWidth * 0.58,
-                                height: constraints.maxWidth * 0.58,
+                                width: constraints.maxWidth * 0.55,
+                                height: constraints.maxWidth * 0.55,
+                                fit: BoxFit.contain,
                               ),
                   ),
                 ),

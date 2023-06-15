@@ -64,6 +64,7 @@ class _CreateLIBRASToPhraseScreenState
     }
     final pickedVideo = await Bindings.get<ImagePicker>().pickVideo(
       source: shouldGetFromGallery ? ImageSource.gallery : ImageSource.camera,
+      preferredCameraDevice: CameraDevice.front,
     );
     if (pickedVideo != null && context.mounted) {
       final cofirmVideo = (await Navigator.push<bool>(

@@ -96,6 +96,7 @@ class _CreateWordToLIBRASScreenState extends State<CreateWordToLIBRASScreen> {
     }
     final pickedVideo = await Bindings.get<ImagePicker>().pickVideo(
       source: shouldGetFromGallery ? ImageSource.gallery : ImageSource.camera,
+      preferredCameraDevice: CameraDevice.front,
     );
     if (pickedVideo == null) return;
     final gifPath = pickedVideo.path.replaceAll('.mp4', '.gif');
@@ -131,6 +132,7 @@ class _CreateWordToLIBRASScreenState extends State<CreateWordToLIBRASScreen> {
     }
     final pickedVideo = await Bindings.get<ImagePicker>().pickVideo(
       source: shouldGetFromGallery ? ImageSource.gallery : ImageSource.camera,
+      preferredCameraDevice: CameraDevice.front,
     );
     if (pickedVideo == null) return;
     final gifPath = pickedVideo.path.replaceAll('.mp4', '.gif');

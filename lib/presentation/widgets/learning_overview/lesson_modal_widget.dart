@@ -1,14 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:librino/core/constants/colors.dart';
 import 'package:librino/core/constants/mappings.dart';
 import 'package:librino/core/constants/sizes.dart';
 import 'package:librino/data/models/lesson/lesson.dart';
 import 'package:librino/data/models/module/module.dart';
 import 'package:librino/data/models/play_lesson_dto.dart';
+import 'package:librino/data/models/question/question.dart';
+import 'package:librino/logic/cubits/auth/auth_cubit.dart';
+import 'package:librino/logic/cubits/auth/auth_state.dart';
+import 'package:librino/logic/cubits/question/load_questions/load_lesson_questions_cubit.dart';
+import 'package:librino/logic/cubits/question/load_questions/load_questions_state.dart';
 import 'package:librino/presentation/widgets/shared/button_widget.dart';
+import 'package:librino/presentation/widgets/shared/gray_bar_widget.dart';
+import 'package:librino/presentation/widgets/shared/illustration_widget.dart';
+import 'package:librino/presentation/widgets/shared/modal_top_bar_widget.dart';
 import 'package:librino/presentation/widgets/shared/progress_bar_widget.dart';
+import 'package:librino/presentation/widgets/shared/shimmer_widget.dart';
 
-class LessonModalWidget extends StatelessWidget {
+class LessonModalWidget extends StatefulWidget {
   final Lesson lesson;
   final Module module;
 
@@ -18,158 +28,286 @@ class LessonModalWidget extends StatelessWidget {
     required this.module,
   });
 
-  void onButtonPress(BuildContext context) async {
-    final steps = lesson.questions!;
-    final firstStep = steps.removeAt(0);
+  @override
+  State<LessonModalWidget> createState() => _LessonModalWidgetState();
+}
+
+class _LessonModalWidgetState extends State<LessonModalWidget> {
+  late final LoadLessonQuestionsCubit loadQuestionsCubit = context.read();
+
+  void onButtonPress(BuildContext context, List<Question> questions) async {
+    final first = questions[0];
 
     Navigator.pushReplacementNamed(
       context,
-      lessonTypeToScreenNameMap[firstStep.type]!,
+      lessonTypeToScreenNameMap[first.type]!,
       arguments: PlayLessonDTO(
         lives: 3,
-        questions: steps,
+        questions: questions,
+        currentQuestion: first,
+        totalQuestions: widget.lesson.questionIds.length,
+        index: 0,
       ),
     );
   }
 
   @override
+  void initState() {
+    super.initState();
+    loadQuestionsCubit.loadFromLesson(widget.lesson);
+  }
+
+  int getCompletedsCount(List<Lesson> all, List<String> completed) {
+    return all.where((l) => completed.contains(l.id)).length;
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: MediaQuery.of(context).size.height * 0.51,
-      child: Padding(
-        padding: const EdgeInsets.only(
-          top: Sizes.modalBottomSheetDefaultTopPadding,
-          bottom: Sizes.modalBottomSheetDefaultBottomPadding,
-          left: Sizes.defaultScreenHorizontalMargin,
-          right: Sizes.defaultScreenHorizontalMargin,
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Flexible(
-              flex: 2,
-              child: Column(
-                children: [
-                  Flexible(
-                    child: module.imageUrl == null
-                        ? Image.asset('assets/images/hand.png')
-                        : Image.network(module.imageUrl!),
-                  ),
-                  Container(
-                    margin: const EdgeInsets.only(top: 12),
-                    child: Text(
-                      module.title,
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Container(
-              margin: const EdgeInsets.only(top: 12),
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [Text('70% concluído'), Text('4/8 exercícios')],
-                  ),
-                  Container(
-                    margin: EdgeInsets.only(top: 6),
-                    child: ProgressBarWidget(
-                      color: LibrinoColors.main,
-                      height: 15,
-                      progression: 70,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Container(
-              margin: const EdgeInsets.only(top: 24),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
+    const edgeInsets = EdgeInsets.only(
+      top: Sizes.modalBottomSheetDefaultTopPadding,
+      bottom: Sizes.modalBottomSheetDefaultBottomPadding,
+      left: Sizes.defaultScreenHorizontalMargin,
+      right: Sizes.defaultScreenHorizontalMargin,
+    );
+    return BlocBuilder<AuthCubit, AuthState>(
+      buildWhen: (previous, current) => current is LoggedInState,
+      builder: (context, authState) {
+        final completedIds =
+            (authState as LoggedInState).user.completedLessonsIds;
+        return BlocBuilder<LoadLessonQuestionsCubit, LoadQuestionsState>(
+          builder: (context, questionsState) {
+            if (questionsState is LoadQuestionsErrorState) {
+              return SizedBox(
+                height: MediaQuery.of(context).size.height * 0.62,
+                child: Padding(
+                  padding: edgeInsets,
+                  child: Column(
                     children: [
-                      Text(
-                        'Dificuldade: ',
-                        style: TextStyle(
-                          color: LibrinoColors.textLightBlack,
+                      ModalTopBarWidget(),
+                      Container(
+                        margin: const EdgeInsets.only(
+                            top: Sizes.modalBottomSheetDefaultTopPadding),
+                        child: IllustrationWidget(
+                          illustrationName: 'error.json',
+                          isAnimation: true,
+                          imageWidth: MediaQuery.of(context).size.width * 0.6,
+                          title: questionsState.errorMessage,
+                          fontSize: 18,
                         ),
                       ),
-                      Icon(
-                        Icons.star,
-                        size: 18,
-                        color: LibrinoColors.starGold,
-                        shadows: [
-                          BoxShadow(
-                            blurRadius: 1,
-                            color: Colors.black.withOpacity(0.4),
-                          ),
-                        ],
-                      ),
-                      // Icon(
-                      //   Icons.star,
-                      //   size: 18,
-                      //   color: lesson.difficulty > 0
-                      //       ? LibrinoColors.starGold
-                      //       : LibrinoColors.disabledGray,
-                      //   shadows: [
-                      //     BoxShadow(
-                      //       blurRadius: 1,
-                      //       color: Colors.black.withOpacity(0.4),
-                      //     ),
-                      //   ],
-                      // ),
-                      // Icon(
-                      //   Icons.star,
-                      //   size: 18,
-                      //   color: lesson.difficulty > 1
-                      //       ? LibrinoColors.starGold
-                      //       : LibrinoColors.disabledGray,
-                      //   shadows: [
-                      //     BoxShadow(
-                      //       blurRadius: 1,
-                      //       color: Colors.black.withOpacity(0.4),
-                      //     ),
-                      //   ],
-                      // ),
                     ],
                   ),
-                  Container(
-                    margin: const EdgeInsets.only(top: 8),
-                    child: RichText(
-                      text: TextSpan(
-                        text: 'N° de exercícios: ',
-                        style: TextStyle(
-                          color: LibrinoColors.textLightBlack,
+                ),
+              );
+            }
+            return SizedBox(
+              height: MediaQuery.of(context).size.height * 0.6,
+              child: Padding(
+                padding: edgeInsets,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        widget.module.imageUrl == null
+                            ? Image.asset(
+                                'assets/images/generic-module.png',
+                                width: MediaQuery.of(context).size.width * 0.28,
+                              )
+                            : Image.network(
+                                widget.module.imageUrl!,
+                                width: MediaQuery.of(context).size.width * 0.28,
+                              ),
+                        Container(
+                          margin: const EdgeInsets.only(top: 12),
+                          child: Text(
+                            widget.module.title,
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
                         ),
-                        children: [
-                          TextSpan(text: lesson.questions!.length.toString()),
-                        ],
+                      ],
+                    ),
+                    Expanded(
+                      child: Container(
+                        margin: const EdgeInsets.only(top: 12),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  '${(getCompletedsCount(widget.module.lessons!, completedIds) / widget.module.lessons!.length)}'
+                                  '% concluído',
+                                ),
+                                Text(
+                                  '${getCompletedsCount(widget.module.lessons!, completedIds)}/${widget.module.lessons!.length} '
+                                  'Lições concluídas',
+                                ),
+                              ],
+                            ),
+                            Container(
+                                margin: const EdgeInsets.only(top: 6),
+                                child: ProgressBarWidget(
+                                  color: LibrinoColors.main,
+                                  height: 15,
+                                  progression: getCompletedsCount(
+                                        widget.module.lessons!,
+                                        completedIds,
+                                      ) /
+                                      widget.module.lessons!.length,
+                                )),
+                            Container(
+                              margin: const EdgeInsets.only(top: 24),
+                              child: RichText(
+                                text: TextSpan(
+                                  text: 'Lição atual: ',
+                                  style: TextStyle(
+                                    color: LibrinoColors.textLightBlack,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                  children: [
+                                    TextSpan(
+                                      text: widget.lesson.title,
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            Container(
+                              margin: const EdgeInsets.only(top: 12),
+                              child: RichText(
+                                text: TextSpan(
+                                  text: 'N° de exercícios: ',
+                                  style: TextStyle(
+                                    color: LibrinoColors.textLightBlack,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                  children: [
+                                    TextSpan(
+                                      text: widget.lesson.questionIds.length
+                                          .toString(),
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            Container(
+                              margin: const EdgeInsets.only(top: 12),
+                              child: RichText(
+                                text: TextSpan(
+                                  text: 'Descrição: ',
+                                  style: TextStyle(
+                                    color: LibrinoColors.textLightBlack,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                  children: [
+                                    TextSpan(
+                                      text: widget.module.description,
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                    // Flexible(
+                    //   flex: 15,
+                    //   child: Container(
+                    //     margin: const EdgeInsets.only(top: 24),
+                    //     child: Column(
+                    //       crossAxisAlignment: CrossAxisAlignment.start,
+                    //       children: [
+                    //         Row(
+                    //           children: [
+                    //             // Text(
+                    //             //   'Dificuldade: ',
+                    //             //   style: TextStyle(
+                    //             //     color: LibrinoColors.textLightBlack,
+                    //             //   ),
+                    //             // ),
+                    //             // Icon(
+                    //             //   Icons.star,
+                    //             //   size: 18,
+                    //             //   color: LibrinoColors.starGold,
+                    //             //   shadows: [
+                    //             //     BoxShadow(
+                    //             //       blurRadius: 1,
+                    //             //       color: Colors.black.withOpacity(0.4),
+                    //             //     ),
+                    //             //   ],
+                    //             // ),
+                    //             // Icon(
+                    //             //   Icons.star,
+                    //             //   size: 18,
+                    //             //   color: lesson.difficulty > 0
+                    //             //       ? LibrinoColors.starGold
+                    //             //       : LibrinoColors.disabledGray,
+                    //             //   shadows: [
+                    //             //     BoxShadow(
+                    //             //       blurRadius: 1,
+                    //             //       color: Colors.black.withOpacity(0.4),
+                    //             //     ),
+                    //             //   ],
+                    //             // ),
+                    //             // Icon(
+                    //             //   Icons.star,
+                    //             //   size: 18,
+                    //             //   color: lesson.difficulty > 1
+                    //             //       ? LibrinoColors.starGold
+                    //             //       : LibrinoColors.disabledGray,
+                    //             //   shadows: [
+                    //             //     BoxShadow(
+                    //             //       blurRadius: 1,
+                    //             //       color: Colors.black.withOpacity(0.4),
+                    //             //     ),
+                    //             //   ],
+                    //             // ),
+                    //           ],
+                    //         ),
+
+                    //       ],
+                    //     ),
+                    //   ),
+                    // ),
+                    ButtonWidget(
+                      onPress: () => questionsState is QuestionsLoadedState
+                          ? onButtonPress(context, questionsState.questions)
+                          : null,
+                      title: 'Jogar',
+                      height: Sizes.defaultButtonHeight,
+                      width: double.infinity,
+                      leftIcon: Icon(
+                        Icons.gamepad,
+                        color: Colors.white,
+                      ),
+                      padding: EdgeInsets.symmetric(vertical: 14),
+                      loadingText: 'Carregando...',
+                      isLoading: questionsState is! QuestionsLoadedState,
+                      isEnabled: questionsState is QuestionsLoadedState,
+                    ),
+                  ],
+                ),
               ),
-            ),
-            Spacer(),
-            ButtonWidget(
-              onPress: () => onButtonPress(context),
-              title: 'Praticar',
-              height: Sizes.defaultButtonHeight,
-              width: double.infinity,
-              leftIcon: Icon(
-                Icons.gamepad,
-                color: Colors.white,
-              ),
-            ),
-          ],
-        ),
-      ),
+            );
+          },
+        );
+      },
     );
   }
 }

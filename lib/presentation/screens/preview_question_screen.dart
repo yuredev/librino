@@ -45,25 +45,38 @@ class PreviewQuestionScreen extends StatelessWidget {
         questionScreen = LibrasToPhraseScreen(
           readOnly: true,
           floatingActionButton: button,
+          playLessonDTO: PlayLessonDTO(
+            lives: 0,
+            questions: [question],
+            currentQuestion: question,
+          ),
         );
         break;
       case QuestionType.librasToWord:
         questionScreen = LibrasToWordScreen(
           readOnly: true,
           floatingActionButton: button,
+          playLessonDTO: PlayLessonDTO(
+            lives: 0,
+            questions: [question],
+            currentQuestion: question,
+          ),
         );
         break;
       case QuestionType.wordToLibras:
         questionScreen = WordToLibrasScreen(
           readOnly: true,
           floatingActionButton: button,
-          playLessonDTO: PlayLessonDTO(lives: 0, questions: [question]),
+          playLessonDTO: PlayLessonDTO(
+              lives: 0, questions: [question], currentQuestion: question),
         );
         break;
       case QuestionType.phraseToLibras:
         questionScreen = PhraseToLibrasScreen(
           readOnly: true,
           floatingActionButton: button,
+          playLessonDTO: PlayLessonDTO(
+              lives: 0, questions: [question], currentQuestion: question),
         );
         break;
     }

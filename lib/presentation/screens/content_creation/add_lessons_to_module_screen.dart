@@ -104,7 +104,7 @@ class _AddLessonsToModuleScreenState extends State<AddLessonsToModuleScreen> {
                             child: ListTileWidget(
                               title: '${index + 1} - ${l.title}',
                               subtitle:
-                                  '13 exercícios${l.supportContentId != null ? ' + conteúdo de apoio' : ''}',
+                                  '${l.questionIds.length} exercícios${l.supportContentId != null ? ' + conteúdo de apoio' : ''}',
                               onDelete: () async {
                                 final shouldRemove =
                                     (await PresentationUtils.showYesNotDialog(

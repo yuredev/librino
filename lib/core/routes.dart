@@ -1,3 +1,4 @@
+import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:librino/core/bindings.dart';
@@ -16,10 +17,12 @@ import 'package:librino/logic/cubits/module/actions/module_actions_cubit.dart';
 import 'package:librino/logic/cubits/module/load/load_modules_cubit.dart';
 import 'package:librino/logic/cubits/participants/load_participants_cubit.dart';
 import 'package:librino/logic/cubits/question/actions/question_actions_cubit.dart';
+import 'package:librino/logic/cubits/question/load_questions/load_lesson_questions_cubit.dart';
 import 'package:librino/logic/cubits/question/load_questions/load_questions_base_cubit.dart';
 import 'package:librino/logic/cubits/subscription/actions/subscription_actions_cubit.dart';
 import 'package:librino/logic/cubits/subscription/load/load_subscriptions_cubit.dart';
 import 'package:librino/logic/cubits/user/user_crud_cubit.dart';
+import 'package:librino/presentation/screens/camera_page.dart';
 import 'package:librino/presentation/screens/class_details_screen.dart';
 import 'package:librino/presentation/screens/content_creation/add_lessons_to_module_screen.dart';
 import 'package:librino/presentation/screens/content_creation/add_question_to_lesson_screen.dart';
@@ -58,6 +61,7 @@ abstract class Routes {
   static const selectQuestionType = '/select-question-type';
   static const viewSupportContent = '/view-support-content';
   static const previewQuestion = '/preview-question';
+  static const camera = '/camera';
 
   // Create questions
   static const createLIBRASToPhraseQuestion =
@@ -93,6 +97,9 @@ abstract class Routes {
                   value: Bindings.get(),
                 ),
                 BlocProvider<LoadSubscriptionsCubit>.value(
+                  value: Bindings.get(),
+                ),
+                BlocProvider<LoadLessonQuestionsCubit>.value(
                   value: Bindings.get(),
                 ),
               ],
@@ -212,7 +219,8 @@ abstract class Routes {
             value: Bindings.get(),
             child: CreateLessonScreen(
               module: (settings.arguments as Map)['module'],
-              lessonCreationIndex: (settings.arguments as Map)['lessonCreationIndex'],
+              lessonCreationIndex:
+                  (settings.arguments as Map)['lessonCreationIndex'],
             ),
           ),
         );
@@ -266,6 +274,12 @@ abstract class Routes {
             question: (settings.arguments as Map)['question'],
             readOnly: (settings.arguments as Map)['readOnly'] ?? false,
           ),
+        );
+      case camera:
+        return MaterialPageRoute(
+          builder: (context) {
+            return CameraPage(settings.arguments as CameraDescription);
+          },
         );
     }
     return null;

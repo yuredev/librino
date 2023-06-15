@@ -18,20 +18,12 @@ class LessonRepository {
     String moduleId,
     int lessonNumber,
   ) async {
-    final lessonsRef = _fireInstance
-        .collection('classes')
-        .doc(classId)
-        .collection('modules')
-        .doc(moduleId)
-        .collection('lessons');
-    final lessonMap =
-        (await lessonsRef.where('number', isEqualTo: lessonNumber).get())
-            .docs
-            .first
-            .data();
-    final lesson = Lesson.fromJson(lessonMap);
-    // lesson.steps.sort((a, b) => a.number - b.number);
-    return lesson;
+    throw UnimplementedError();
+    // final lessonsRef = getCollection(moduleId);
+    // final moduleLessons = await lessonsRef.get();
+    // final lesson = Lesson.fromJson(moduleLessons);
+    // // lesson.steps.sort((a, b) => a.number - b.number);
+    // return lesson;
   }
 
   Future<Lesson> create(Lesson lesson) async {
@@ -44,7 +36,7 @@ class LessonRepository {
   }
 
   Future<List<Lesson>> getFromModule(String moduleId) async {
-    final snapshot = (await getCollection(moduleId).get());
+    final snapshot = (await getCollection(moduleId).orderBy('index').get());
     final lessons =
         snapshot.docs.map((e) => Lesson.fromJson(e.data())).toList();
     return lessons;

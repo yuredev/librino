@@ -25,6 +25,7 @@ import 'package:librino/logic/cubits/module/actions/module_actions_cubit.dart';
 import 'package:librino/logic/cubits/module/load/load_modules_cubit.dart';
 import 'package:librino/logic/cubits/participants/load_participants_cubit.dart';
 import 'package:librino/logic/cubits/question/actions/question_actions_cubit.dart';
+import 'package:librino/logic/cubits/question/load_questions/load_lesson_questions_cubit.dart';
 import 'package:librino/logic/cubits/question/load_questions/load_questions_base_cubit.dart';
 import 'package:librino/logic/cubits/subscription/actions/subscription_actions_cubit.dart';
 import 'package:librino/logic/cubits/subscription/load/load_subscriptions_cubit.dart';
@@ -53,6 +54,7 @@ abstract class Bindings {
     set(LessonRepository());
     set(GlobalAlertCubit());
     set(SelectClassCubit());
+    set(LoadLessonQuestionsCubit());
     set(LoadQuestionBaseCubit());
     set(LessonActionsCubit());
     set(LoadModulesCubit());

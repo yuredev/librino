@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:librino/core/constants/colors.dart';
 import 'package:librino/core/constants/mappings.dart';
 import 'package:librino/core/constants/sizes.dart';
 import 'package:librino/data/models/play_lesson_dto.dart';
@@ -10,7 +11,7 @@ import 'package:librino/presentation/widgets/shared/lesson_topbar_widget.dart';
 import 'package:librino/presentation/widgets/shared/librino_scaffold.dart';
 import 'package:librino/presentation/widgets/shared/question_title.dart';
 
-class WordToLibrasScreen extends StatelessWidget {
+class WordToLibrasScreen extends StatefulWidget {
   final PlayLessonDTO playLessonDTO;
   final bool readOnly;
   final Widget? floatingActionButton;
@@ -22,24 +23,53 @@ class WordToLibrasScreen extends StatelessWidget {
     this.floatingActionButton,
   });
 
+  @override
+  State<WordToLibrasScreen> createState() => _WordToLibrasScreenState();
+}
+
+class _WordToLibrasScreenState extends State<WordToLibrasScreen> {
+  String? selectedImageUrl;
+
   WordToLibrasQuestion get question =>
-      playLessonDTO.questions[0] as WordToLibrasQuestion;
+      widget.playLessonDTO.currentQuestion as WordToLibrasQuestion;
 
   void onButtonPress(BuildContext context) {
-    if (playLessonDTO.questions.isEmpty) {
+    final questions = widget.playLessonDTO.questions;
+    final question = questions.removeAt(0);
+    late final int lives;
+    if (hasMissed()) {
+      if (widget.playLessonDTO.lives == 1) {
+        Navigator.pop(context);
+        SoundUtils.play('loss.mp3');
+        // TODO: mostrar modal de perdedor
+        return;
+      } else {
+        PresentationUtils.showQuestionResultFeedback(context, false);
+      }
+      lives = widget.playLessonDTO.lives! - 1;
+    } else {
+      lives = widget.playLessonDTO.lives!;
+      PresentationUtils.showQuestionResultFeedback(context, true);
+    }
+    if (questions.isEmpty) {
       Navigator.pop(context);
       SoundUtils.play('win.mp3');
       // TODO: mostrar modal de conclusão
       return;
+    } else {
+      Navigator.pushReplacementNamed(
+        context,
+        lessonTypeToScreenNameMap[questions[0].type]!,
+        arguments: widget.playLessonDTO.copyWith(
+          index: widget.playLessonDTO.index! + 1,
+          lives: lives,
+          currentQuestion: questions[0],
+        ),
+      );
     }
-    final firstStep = playLessonDTO.questions.removeAt(0);
-    Navigator.pushReplacementNamed(
-      context,
-      lessonTypeToScreenNameMap[firstStep.type]!,
-      arguments: playLessonDTO,
-    );
-    PresentationUtils.showQuestionResultFeedback(context, true);
   }
+
+  bool hasMissed() => selectedImageUrl != question.rightChoiceUrl;
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +77,7 @@ class WordToLibrasScreen extends StatelessWidget {
     final padding = MediaQuery.of(context).viewPadding;
     final height = fullHeight - padding.top - padding.bottom;
     return LibrinoScaffold(
-      floatingActionButton: floatingActionButton,
+      floatingActionButton: widget.floatingActionButton,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       body: Container(
         height: height,
@@ -59,15 +89,16 @@ class WordToLibrasScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            if (!readOnly)
+            if (!widget.readOnly)
               Container(
                 margin: const EdgeInsets.only(
                   bottom: 26,
                 ),
-                padding: const EdgeInsets.symmetric(horizontal: 4.0),
                 child: LessonTopBarWidget(
-                  lifesNumber: playLessonDTO.lives!,
-                  progression: 70,
+                  lifesNumber: widget.playLessonDTO.lives!,
+                  progression: (widget.playLessonDTO.index! /
+                          widget.playLessonDTO.totalQuestions!) *
+                      100,
                 ),
               ),
             Flexible(
@@ -76,9 +107,7 @@ class WordToLibrasScreen extends StatelessWidget {
                   Container(
                     margin: const EdgeInsets.only(bottom: 36),
                     padding: const EdgeInsets.only(right: 20),
-                    child: const QuestionTitleWidget(
-                      'Qual destes sinais significa "Caminhão"?',
-                    ),
+                    child: QuestionTitleWidget(question.statement),
                   ),
                   GridView.count(
                     physics: const NeverScrollableScrollPhysics(),
@@ -92,12 +121,19 @@ class WordToLibrasScreen extends StatelessWidget {
                             elevation: 6,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(20),
+                              side: BorderSide(
+                                  color: selectedImageUrl == e
+                                      ? LibrinoColors.highlightLightBlue
+                                      : Colors.transparent,
+                                  width: selectedImageUrl == e ? 7 : 1),
                             ),
                             clipBehavior: Clip.antiAlias,
                             child: Material(
                               color: Colors.transparent,
                               child: InkWell(
-                                onTap: () {},
+                                onTap: () {
+                                  setState(() => selectedImageUrl = e);
+                                },
                                 child: Ink.image(
                                   image: NetworkImage(e),
                                   fit: BoxFit.cover,
@@ -108,14 +144,15 @@ class WordToLibrasScreen extends StatelessWidget {
                         )
                         .toList(),
                   ),
-                  if (!readOnly) Spacer(),
-                  if (!readOnly)
+                  if (!widget.readOnly) Spacer(),
+                  if (!widget.readOnly)
                     Container(
                       margin: const EdgeInsets.only(
                         top: 50,
                         bottom: Sizes.defaultScreenBottomMargin,
                       ),
                       child: ButtonWidget(
+                        isEnabled: selectedImageUrl != null,
                         title: 'Checar',
                         height: Sizes.defaultButtonHeight,
                         width: double.infinity,

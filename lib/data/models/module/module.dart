@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:librino/data/models/lesson/lesson.dart';
 
 part 'module.g.dart';
 
@@ -13,6 +14,9 @@ class Module extends Equatable {
   final int index;
   final String classId;
 
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  final List<Lesson>? lessons;
+
   const Module({
     this.id,
     this.imageUrl,
@@ -20,6 +24,7 @@ class Module extends Equatable {
     required this.description,
     required this.index,
     required this.classId,
+    this.lessons,
   });
 
   @override
@@ -30,6 +35,7 @@ class Module extends Equatable {
         description,
         index,
         classId,
+        lessons,
       ];
 
   factory Module.fromJson(Map<String, dynamic> json) => _$ModuleFromJson(json);
@@ -43,6 +49,7 @@ class Module extends Equatable {
     String? imageUrl,
     int? index,
     String? classId,
+    List<Lesson>? lessons,
   }) {
     return Module(
       id: id ?? this.id,
@@ -51,6 +58,7 @@ class Module extends Equatable {
       imageUrl: imageUrl ?? this.imageUrl,
       index: index ?? this.index,
       classId: classId ?? this.classId,
+      lessons: lessons ?? this.lessons,
     );
   }
 }
