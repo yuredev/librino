@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:librino/core/constants/colors.dart';
 import 'package:librino/core/constants/sizes.dart';
 import 'package:librino/core/enums/enums.dart';
+import 'package:librino/core/routes.dart';
 import 'package:librino/logic/cubits/auth/auth_cubit.dart';
 import 'package:librino/logic/cubits/auth/auth_state.dart';
 import 'package:librino/logic/cubits/class/select/select_class_cubit.dart';
@@ -81,26 +82,53 @@ class _LearningOverviewScreenState extends State<LearningOverviewScreen> {
                               ),
                             ),
                           ),
-                          Container(
-                            alignment: Alignment.bottomRight,
-                            child: TextButton(
-                              style: TextButton.styleFrom(
-                                minimumSize: Size.zero,
-                                padding: EdgeInsets.symmetric(
-                                  horizontal: 4,
-                                  vertical: 4,
+                          if (user.isInstructor)
+                            Container(
+                              alignment: Alignment.bottomRight,
+                              child: TextButton(
+                                style: TextButton.styleFrom(
+                                  minimumSize: Size.zero,
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: 4,
+                                    vertical: 4,
+                                  ),
+                                ),
+                                onPressed: () {
+                                  Navigator.pushNamed(
+                                    context,
+                                    Routes.reorderModules,
+                                  );
+                                },
+                                child: Text(
+                                  'Reordenar',
+                                  style: TextStyle(
+                                    color: Colors.grey,
+                                    fontSize: 12.5,
+                                  ),
                                 ),
                               ),
-                              onPressed: widget.switchTabCallback,
-                              child: Text(
-                                'Mudar turma',
-                                style: TextStyle(
-                                  color: Colors.grey,
-                                  fontSize: 12.5,
+                            )
+                          else
+                            Container(
+                              alignment: Alignment.bottomRight,
+                              child: TextButton(
+                                style: TextButton.styleFrom(
+                                  minimumSize: Size.zero,
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: 4,
+                                    vertical: 4,
+                                  ),
+                                ),
+                                onPressed: widget.switchTabCallback,
+                                child: Text(
+                                  'Mudar turma',
+                                  style: TextStyle(
+                                    color: Colors.grey,
+                                    fontSize: 12.5,
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
                         ],
                       ),
                     ),

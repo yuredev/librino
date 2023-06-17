@@ -92,7 +92,7 @@ class _AddLessonsToModuleScreenState extends State<AddLessonsToModuleScreen> {
                           lessons[newIndex] =
                               lessons[newIndex].copyWith(index: newIndex);
                         });
-                        lessonActionsCubit.updateListOrder(lessons);
+                        lessonActionsCubit.reorder(lessons);
                       },
                       children: lessons.asMap().entries.map(
                         (entry) {

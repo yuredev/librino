@@ -116,6 +116,9 @@ class _LibrasToPhraseScreenState extends State<LibrasToPhraseScreen> {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: widget.floatingActionButton,
       body: SingleChildScrollView(
+        padding: EdgeInsets.only(
+          bottom: Sizes.defaultScreenBottomMargin * (widget.readOnly ? 4 : 1),
+        ),
         child: Column(
           children: [
             Container(
@@ -150,16 +153,22 @@ class _LibrasToPhraseScreenState extends State<LibrasToPhraseScreen> {
               ),
             ),
             Container(
-              margin: const EdgeInsets.only(bottom: 26),
+              margin: const EdgeInsets.only(bottom: 20),
               color: LibrinoColors.backgroundGray,
-              // padding: const EdgeInsets.symmetric(
-              //   horizontal: 64,
-              //   vertical: 16,
-              // ),
-              // height: 100,
-              width: double.infinity,
-              child: VideoPlayerWidget(
-                videoPath: question.assetUrl!,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Flexible(
+                    child: Container(
+                      constraints: BoxConstraints(
+                        maxHeight: MediaQuery.of(context).size.height * 0.5,
+                      ),
+                      child: VideoPlayerWidget(
+                        videoPath: question.assetUrl!,
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
             Padding(
@@ -292,7 +301,6 @@ class _LibrasToPhraseScreenState extends State<LibrasToPhraseScreen> {
                     Container(
                       margin: const EdgeInsets.only(
                         top: 50,
-                        bottom: 16,
                       ),
                       child: ButtonWidget(
                         title: 'Checar',

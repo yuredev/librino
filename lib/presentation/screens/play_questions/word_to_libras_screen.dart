@@ -149,7 +149,6 @@ class _WordToLibrasScreenState extends State<WordToLibrasScreen> {
                                 },
                                 child: Ink.image(
                                   image: NetworkImage(e),
-                                  fit: BoxFit.cover,
                                 ),
                               ),
                             ),

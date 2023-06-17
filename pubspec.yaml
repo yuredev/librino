@@ -35,7 +35,6 @@ dependencies:
   dotted_border: ^2.0.0+1
   image_picker: ^0.8.7+5
   flutter_ffmpeg: ^0.4.2
-  camera: ^0.10.5+2
 
 dev_dependencies:
   flutter_test:

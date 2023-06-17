@@ -96,8 +96,7 @@ class _LibrasToWordScreenState extends State<LibrasToWordScreen> {
         child: Column(
           children: [
             Container(
-              padding: const EdgeInsets.fromLTRB(23, 40, 23, 0),
-              margin: const EdgeInsets.only(bottom: 20),
+              padding: const EdgeInsets.fromLTRB(23, 40, 23, 20),
               child: Column(
                 children: [
                   if (!widget.readOnly)
@@ -122,16 +121,22 @@ class _LibrasToWordScreenState extends State<LibrasToWordScreen> {
               ),
             ),
             Container(
-              margin: const EdgeInsets.only(bottom: 26),
+              margin: const EdgeInsets.only(bottom: 20),
               color: LibrinoColors.backgroundGray,
-              // padding: const EdgeInsets.symmetric(
-              //   horizontal: 64,
-              //   vertical: 16,
-              // ),
-              // height: 100,
-              width: double.infinity,
-              child: VideoPlayerWidget(
-                videoPath: question.assetUrl!,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Flexible(
+                    child: Container(
+                      constraints: BoxConstraints(
+                        maxHeight: MediaQuery.of(context).size.height * 0.5,
+                      ),
+                      child: VideoPlayerWidget(
+                        videoPath: question.assetUrl!,
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
             Container(

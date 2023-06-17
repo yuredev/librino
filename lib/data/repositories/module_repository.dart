@@ -37,4 +37,11 @@ class ModuleRepository {
     await docRef.update(data);
     return Module.fromJson(data);
   }
+
+  Future<void> updateList(List<Module> lessons) async {
+    for (final l in lessons) {
+      final docRef = _collection.doc(l.id);
+      await docRef.update(l.toJson());
+    }
+  }
 }

@@ -1,4 +1,3 @@
-import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:librino/core/bindings.dart';
@@ -22,7 +21,6 @@ import 'package:librino/logic/cubits/question/load_questions/load_questions_base
 import 'package:librino/logic/cubits/subscription/actions/subscription_actions_cubit.dart';
 import 'package:librino/logic/cubits/subscription/load/load_subscriptions_cubit.dart';
 import 'package:librino/logic/cubits/user/user_crud_cubit.dart';
-import 'package:librino/presentation/screens/camera_page.dart';
 import 'package:librino/presentation/screens/class_details_screen.dart';
 import 'package:librino/presentation/screens/content_creation/add_lessons_to_module_screen.dart';
 import 'package:librino/presentation/screens/content_creation/add_question_to_lesson_screen.dart';
@@ -43,6 +41,7 @@ import 'package:librino/presentation/screens/introduction_screen.dart';
 import 'package:librino/presentation/screens/login_screen.dart';
 import 'package:librino/presentation/screens/preview_question_screen.dart';
 import 'package:librino/presentation/screens/register_screen.dart';
+import 'package:librino/presentation/screens/reorder_modules_screen.dart';
 import 'package:librino/presentation/screens/search_class_screen.dart';
 import 'package:librino/presentation/screens/select_question_type_screen.dart';
 import 'package:librino/presentation/screens/support_content_screen.dart';
@@ -63,6 +62,7 @@ abstract class Routes {
   static const viewSupportContent = '/view-support-content';
   static const previewQuestion = '/preview-question';
   static const camera = '/camera';
+  static const reorderModules = '/reorder-modules';
 
   // Create questions
   static const createLIBRASToPhraseQuestion =
@@ -277,12 +277,15 @@ abstract class Routes {
             readOnly: (settings.arguments as Map)['readOnly'] ?? false,
           ),
         );
-      case camera:
-        return MaterialPageRoute(
-          builder: (context) {
-            return CameraPage(settings.arguments as CameraDescription);
-          },
-        );
+      // case camera:
+      //   return MaterialPageRoute(
+      //     builder: (context) {
+      //       return CameraScreenOld(
+      //         isVideo: (settings.arguments as Map)['isVideo'] ?? false,
+      //         startInFrontal: (settings.arguments as Map)['startInFrontal'],
+      //       );
+      //     },
+      //   );
       case lessonResult:
         return MaterialPageRoute(
           builder: (context) => BlocProvider<LessonActionsCubit>.value(
@@ -291,6 +294,23 @@ abstract class Routes {
               hasFailed: (settings.arguments as Map)['hasFailed'],
               lessonId: (settings.arguments as Map)['lessonId'],
             ),
+          ),
+        );
+      case reorderModules:
+        return MaterialPageRoute(
+          builder: (context) => MultiBlocProvider(
+            providers: [
+              BlocProvider<ModuleActionsCubit>.value(
+                value: Bindings.get(),
+              ),
+              BlocProvider<LoadModulesCubit>.value(
+                value: Bindings.get(),
+              ),
+              BlocProvider<AuthCubit>.value(
+                value: Bindings.get(),
+              ),
+            ],
+            child: ReorderModulesScreen(),
           ),
         );
     }

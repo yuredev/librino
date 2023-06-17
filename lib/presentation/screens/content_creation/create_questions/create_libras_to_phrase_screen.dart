@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
@@ -65,8 +67,18 @@ class _CreateLIBRASToPhraseScreenState
     final pickedVideo = await Bindings.get<ImagePicker>().pickVideo(
       source: shouldGetFromGallery ? ImageSource.gallery : ImageSource.camera,
       preferredCameraDevice: CameraDevice.front,
+      maxDuration: Duration(seconds: 60),
     );
     if (pickedVideo != null && context.mounted) {
+      final extension = pickedVideo.name.split('.').last;
+      if (extension != 'mp4') {
+        PresentationUtils.showSnackBar(
+          context,
+          'Formato inválido! O vídeo deve ser do tipo mp4',
+          isErrorMessage: true,
+        );
+        return;
+      }
       final cofirmVideo = (await Navigator.push<bool>(
             context,
             MaterialPageRoute(

@@ -12,11 +12,9 @@ import 'package:librino/logic/cubits/auth/auth_state.dart';
 import 'package:librino/logic/cubits/question/load_questions/load_lesson_questions_cubit.dart';
 import 'package:librino/logic/cubits/question/load_questions/load_questions_state.dart';
 import 'package:librino/presentation/widgets/shared/button_widget.dart';
-import 'package:librino/presentation/widgets/shared/gray_bar_widget.dart';
 import 'package:librino/presentation/widgets/shared/illustration_widget.dart';
 import 'package:librino/presentation/widgets/shared/modal_top_bar_widget.dart';
 import 'package:librino/presentation/widgets/shared/progress_bar_widget.dart';
-import 'package:librino/presentation/widgets/shared/shimmer_widget.dart';
 
 class LessonModalWidget extends StatefulWidget {
   final Lesson lesson;
@@ -104,6 +102,10 @@ class _LessonModalWidgetState extends State<LessonModalWidget> {
                 ),
               );
             }
+            final percentage =
+                (getCompletedsCount(widget.module.lessons!, completedIds) /
+                    widget.module.lessons!.length *
+                    100);
             return SizedBox(
               height: MediaQuery.of(context).size.height * 0.6,
               child: Padding(
@@ -129,18 +131,18 @@ class _LessonModalWidgetState extends State<LessonModalWidget> {
                                         0.28,
                                   );
                                 },
-                                loadingBuilder:
-                                    (context, child, loadingProgress) {
-                                  return ShimmerWidget(
-                                    child: GrayBarWidget(
-                                      height:
-                                          MediaQuery.of(context).size.width *
-                                              0.28,
-                                      width: MediaQuery.of(context).size.width *
-                                          0.28,
-                                    ),
-                                  );
-                                },
+                                // loadingBuilder:
+                                //     (context, child, loadingProgress) {
+                                //   return ShimmerWidget(
+                                //     child: GrayBarWidget(
+                                //       height:
+                                //           MediaQuery.of(context).size.width *
+                                //               0.28,
+                                //       width: MediaQuery.of(context).size.width *
+                                //           0.28,
+                                //     ),
+                                //   );
+                                // },
                               ),
                         Container(
                           margin: const EdgeInsets.only(top: 12),
@@ -164,7 +166,7 @@ class _LessonModalWidgetState extends State<LessonModalWidget> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
-                                  '${(getCompletedsCount(widget.module.lessons!, completedIds) / widget.module.lessons!.length * 100).truncate()}'
+                                  '${percentage.truncate()}'
                                   '% concluído',
                                 ),
                                 Text(
@@ -174,42 +176,18 @@ class _LessonModalWidgetState extends State<LessonModalWidget> {
                               ],
                             ),
                             Container(
-                                margin: const EdgeInsets.only(top: 6),
-                                child: ProgressBarWidget(
-                                  color: LibrinoColors.main,
-                                  height: 15,
-                                  progression: getCompletedsCount(
-                                        widget.module.lessons!,
-                                        completedIds,
-                                      ) /
-                                      widget.module.lessons!.length *
-                                      100,
-                                )),
+                              margin: const EdgeInsets.only(top: 6),
+                              child: ProgressBarWidget(
+                                color: LibrinoColors.main,
+                                height: 15,
+                                progression: percentage,
+                              ),
+                            ),
                             Container(
                               margin: const EdgeInsets.only(top: 24),
                               child: RichText(
                                 text: TextSpan(
-                                  text: 'Lição atual: ',
-                                  style: TextStyle(
-                                    color: LibrinoColors.textLightBlack,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                  children: [
-                                    TextSpan(
-                                      text: widget.lesson.title,
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.w400,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                            Container(
-                              margin: const EdgeInsets.only(top: 12),
-                              child: RichText(
-                                text: TextSpan(
-                                  text: 'N° de exercícios: ',
+                                  text: 'Exercícios na lição: ',
                                   style: TextStyle(
                                     color: LibrinoColors.textLightBlack,
                                     fontWeight: FontWeight.bold,
@@ -226,26 +204,48 @@ class _LessonModalWidgetState extends State<LessonModalWidget> {
                                 ),
                               ),
                             ),
-                            Container(
-                              margin: const EdgeInsets.only(top: 12),
-                              child: RichText(
-                                text: TextSpan(
-                                  text: 'Descrição: ',
-                                  style: TextStyle(
-                                    color: LibrinoColors.textLightBlack,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                  children: [
-                                    TextSpan(
-                                      text: widget.module.description,
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.w400,
-                                      ),
+                            if (percentage < 100)
+                              Container(
+                                margin: const EdgeInsets.only(top: 12),
+                                child: RichText(
+                                  text: TextSpan(
+                                    text: 'Lição atual: ',
+                                    style: TextStyle(
+                                      color: LibrinoColors.textLightBlack,
+                                      fontWeight: FontWeight.bold,
                                     ),
-                                  ],
+                                    children: [
+                                      TextSpan(
+                                        text: widget.lesson.title,
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.w400,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
-                            ),
+                            
+                            // Container(
+                            //   margin: const EdgeInsets.only(top: 12),
+                            //   child: RichText(
+                            //     text: TextSpan(
+                            //       text: 'Descrição: ',
+                            //       style: TextStyle(
+                            //         color: LibrinoColors.textLightBlack,
+                            //         fontWeight: FontWeight.bold,
+                            //       ),
+                            //       children: [
+                            //         TextSpan(
+                            //           text: widget.module.description,
+                            //           style: TextStyle(
+                            //             fontWeight: FontWeight.w400,
+                            //           ),
+                            //         ),
+                            //       ],
+                            //     ),
+                            //   ),
+                            // ),
                           ],
                         ),
                       ),

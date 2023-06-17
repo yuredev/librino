@@ -104,12 +104,10 @@ class _PhraseToLibrasScreenState extends State<PhraseToLibrasScreen> {
   Widget build(BuildContext context) {
     final fullHeight = MediaQuery.of(context).size.height;
     final padding = MediaQuery.of(context).viewPadding;
-    final height = fullHeight - padding.top - padding.bottom;
     return LibrinoScaffold(
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: widget.floatingActionButton,
-      body: Container(
-        height: height,
+      body: SingleChildScrollView(
         padding: const EdgeInsets.only(
           top: 40,
           left: Sizes.defaultScreenHorizontalMargin,
@@ -200,18 +198,15 @@ class _PhraseToLibrasScreenState extends State<PhraseToLibrasScreen> {
                           .map(
                             (e) => Container(
                               clipBehavior: Clip.antiAlias,
-                              width: constraints.maxWidth * .301842904,
-                              height: constraints.maxWidth * .301842904,
+                              width: constraints.maxWidth * .45,
+                              height: constraints.maxWidth * .45,
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(20),
                                 border: Border.all(
                                   color: Colors.black.withOpacity(0.7),
                                 ),
                               ),
-                              child: Image.network(
-                                e,
-                                fit: BoxFit.cover,
-                              ),
+                              child: Image.network(e),
                             ),
                           )
                           .toList(),
@@ -220,7 +215,6 @@ class _PhraseToLibrasScreenState extends State<PhraseToLibrasScreen> {
                 ],
               ),
             ),
-            if (!widget.readOnly) Spacer(),
             if (!widget.readOnly)
               Container(
                 margin: const EdgeInsets.only(

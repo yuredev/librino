@@ -28,7 +28,7 @@ class LessonActionsCubit extends Cubit<LessonActionsState> {
     }
   }
 
-  Future<void> updateListOrder(List<Lesson> lessons) async {
+  Future<void> reorder(List<Lesson> lessons) async {
     try {
       emit(UpdatingLessonsOrderState());
       await _lessonRepository.updateList(lessons);

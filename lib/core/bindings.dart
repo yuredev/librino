@@ -1,4 +1,5 @@
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter_ffmpeg/flutter_ffmpeg.dart';
 import 'package:get_it/get_it.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:librino/core/config/environment.dart';
@@ -42,6 +43,7 @@ abstract class Bindings {
 
   static Future<void> init(EnvironmentSettings settings) async {
     set(ImagePicker());
+    set(FlutterFFmpeg());
     set(FirebaseFirestore.instance);
     set(FirebaseStorage.instance.ref());
     set(FirestoreUserRepository());
