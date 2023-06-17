@@ -27,6 +27,10 @@ class AuthCubit extends HydratedCubit<AuthState> {
     }
   }
 
+  void updateUserState(LibrinoUser user) => emit(
+        LoggedInState(user, (state as LoggedInState).token),
+      );
+
   Future<void> signIn({
     required String email,
     required String password,
@@ -52,6 +56,7 @@ class AuthCubit extends HydratedCubit<AuthState> {
         surname: firestoreUser.surname,
         genderIdentity: firestoreUser.genderIdentity,
         photoURL: fireAuthUser.photoURL,
+        completedLessonsIds: firestoreUser.completedLessonsIds ?? [],
       );
       emit(LoggedInState(user, fireAuthUser.refreshToken!));
     } catch (e) {

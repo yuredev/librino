@@ -44,8 +44,10 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
               mixWithOthers: true,
             ),
           );
-    playerCtrl.addListener(() => setState(() {}));
-    initializePlayer();
+    if (mounted) {
+      playerCtrl.addListener(() => setState(() {}));
+      initializePlayer();
+    }
   }
 
   bool get shouldStartPlaying => !widget.shouldLimitReplays;
@@ -133,7 +135,7 @@ class _ControlsOverlayState extends State<_ControlsOverlay> {
           child: widget.controller.value.isPlaying
               ? const SizedBox.shrink()
               : Container(
-                  color: Colors.black26,
+                  color: LibrinoColors.backgroundGray,
                   child: Center(
                     child: Icon(
                       isStartPlaying
@@ -141,7 +143,7 @@ class _ControlsOverlayState extends State<_ControlsOverlay> {
                           : replaysNumber == widget.replaysNumber
                               ? Icons.play_arrow
                               : Icons.replay,
-                      color: Colors.white,
+                      color: LibrinoColors.iconGray,
                       size: 100.0,
                       semanticLabel: 'Play',
                     ),

@@ -1,24 +1,28 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:librino/core/constants/colors.dart';
 import 'package:librino/core/constants/mappings.dart';
 import 'package:librino/core/constants/sizes.dart';
+import 'package:librino/core/routes.dart';
+import 'package:librino/core/utils/array_utils.dart';
 import 'package:librino/data/models/play_lesson_dto.dart';
+import 'package:librino/data/models/question/phrase_to_libras/phrase_to_libras_question.dart';
 import 'package:librino/presentation/utils/presentation_utils.dart';
 import 'package:librino/presentation/utils/sound_utils.dart';
 import 'package:librino/presentation/widgets/shared/button_widget.dart';
 import 'package:librino/presentation/widgets/shared/lesson_topbar_widget.dart';
 import 'package:librino/presentation/widgets/shared/librino_scaffold.dart';
-import 'package:librino/presentation/widgets/shared/question_title.dart';
 import 'package:reorderables/reorderables.dart';
 
 class PhraseToLibrasScreen extends StatefulWidget {
   final bool readOnly;
   final Widget? floatingActionButton;
-  final PlayLessonDTO? playLessonDTO;
+  final PlayLessonDTO playLessonDTO;
 
   const PhraseToLibrasScreen({
     super.key,
-    this.playLessonDTO,
+    required this.playLessonDTO,
     this.readOnly = false,
     this.floatingActionButton,
   });
@@ -28,33 +32,82 @@ class PhraseToLibrasScreen extends StatefulWidget {
 }
 
 class _PhraseToLibrasScreenState extends State<PhraseToLibrasScreen> {
+  late final List<String> userAnswer;
+
   void onButtonPress(BuildContext context) {
-    final steps = widget.playLessonDTO!.questions;
-    if (steps.isEmpty) {
-      Navigator.pop(context);
-      SoundUtils.play('win.mp3');
-      // TODO: mostrar modal de conclusão
-      return;
+    final questions = widget.playLessonDTO.questions;
+    questions.removeAt(0);
+    late final int lives;
+    if (hasMissed()) {
+      if (widget.playLessonDTO.lives == 1) {
+        SoundUtils.play('loss.mp3');
+        Navigator.pushReplacementNamed(
+          context,
+          Routes.lessonResult,
+          arguments: {
+            'hasFailed': true,
+            'lessonId': widget.playLessonDTO.lessonId!,
+          },
+        );
+        return;
+      } else {
+        PresentationUtils.showQuestionResultFeedback(context, false);
+      }
+      lives = widget.playLessonDTO.lives! - 1;
+    } else {
+      lives = widget.playLessonDTO.lives!;
+      PresentationUtils.showQuestionResultFeedback(context, true);
     }
-    final firstStep = steps.removeAt(0);
-    Navigator.pushReplacementNamed(
-      context,
-      lessonTypeToScreenNameMap[firstStep.type]!,
-      arguments: widget.playLessonDTO,
-    );
-    PresentationUtils.showQuestionResultFeedback(context, true);
+    if (questions.isEmpty) {
+      SoundUtils.play('win.mp3');
+      Navigator.pushReplacementNamed(
+        context,
+        Routes.lessonResult,
+        arguments: {
+          'hasFailed': false,
+          'lessonId': widget.playLessonDTO.lessonId!,
+        },
+      );
+      return;
+    } else {
+      Navigator.pushReplacementNamed(
+        context,
+        lessonTypeToScreenNameMap[questions[0].type]!,
+        arguments: widget.playLessonDTO.copyWith(
+          index: widget.playLessonDTO.index! + 1,
+          lives: lives,
+          currentQuestion: questions[0],
+        ),
+      );
+    }
   }
+
+  bool hasMissed() {
+    for (int i = 0; i < userAnswer.length; i++) {
+      if (userAnswer[i] != question.answerUrls![i]) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    userAnswer = ArrayUtils.shuffle([...question.answerUrls!]);
+  }
+
+  PhraseToLibrasQuestion get question =>
+      widget.playLessonDTO.currentQuestion as PhraseToLibrasQuestion;
 
   @override
   Widget build(BuildContext context) {
     final fullHeight = MediaQuery.of(context).size.height;
     final padding = MediaQuery.of(context).viewPadding;
-    final height = fullHeight - padding.top - padding.bottom;
     return LibrinoScaffold(
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: widget.floatingActionButton,
-      body: Container(
-        height: height,
+      body: SingleChildScrollView(
         padding: const EdgeInsets.only(
           top: 40,
           left: Sizes.defaultScreenHorizontalMargin,
@@ -68,7 +121,12 @@ class _PhraseToLibrasScreenState extends State<PhraseToLibrasScreen> {
                 margin: const EdgeInsets.only(
                   bottom: 26,
                 ),
-                child: LessonTopBarWidget(lifesNumber: 5, progression: 70),
+                child: LessonTopBarWidget(
+                  lifesNumber: widget.playLessonDTO.lives!,
+                  progression: (widget.playLessonDTO.index! /
+                          widget.playLessonDTO.totalQuestions!) *
+                      100,
+                ),
               ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 4.0),
@@ -76,12 +134,14 @@ class _PhraseToLibrasScreenState extends State<PhraseToLibrasScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
-                    margin: const EdgeInsets.only(bottom: 6),
-                    child: const QuestionTitleWidget('Traduza a frase'),
-                  ),
-                  Container(
-                    margin: const EdgeInsets.only(bottom: 36),
-                    child: Text('"Os cachorros comem carne"'),
+                    margin: const EdgeInsets.only(bottom: 36, top: 22),
+                    child: Text(
+                      question.statement,
+                      style: TextStyle(
+                        fontWeight: FontWeight.w500,
+                        fontSize: 16,
+                      ),
+                    ),
                   ),
                   if (!widget.readOnly)
                     Container(
@@ -115,7 +175,13 @@ class _PhraseToLibrasScreenState extends State<PhraseToLibrasScreen> {
                     builder: (ctx, constraints) => ReorderableWrap(
                       spacing: 16,
                       runSpacing: 16,
-                      onReorder: (oldIndex, newIndex) {},
+                      onReorder: (oldIndex, newIndex) {
+                        final aux = userAnswer[oldIndex];
+                        setState(() {
+                          userAnswer[oldIndex] = userAnswer[newIndex];
+                          userAnswer[newIndex] = aux;
+                        });
+                      },
                       needsLongPressDraggable: false,
                       buildDraggableFeedback: (ctx, consts, widget) {
                         return Material(
@@ -128,30 +194,27 @@ class _PhraseToLibrasScreenState extends State<PhraseToLibrasScreen> {
                         );
                       },
                       alignment: WrapAlignment.spaceBetween,
-                      children: List.generate(
-                        7,
-                        (index) => Container(
-                          clipBehavior: Clip.antiAlias,
-                          width: constraints.maxWidth * .301842904,
-                          height: constraints.maxWidth * .301842904,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20),
-                            border: Border.all(
-                              color: Colors.black.withOpacity(0.7),
+                      children: userAnswer
+                          .map(
+                            (e) => Container(
+                              clipBehavior: Clip.antiAlias,
+                              width: constraints.maxWidth * .45,
+                              height: constraints.maxWidth * .45,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(20),
+                                border: Border.all(
+                                  color: Colors.black.withOpacity(0.7),
+                                ),
+                              ),
+                              child: Image.network(e),
                             ),
-                          ),
-                          child: Image.network(
-                            'https://thumbs.gfycat.com/MiniatureInconsequentialIceblueredtopzebra-size_restricted.gif',
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                      ),
+                          )
+                          .toList(),
                     ),
                   ),
                 ],
               ),
             ),
-            if (!widget.readOnly) Spacer(),
             if (!widget.readOnly)
               Container(
                 margin: const EdgeInsets.only(

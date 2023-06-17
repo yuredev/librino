@@ -55,6 +55,7 @@ class UserCRUDCubit extends Cubit<UserCRUDState> {
           genderIdentity: firestoreUser.genderIdentity,
           name: fireAuthUser.displayName!,
           surname: firestoreUser.surname,
+          completedLessonsIds: [],
         )),
       );
     } catch (e) {

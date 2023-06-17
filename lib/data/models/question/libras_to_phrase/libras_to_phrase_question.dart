@@ -56,4 +56,7 @@ class LibrasToPhraseQuestion extends Question {
       isPublic: isPublic ?? this.isPublic,
     );
   }
+
+  @override
+  String get label => 'Tradução: $answerText';
 }

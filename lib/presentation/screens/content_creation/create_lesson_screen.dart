@@ -267,7 +267,7 @@ class _CreateLessonScreenState extends State<CreateLessonScreen> {
                           final i = entry.key;
                           return Container(
                             key: ValueKey(
-                              q.id! + DateTime.now().toString(),
+                              i.toString() + DateTime.now().toString(),
                             ),
                             padding: EdgeInsets.only(bottom: 12),
                             child: ListTileWidget(

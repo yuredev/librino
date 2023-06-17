@@ -16,6 +16,7 @@ import 'package:librino/logic/cubits/module/actions/module_actions_cubit.dart';
 import 'package:librino/logic/cubits/module/load/load_modules_cubit.dart';
 import 'package:librino/logic/cubits/participants/load_participants_cubit.dart';
 import 'package:librino/logic/cubits/question/actions/question_actions_cubit.dart';
+import 'package:librino/logic/cubits/question/load_questions/load_lesson_questions_cubit.dart';
 import 'package:librino/logic/cubits/question/load_questions/load_questions_base_cubit.dart';
 import 'package:librino/logic/cubits/subscription/actions/subscription_actions_cubit.dart';
 import 'package:librino/logic/cubits/subscription/load/load_subscriptions_cubit.dart';
@@ -31,6 +32,7 @@ import 'package:librino/presentation/screens/content_creation/create_questions/c
 import 'package:librino/presentation/screens/content_creation/create_questions/create_word_to_libras_screen.dart';
 import 'package:librino/presentation/screens/create_class_screen.dart';
 import 'package:librino/presentation/screens/home/home.dart';
+import 'package:librino/presentation/screens/lesson_result_screen.dart';
 import 'package:librino/presentation/screens/play_questions/libras_to_phrase_screen.dart';
 import 'package:librino/presentation/screens/play_questions/libras_to_word_screen.dart';
 import 'package:librino/presentation/screens/play_questions/phrase_to_libras_screen.dart';
@@ -39,6 +41,7 @@ import 'package:librino/presentation/screens/introduction_screen.dart';
 import 'package:librino/presentation/screens/login_screen.dart';
 import 'package:librino/presentation/screens/preview_question_screen.dart';
 import 'package:librino/presentation/screens/register_screen.dart';
+import 'package:librino/presentation/screens/reorder_modules_screen.dart';
 import 'package:librino/presentation/screens/search_class_screen.dart';
 import 'package:librino/presentation/screens/select_question_type_screen.dart';
 import 'package:librino/presentation/screens/support_content_screen.dart';
@@ -58,6 +61,8 @@ abstract class Routes {
   static const selectQuestionType = '/select-question-type';
   static const viewSupportContent = '/view-support-content';
   static const previewQuestion = '/preview-question';
+  static const camera = '/camera';
+  static const reorderModules = '/reorder-modules';
 
   // Create questions
   static const createLIBRASToPhraseQuestion =
@@ -71,6 +76,7 @@ abstract class Routes {
   static const phraseToLibrasQuestion = '/phrase-to-libras-question';
   static const wordToLibrasQuestion = '/word-to-libras-question';
   static const librasToWordQuestion = '/libras-to-word-question';
+  static const lessonResult = '/lesson-result';
 
   static Route? onGenerateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -93,6 +99,9 @@ abstract class Routes {
                   value: Bindings.get(),
                 ),
                 BlocProvider<LoadSubscriptionsCubit>.value(
+                  value: Bindings.get(),
+                ),
+                BlocProvider<LoadLessonQuestionsCubit>.value(
                   value: Bindings.get(),
                 ),
               ],
@@ -212,7 +221,8 @@ abstract class Routes {
             value: Bindings.get(),
             child: CreateLessonScreen(
               module: (settings.arguments as Map)['module'],
-              lessonCreationIndex: (settings.arguments as Map)['lessonCreationIndex'],
+              lessonCreationIndex:
+                  (settings.arguments as Map)['lessonCreationIndex'],
             ),
           ),
         );
@@ -265,6 +275,42 @@ abstract class Routes {
           builder: (ctx) => PreviewQuestionScreen(
             question: (settings.arguments as Map)['question'],
             readOnly: (settings.arguments as Map)['readOnly'] ?? false,
+          ),
+        );
+      // case camera:
+      //   return MaterialPageRoute(
+      //     builder: (context) {
+      //       return CameraScreenOld(
+      //         isVideo: (settings.arguments as Map)['isVideo'] ?? false,
+      //         startInFrontal: (settings.arguments as Map)['startInFrontal'],
+      //       );
+      //     },
+      //   );
+      case lessonResult:
+        return MaterialPageRoute(
+          builder: (context) => BlocProvider<LessonActionsCubit>.value(
+            value: Bindings.get(),
+            child: LessonResultScreen(
+              hasFailed: (settings.arguments as Map)['hasFailed'],
+              lessonId: (settings.arguments as Map)['lessonId'],
+            ),
+          ),
+        );
+      case reorderModules:
+        return MaterialPageRoute(
+          builder: (context) => MultiBlocProvider(
+            providers: [
+              BlocProvider<ModuleActionsCubit>.value(
+                value: Bindings.get(),
+              ),
+              BlocProvider<LoadModulesCubit>.value(
+                value: Bindings.get(),
+              ),
+              BlocProvider<AuthCubit>.value(
+                value: Bindings.get(),
+              ),
+            ],
+            child: ReorderModulesScreen(),
           ),
         );
     }

@@ -64,7 +64,7 @@ class _CreateModuleScreenState extends State<CreateModuleScreen> {
 
   void onModuleActionsListen(BuildContext context, ModuleActionsState state) {
     if (state is ModuleCreatedState) {
-      Navigator.pushNamed(
+      Navigator.pushReplacementNamed(
         context,
         Routes.addLessonsToModule,
         arguments: {

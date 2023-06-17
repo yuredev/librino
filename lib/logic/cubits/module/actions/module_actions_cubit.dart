@@ -3,7 +3,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:librino/core/bindings.dart';
 import 'package:librino/data/models/module/module.dart';
 import 'package:librino/data/repositories/module_repository.dart';
-import 'package:librino/logic/cubits/class/select/select_class_cubit.dart';
 import 'package:librino/logic/cubits/global_alert/global_alert_cubit.dart';
 import 'package:librino/logic/cubits/module/actions/module_actions_state.dart';
 import 'package:librino/logic/cubits/module/load/load_modules_cubit.dart';
@@ -24,8 +23,26 @@ class ModuleActionsCubit extends Cubit<ModuleActionsState> {
       emit(ModuleCreatedState(moduleSaved));
     } catch (e) {
       print(e);
-      _globalAlertCubit.fire('Erro ao cadastrar novo módulo', isErrorMessage: true);
+      _globalAlertCubit.fire('Erro ao cadastrar novo módulo',
+          isErrorMessage: true);
       emit(CreateModuleErrorState('Erro ao cadastrar novo módulo'));
+    }
+  }
+
+  Future<void> reorder(List<Module> modules) async {
+    try {
+      emit(UpdatingModulesOrderState());
+      await _moduleRepository.updateList(modules);
+      _globalAlertCubit.fire('Ordem dos módulos alterada!');
+      emit(ModulesOrderUpdatedState());
+      _loadModulesCubit.load();
+    } catch (e) {
+      print(e);
+      _globalAlertCubit.fire(
+        'Erro ao atualizar ordem dos módulos',
+        isErrorMessage: true,
+      );
+      emit(ModuleOrderUpdateErrorState('Erro ao atualizar ordem dos módulos'));
     }
   }
 }

@@ -14,6 +14,7 @@ class FirestoreUser extends Equatable {
   final GenderIdentity? genderIdentity;
   final String surname;
   final String name;
+  final List<String>? completedLessonsIds;
 
   const FirestoreUser({
     this.genderIdentity,
@@ -22,6 +23,7 @@ class FirestoreUser extends Equatable {
     required this.roles,
     required this.surname,
     required this.name,
+    this.completedLessonsIds,
   });
 
   String get completeName => '$name $surname';
@@ -30,24 +32,6 @@ class FirestoreUser extends Equatable {
       _$FirestoreUserFromJson(json);
 
   Map<String, dynamic> toJson() => _$FirestoreUserToJson(this);
-
-  FirestoreUser copyWith({
-    String? id,
-    AuditoryAbility? auditoryAbility,
-    List<int>? roles,
-    GenderIdentity? genderIdentity,
-    String? surname,
-    String? name,
-  }) {
-    return FirestoreUser(
-      id: id ?? this.id,
-      auditoryAbility: auditoryAbility ?? this.auditoryAbility,
-      roles: roles ?? this.roles,
-      genderIdentity: genderIdentity ?? this.genderIdentity,
-      surname: surname ?? this.surname,
-      name: name ?? this.name,
-    );
-  }
 
   @override
   List<Object?> get props => [
@@ -58,4 +42,24 @@ class FirestoreUser extends Equatable {
         surname,
         name,
       ];
+
+  FirestoreUser copyWith({
+    String? id,
+    AuditoryAbility? auditoryAbility,
+    List<int>? roles,
+    GenderIdentity? genderIdentity,
+    String? surname,
+    String? name,
+    List<String>? completedLessonsIds,
+  }) {
+    return FirestoreUser(
+      id: id ?? this.id,
+      auditoryAbility: auditoryAbility ?? this.auditoryAbility,
+      roles: roles ?? this.roles,
+      genderIdentity: genderIdentity ?? this.genderIdentity,
+      surname: surname ?? this.surname,
+      name: name ?? this.name,
+      completedLessonsIds: completedLessonsIds ?? this.completedLessonsIds,
+    );
+  }
 }

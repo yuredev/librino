@@ -64,8 +64,19 @@ class _CreateLIBRASToWordScreenState extends State<CreateLIBRASToWordScreen> {
     }
     final pickedVideo = await Bindings.get<ImagePicker>().pickVideo(
       source: shouldGetFromGallery ? ImageSource.gallery : ImageSource.camera,
+      preferredCameraDevice: CameraDevice.front,
+      maxDuration: Duration(seconds: 60),
     );
     if (pickedVideo != null && context.mounted) {
+      final extension = pickedVideo.name.split('.').last;
+      if (extension != 'mp4') {
+        PresentationUtils.showSnackBar(
+          context,
+          'Formato inválido! O vídeo deve ser do tipo mp4',
+          isErrorMessage: true
+        );
+        return;
+      }
       final cofirmVideo = (await Navigator.push<bool>(
             context,
             MaterialPageRoute(

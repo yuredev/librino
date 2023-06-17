@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:librino/core/bindings.dart';
+import 'package:librino/data/models/lesson/lesson.dart';
 import 'package:librino/data/models/question/libras_to_phrase/libras_to_phrase_question.dart';
 import 'package:librino/data/models/question/libras_to_word/libras_to_word_question.dart';
 import 'package:librino/data/models/question/phrase_to_libras/phrase_to_libras_question.dart';
@@ -113,7 +114,8 @@ class QuestionRepository {
     final snap = await rightChoiceRef.putFile(File(rightChoice.path));
     final rightChoiceURL = await snap.ref.getDownloadURL();
     for (var i = 0; i < wrongChoices.length; i++) {
-      final wrongChoiceRef = ref.child('question_${data['id']}').child('$i.gif');
+      final wrongChoiceRef =
+          ref.child('question_${data['id']}').child('$i.gif');
       final snap = await wrongChoiceRef.putFile(File(wrongChoices[i].path));
       final url = await snap.ref.getDownloadURL();
       wrongChoicesUrls.add(url);
@@ -123,5 +125,14 @@ class QuestionRepository {
     data.update('choicesUrls', (_) => [...wrongChoicesUrls, rightChoiceURL]);
     await docRef.update(data);
     return WordToLibrasQuestion.fromJson(data);
+  }
+
+  Future<List<Question>> loadFromLesson(Lesson lesson) async {
+    final questions = <Question>[];
+    for (final id in lesson.questionIds) {
+      var snap = await _collection.doc(id).get();
+      questions.add(Question.fromJson(snap.data()!));
+    }
+    return questions;
   }
 }
