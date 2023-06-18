@@ -12,10 +12,12 @@ import 'package:librino/presentation/widgets/shared/modal_top_bar_widget.dart';
 class SelectClassModal extends StatelessWidget {
   final Class clazz;
   final SelectClassCubit cubit;
+  final bool disableSelecion;
   final void Function() switchTabCallback;
 
   const SelectClassModal({
     Key? key,
+    this.disableSelecion = false,
     required this.clazz,
     required this.cubit,
     required this.switchTabCallback,
@@ -97,14 +99,14 @@ class SelectClassModal extends StatelessWidget {
           Spacer(),
           Container(
             margin: const EdgeInsets.only(
-              bottom: 16,
+              bottom: 13,
             ),
             child: ButtonWidget(
               title: 'Ver Turma',
               width: double.infinity,
               height: Sizes.defaultButtonHeight,
               onPress: () {
-                Navigator.pushNamed(
+                Navigator.pushReplacementNamed(
                   context,
                   Routes.classDetails,
                   arguments: {'class': clazz},
@@ -113,21 +115,22 @@ class SelectClassModal extends StatelessWidget {
               color: LibrinoColors.buttonGray,
             ),
           ),
-          Container(
-            margin: const EdgeInsets.only(
-              bottom: 13,
-            ),
-            child: ButtonWidget(
-              title: 'Selecionar Turma',
-              width: double.infinity,
-              height: Sizes.defaultButtonHeight,
-              onPress: () {
-                cubit.select(clazz);
-                PresentationUtils.showToast('${clazz.name} selecionada!');
-                Navigator.pop(context);
-              },
-            ),
-          )
+          if (!disableSelecion)
+            Container(
+              margin: const EdgeInsets.only(
+                bottom: 13,
+              ),
+              child: ButtonWidget(
+                title: 'Selecionar Turma',
+                width: double.infinity,
+                height: Sizes.defaultButtonHeight,
+                onPress: () {
+                  cubit.select(clazz);
+                  PresentationUtils.showToast('${clazz.name} selecionada!');
+                  Navigator.pop(context);
+                },
+              ),
+            )
         ],
       ),
     );

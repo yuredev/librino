@@ -11,18 +11,15 @@ import 'package:librino/core/bindings.dart';
 import 'package:librino/core/constants/colors.dart';
 import 'package:librino/core/constants/sizes.dart';
 import 'package:librino/core/enums/enums.dart';
-import 'package:librino/data/models/question/phrase_to_libras/phrase_to_libras_question.dart';
 import 'package:librino/data/models/question/word_to_libras/word_to_libras_question.dart';
 import 'package:librino/logic/cubits/question/actions/question_actions_cubit.dart';
 import 'package:librino/logic/cubits/question/actions/question_actions_state.dart';
 import 'package:librino/logic/validators/create_libras_to_phrase_validator.dart';
-import 'package:librino/logic/validators/create_phrase_to_libras_validator.dart';
 import 'package:librino/logic/validators/create_word_to_libras_validator.dart';
 import 'package:librino/presentation/utils/presentation_utils.dart';
 import 'package:librino/presentation/widgets/shared/button_widget.dart';
 import 'package:librino/presentation/widgets/shared/inkwell_widget.dart';
 import 'package:librino/presentation/widgets/shared/select_image_source_modal.dart';
-import 'package:reorderables/reorderables.dart';
 
 const ffmpegSuccessCode = 0;
 
@@ -234,7 +231,7 @@ class _CreateWordToLIBRASScreenState extends State<CreateWordToLIBRASScreen> {
     );
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: LibrinoColors.deepBlue,
+        backgroundColor: LibrinoColors.mainDeeper,
         centerTitle: true,
         title: const Text(
           'Criar Questão',

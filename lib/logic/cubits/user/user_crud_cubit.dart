@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:librino/core/bindings.dart';
 import 'package:librino/core/enums/enums.dart';
 import 'package:librino/data/models/user/librino_user.dart';
@@ -24,6 +25,7 @@ class UserCRUDCubit extends Cubit<UserCRUDState> {
     required AuditoryAbility auditoryAbility,
     required ProfileType profileType,
     GenderIdentity? genderIdentity,
+    XFile? photo,
   }) async {
     try {
       emit(CreatingUserState());
@@ -33,6 +35,7 @@ class UserCRUDCubit extends Cubit<UserCRUDState> {
         name: name,
         email: email,
         password: password,
+        photo: photo,
       );
       final firestoreUser = await _firestoreRepository.save(
         FirestoreUser(
@@ -42,6 +45,8 @@ class UserCRUDCubit extends Cubit<UserCRUDState> {
           genderIdentity: genderIdentity,
           surname: surname,
           name: name,
+          email: email,
+          photoUrl: fireAuthUser.photoURL,
         ),
       );
       _globalAlertCubit.fire('Conta criada com sucesso!');

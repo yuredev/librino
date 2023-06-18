@@ -77,3 +77,29 @@ class FinishLessonErrorState extends AbstractFinishLessonState {
   @override
   List<Object?> get props => [];
 }
+
+
+
+class DeletingLessonState extends LessonActionsState {
+
+  const DeletingLessonState();
+
+  @override
+  List<Object?> get props => [];
+}
+
+class LessonDeletedState extends LessonActionsState {
+
+  const LessonDeletedState();
+
+  @override
+  List<Object?> get props => [];
+}
+
+class DeleteLessonErrorState extends LessonActionsState {
+
+  const DeleteLessonErrorState();
+
+  @override
+  List<Object?> get props => [];
+}

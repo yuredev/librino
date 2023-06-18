@@ -140,7 +140,7 @@ class _LibrasToWordScreenState extends State<LibrasToWordScreen> {
               ),
             ),
             Container(
-              margin: const EdgeInsets.only(bottom: 46),
+              margin: EdgeInsets.only(bottom: widget.readOnly ? 92 : 46),
               padding: const EdgeInsets.symmetric(
                 horizontal: 23,
               ),

@@ -1,5 +1,9 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:librino/core/bindings.dart';
 import 'package:librino/core/constants/colors.dart';
 import 'package:librino/core/constants/mappings.dart';
 import 'package:librino/core/constants/sizes.dart';
@@ -12,6 +16,8 @@ import 'package:librino/logic/cubits/user/user_crud_state.dart';
 import 'package:librino/logic/validators/register_user_validator.dart';
 import 'package:librino/presentation/utils/presentation_utils.dart';
 import 'package:librino/presentation/widgets/shared/button_widget.dart';
+import 'package:librino/presentation/widgets/shared/inkwell_widget.dart';
+import 'package:librino/presentation/widgets/shared/select_image_source_modal.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -38,6 +44,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   String? genderIdentityErrorMsg;
   String? profileTypeErrorMsg;
   String? auditoryAbilityErrorMsg;
+  XFile? photo;
 
   void submit(BuildContext context) {
     setState(() {
@@ -62,6 +69,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             profileType: profileType!,
             surname: surnameCtrl.text,
             genderIdentity: genderIdentity,
+            photo: photo,
           );
     }
   }
@@ -102,6 +110,106 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
   }
 
+  void attachPhoto() async {
+    FocusScope.of(context).unfocus();
+    final shouldGetFromGallery = await showModalBottomSheet<bool>(
+      context: context,
+      builder: (context) => SelectImageSourceModal(),
+    );
+    if (shouldGetFromGallery == null) {
+      return;
+    }
+    final pickedImage = await Bindings.get<ImagePicker>().pickImage(
+      source: shouldGetFromGallery ? ImageSource.gallery : ImageSource.camera,
+      preferredCameraDevice: CameraDevice.front,
+    );
+    if (pickedImage != null && context.mounted) {
+      setState(() {
+        photo = pickedImage;
+      });
+    }
+  }
+
+  Widget buildPhotoBtn() {
+    final screenSize = MediaQuery.of(context).size;
+    const addPhotoBtnSize = 35.0;
+    return Stack(
+      alignment: Alignment.center,
+      clipBehavior: Clip.none,
+      children: [
+        Container(
+          margin: EdgeInsets.only(bottom: addPhotoBtnSize / 2),
+          clipBehavior: Clip.antiAlias,
+          width: screenSize.width * 0.34,
+          height: screenSize.width * 0.34,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(120),
+          ),
+          child: photo != null
+              ? Image.file(
+                  File(photo!.path),
+                  fit: BoxFit.cover,
+                )
+              : Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                        color: LibrinoColors.mainDeeper.withOpacity(0.45),
+                        borderRadius: BorderRadius.circular(120),
+                      ),
+                    ),
+                    Positioned(
+                      bottom: -10,
+                      left: -0.07,
+                      child: Icon(
+                        Icons.person,
+                        size: screenSize.width * 0.34,
+                        color: LibrinoColors.backgroundWhite,
+                      ),
+                    ),
+                    Positioned(
+                      bottom: -80,
+                      child: Icon(
+                        Icons.circle,
+                        size: screenSize.width * 0.34,
+                        color: LibrinoColors.backgroundWhite,
+                      ),
+                    ),
+                  ],
+                ),
+        ),
+        Positioned(
+          bottom: 2,
+          child: Container(
+            width: addPhotoBtnSize,
+            height: addPhotoBtnSize,
+            decoration: BoxDecoration(
+              color: LibrinoColors.mainLighter,
+              borderRadius: BorderRadius.circular(50),
+            ),
+            child: Tooltip(
+              message: photo != null ? 'Substituir foto' : 'Adicionar foto',
+              child: InkWellWidget(
+                borderRadius: 50,
+                onTap: attachPhoto,
+                child: Padding(
+                  padding: EdgeInsets.all(photo != null ? 8.0 : 4.0),
+                  child: FittedBox(
+                    child: Icon(
+                      photo != null ? Icons.edit : Icons.add,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final inputBorder = OutlineInputBorder(
@@ -110,9 +218,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
       ),
       borderRadius: BorderRadius.circular(Sizes.defaultInputBorderRadius),
     );
+
     return Scaffold(
+      backgroundColor: LibrinoColors.backgroundGray,
       appBar: AppBar(
-        backgroundColor: LibrinoColors.deepBlue,
+        backgroundColor: LibrinoColors.mainDeeper,
         centerTitle: true,
         title: const Text(
           'Cadastrar-se',
@@ -134,11 +244,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              Center(
+                child: Container(
+                  margin: const EdgeInsets.only(bottom: 28),
+                  child: buildPhotoBtn(),
+                ),
+              ),
               Container(
                 margin: const EdgeInsets.only(bottom: 20),
                 child: const Text(
                   'Informações cadastrais',
-                  style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                  style: TextStyle(fontSize: 21, fontWeight: FontWeight.bold),
                 ),
               ),
               Container(
@@ -230,7 +346,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 margin: const EdgeInsets.only(bottom: 20),
                 child: const Text(
                   'Identificação do usuário',
-                  style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                  style: TextStyle(fontSize: 21, fontWeight: FontWeight.bold),
                 ),
               ),
               Container(
@@ -439,7 +555,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 margin: const EdgeInsets.only(bottom: 20),
                 child: const Text(
                   'Credenciais',
-                  style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                  style: TextStyle(fontSize: 21, fontWeight: FontWeight.bold),
                 ),
               ),
               Container(
@@ -491,7 +607,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   controller: passwordConfirmCtrl,
                   style: const TextStyle(fontSize: 16),
                   enableSuggestions: false,
-                  textInputAction: TextInputAction.next,
+                  textInputAction: TextInputAction.done,
                   obscureText: !passwordIsVisible,
                   decoration: InputDecoration(
                     filled: true,

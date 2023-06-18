@@ -113,7 +113,7 @@ class _CreateLessonScreenState extends State<CreateLessonScreen> {
       ),
       backgroundColor: LibrinoColors.backgroundGray,
       appBar: AppBar(
-        backgroundColor: LibrinoColors.deepBlue,
+        backgroundColor: LibrinoColors.mainDeeper,
         centerTitle: true,
         title: const Text(
           'Cadastrar Lição',

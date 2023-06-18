@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 
 abstract class LibrinoColors {
-  // static const mainOrange = Color(0xFFFF9040);
-  static const mainBlue = Color(0xFF457AC9);
+  static const mainOrange = Color(0xFFFF9040);
   static const main = Color(0xFF457AC9);
+  static const mainLighter = Color(0xFF568BDA);
   static const mainDeeper = Color.fromARGB(255, 52, 92, 151);
   static const classFoundBlue = Color.fromARGB(255, 114, 128, 136);
   // static const deepOrange = Color(0xFFFF7940);
-  static const deepBlue = Color.fromARGB(255, 57, 102, 170);
   static const lightGray = Color(0xFFEFEFEF);
   static const lightGrayDarker = Color(0xFFEEEEEE);
   static const backgroundGray = Color(0xFFF3F7FF);
@@ -36,4 +35,5 @@ abstract class LibrinoColors {
   static const validationErrorRed = Color.fromARGB(255, 200, 10, 10);
   static const textLightGray = Color.fromARGB(255, 209, 209, 209);
   static const whiteRed = Color.fromARGB(255, 255, 226, 224);
+  static const secondaryBlue = Color.fromARGB(255, 65, 106, 167);
 }

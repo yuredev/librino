@@ -14,14 +14,14 @@ class ClassWidget extends StatelessWidget {
   final Color color;
   final Color textColor;
   final Color? iconColor;
-  final bool disabled;
+  final bool disableSelection;
   final Class? clazz;
   final bool isLoading;
   final void Function() switchTabCallback;
 
   const ClassWidget({
     super.key,
-    this.disabled = false,
+    this.disableSelection = false,
     required this.color,
     required this.textColor,
     this.iconColor,
@@ -56,16 +56,15 @@ class ClassWidget extends StatelessWidget {
     final SelectClassCubit selectClassCubit = context.read();
     final conteudo = InkWellWidget(
       borderRadius: 24,
-      onTap: disabled || isLoading
-          ? null
-          : () => PresentationUtils.showBottomModal(
-                context,
-                SelectClassModal(
-                  cubit: selectClassCubit,
-                  clazz: clazz!,
-                  switchTabCallback: switchTabCallback,
-                ),
-              ),
+      onTap: () => PresentationUtils.showBottomModal(
+        context,
+        SelectClassModal(
+          cubit: selectClassCubit,
+          clazz: clazz!,
+          switchTabCallback: switchTabCallback,
+          disableSelecion: disableSelection,
+        ),
+      ),
       child: Stack(
         children: [
           if (clazz?.id == FirebaseConstants.defaultClassId)

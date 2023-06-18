@@ -30,7 +30,6 @@ class _CreateModuleScreenState extends State<CreateModuleScreen> {
   late final ModuleActionsCubit moduleActionsCubit = context.read();
   final nameCtrl = TextEditingController();
   final descriptionCtrl = TextEditingController();
-  final indexCtrl = TextEditingController();
   final formKey = GlobalKey<FormState>();
   final picker = Bindings.get<ImagePicker>();
   XFile? attachedImage;
@@ -54,7 +53,7 @@ class _CreateModuleScreenState extends State<CreateModuleScreen> {
         Module(
           title: nameCtrl.text,
           description: descriptionCtrl.text,
-          index: int.parse(indexCtrl.text),
+          index: 999, // TODO: remover
           classId: widget.clazz.id!,
         ),
         attachedImage,
@@ -84,7 +83,7 @@ class _CreateModuleScreenState extends State<CreateModuleScreen> {
     );
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: LibrinoColors.deepBlue,
+        backgroundColor: LibrinoColors.mainDeeper,
         centerTitle: true,
         title: const Text(
           'Cadastrar Módulo',
@@ -128,35 +127,6 @@ class _CreateModuleScreenState extends State<CreateModuleScreen> {
                       ),
                       contentPadding: const EdgeInsets.only(left: 22),
                       label: const Text('*Nome do módulo'),
-                      enabledBorder: inputBorder,
-                      disabledBorder: inputBorder,
-                      focusedBorder: inputBorder,
-                      border: inputBorder,
-                      labelStyle: TextStyle(
-                        color: LibrinoColors.grayPlaceholder,
-                      ),
-                      isDense: true,
-                    ),
-                  ),
-                ),
-                Container(
-                  margin: const EdgeInsets.only(bottom: 16),
-                  child: TextFormField(
-                    controller: indexCtrl,
-                    validator: CreateModuleValidator.validateIndex,
-                    autocorrect: false,
-                    style: TextStyle(fontSize: 15),
-                    textInputAction: TextInputAction.next,
-                    keyboardType: TextInputType.numberWithOptions(signed: true),
-                    decoration: InputDecoration(
-                      filled: true,
-                      fillColor: LibrinoColors.backgroundWhite,
-                      prefixIcon: const Icon(
-                        Icons.filter_1,
-                        size: 22,
-                      ),
-                      contentPadding: const EdgeInsets.only(left: 22),
-                      label: const Text('*Ordem do módulo na turma'),
                       enabledBorder: inputBorder,
                       disabledBorder: inputBorder,
                       focusedBorder: inputBorder,

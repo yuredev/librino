@@ -117,7 +117,7 @@ class _AddQuestionToLessonScreenState extends State<AddQuestionToLessonScreen> {
     return Scaffold(
       backgroundColor: LibrinoColors.backgroundGray,
       appBar: AppBar(
-        backgroundColor: LibrinoColors.deepBlue,
+        backgroundColor: LibrinoColors.mainDeeper,
         centerTitle: true,
         title: const Text(
           'Nova Lição - Adicionar Questão',

@@ -12,6 +12,7 @@ class LoadLessonsCubit extends Cubit<LoadLessonState> {
     try {
       emit(LoadinglLessonState());
       final lessons = await _lessonRepository.getFromModule(moduleId);
+      lessons.sort((a, b) => a.index - b.index);
       emit(LessonsLoadedState(lessons));
     } catch (e) {
       print(e);

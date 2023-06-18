@@ -149,7 +149,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         controller: passwordCtrl,
                         style: const TextStyle(fontSize: 16),
                         enableSuggestions: false,
-                        textInputAction: TextInputAction.next,
+                        textInputAction: TextInputAction.done,
                         obscureText: !passwordIsVisible,
                         decoration: InputDecoration(
                           filled: true,

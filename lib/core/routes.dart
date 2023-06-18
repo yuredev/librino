@@ -11,7 +11,6 @@ import 'package:librino/logic/cubits/class/search/search_class_cubit.dart';
 import 'package:librino/logic/cubits/class/select/select_class_cubit.dart';
 import 'package:librino/logic/cubits/lesson/actions/lesson_actions_cubit.dart';
 import 'package:librino/logic/cubits/lesson/load/load_lessons_cubit.dart';
-import 'package:librino/logic/cubits/lesson/load/load_single_lesson_cubit.dart';
 import 'package:librino/logic/cubits/module/actions/module_actions_cubit.dart';
 import 'package:librino/logic/cubits/module/load/load_modules_cubit.dart';
 import 'package:librino/logic/cubits/participants/load_participants_cubit.dart';
@@ -40,6 +39,7 @@ import 'package:librino/presentation/screens/play_questions/word_to_libras_scree
 import 'package:librino/presentation/screens/introduction_screen.dart';
 import 'package:librino/presentation/screens/login_screen.dart';
 import 'package:librino/presentation/screens/preview_question_screen.dart';
+import 'package:librino/presentation/screens/profile_screen.dart';
 import 'package:librino/presentation/screens/register_screen.dart';
 import 'package:librino/presentation/screens/reorder_modules_screen.dart';
 import 'package:librino/presentation/screens/search_class_screen.dart';
@@ -63,6 +63,7 @@ abstract class Routes {
   static const previewQuestion = '/preview-question';
   static const camera = '/camera';
   static const reorderModules = '/reorder-modules';
+  static const profile = '/profile';
 
   // Create questions
   static const createLIBRASToPhraseQuestion =
@@ -86,9 +87,9 @@ abstract class Routes {
             return MultiBlocProvider(
               providers: [
                 BlocProvider<LoadModulesCubit>.value(value: Bindings.get()),
-                BlocProvider<LoadSingleLessonCubit>.value(
-                  value: Bindings.get(),
-                ),
+                // BlocProvider<LoadSingleLessonCubit>.value(
+                //   value: Bindings.get(),
+                // ),
                 BlocProvider<LoadClassesCubit>.value(value: Bindings.get()),
                 BlocProvider<AuthCubit>.value(value: Bindings.get()),
                 BlocProvider<SelectClassCubit>.value(value: Bindings.get()),
@@ -163,8 +164,15 @@ abstract class Routes {
       case classDetails:
         return MaterialPageRoute(
           builder: (ctx) {
-            return BlocProvider<LoadParticipantsCubit>.value(
-              value: Bindings.get(),
+            return MultiBlocProvider(
+              providers: [
+                BlocProvider<LoadParticipantsCubit>.value(
+                  value: Bindings.get(),
+                ),
+                BlocProvider<SelectClassCubit>.value(
+                  value: Bindings.get(),
+                ),
+              ],
               child: ClassDetailsScreen(
                 clazz: (settings.arguments as Map)['class'] as Class,
               ),
@@ -212,6 +220,7 @@ abstract class Routes {
             ],
             child: AddLessonsToModuleScreen(
               module: (settings.arguments as Map)['module'],
+              hasContent: (settings.arguments as Map)['hasContent'] ?? false,
             ),
           ),
         );
@@ -277,15 +286,14 @@ abstract class Routes {
             readOnly: (settings.arguments as Map)['readOnly'] ?? false,
           ),
         );
-      // case camera:
-      //   return MaterialPageRoute(
-      //     builder: (context) {
-      //       return CameraScreenOld(
-      //         isVideo: (settings.arguments as Map)['isVideo'] ?? false,
-      //         startInFrontal: (settings.arguments as Map)['startInFrontal'],
-      //       );
-      //     },
-      //   );
+      case profile:
+        return MaterialPageRoute(
+          builder: (context) {
+            return ProfileScreen(
+              user: (settings.arguments as Map)['user'],
+            );
+          },
+        );
       case lessonResult:
         return MaterialPageRoute(
           builder: (context) => BlocProvider<LessonActionsCubit>.value(

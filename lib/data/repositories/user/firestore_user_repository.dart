@@ -1,9 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:librino/core/bindings.dart';
 import 'package:librino/data/models/user/firestore_user.dart';
 
 class FirestoreUserRepository {
   final _collection = Bindings.get<FirebaseFirestore>().collection('users');
+  final Reference _storageRef = Bindings.get();
 
   Future<FirestoreUser> save(FirestoreUser user) async {
     final docRef = await _collection.add(user.toJson());
