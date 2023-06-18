@@ -56,7 +56,7 @@ class _CreateClassScreenState extends State<CreateClassScreen> {
     );
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: LibrinoColors.deepBlue,
+        backgroundColor: LibrinoColors.mainDeeper,
         centerTitle: true,
         title: const Text(
           'Cadastrar Turma',

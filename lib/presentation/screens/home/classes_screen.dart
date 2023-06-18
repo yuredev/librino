@@ -94,9 +94,9 @@ class ClassesScreen extends StatelessWidget {
                               ),
                             )
                           : ClassWidget(
-                              color: LibrinoColors.deepBlue,
+                              color: LibrinoColors.mainDeeper,
                               textColor: Colors.white,
-                              disabled: true,
+                              disableSelection: true,
                               switchTabCallback: () {},
                               clazz: state.clazz,
                               iconColor: Colors.white.withOpacity(0.7),

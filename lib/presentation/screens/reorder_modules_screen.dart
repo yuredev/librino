@@ -54,7 +54,7 @@ class _ReorderModulesScreenState extends State<ReorderModulesScreen> {
         ),
       ),
       appBar: AppBar(
-        backgroundColor: LibrinoColors.deepBlue,
+        backgroundColor: LibrinoColors.mainDeeper,
         centerTitle: true,
         title: const Text(
           'Ordenar Módulos',
@@ -73,139 +73,131 @@ class _ReorderModulesScreenState extends State<ReorderModulesScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Container(
-                    child: Lottie.asset('assets/animations/searching-class.json'),
+                    child:
+                        Lottie.asset('assets/animations/searching-class.json'),
                   ),
                   Text('Carregando...'),
                 ],
               ),
             );
           }
-          return SingleChildScrollView(
-            padding: EdgeInsets.only(
-              top: Sizes.defaultScreenTopMargin,
-              bottom: Sizes.defaultScreenBottomMargin * 4,
-              left: Sizes.defaultScreenHorizontalMargin,
-              right: Sizes.defaultScreenHorizontalMargin,
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                BlocListener<ModuleActionsCubit, ModuleActionsState>(
-                  listener: (context, state) {
-                    if (state is ModulesOrderUpdatedState) {
-                      Navigator.pop(context);
-                    }
-                  },
-                  child: SizedBox(),
+          return BlocListener<ModuleActionsCubit, ModuleActionsState>(
+            listener: (context, state) {
+              if (state is ModulesOrderUpdatedState) {
+                Navigator.pop(context);
+              }
+            },
+            child: Center(
+              child: ReorderableWrap(
+                padding: EdgeInsets.only(
+                  top: Sizes.defaultScreenTopMargin,
+                  bottom: Sizes.defaultScreenBottomMargin * 4,
                 ),
-                ReorderableWrap(
-                  needsLongPressDraggable: false,
-                  spacing: 16,
-                  runSpacing: 16,
-                  onReorder: (oldIndex, newIndex) {
-                    final aux = modules[oldIndex];
-                    setState(() {
-                      modules[oldIndex] = modules[newIndex];
-                      modules[newIndex] = aux;
-                      modules[oldIndex] =
-                          modules[oldIndex].copyWith(index: oldIndex);
-                      modules[newIndex] =
-                          modules[newIndex].copyWith(index: newIndex);
-                    });
-                  },
-                  children: modules.asMap().entries.map(
-                    (entry) {
-                      final m = entry.value;
-                      final i = entry.key;
-                      return Stack(
-                        children: [
-                          DottedBorder(
-                            color: LibrinoColors.borderGray,
-                            strokeWidth: 1.2,
-                            dashPattern: [2.5, 2],
-                            radius: Radius.circular(20),
-                            borderType: BorderType.RRect,
-                            child: Container(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 16),
-                              decoration: BoxDecoration(
-                                color: LibrinoColors.backgroundWhite,
-                                borderRadius: BorderRadius.circular(20),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.grey.withOpacity(0.03),
-                                    spreadRadius: 1.25,
-                                    blurRadius: 15,
-                                  ),
-                                ],
-                              ),
-                              child: Column(
-                                children: [
-                                  m.imageUrl == null
-                                      ? Image.asset(
-                                          'assets/images/generic-module.png',
-                                          width: 100,
-                                          height: 100,
-                                          fit: BoxFit.contain,
-                                        )
-                                      : Image.network(
-                                          m.imageUrl!,
-                                          width: 100,
-                                          height: 100,
-                                          fit: BoxFit.contain,
-                                          errorBuilder:
-                                              (context, error, stackTrace) {
-                                            return Image.asset(
-                                              'assets/images/generic-module.png',
-                                              width: 120,
-                                              height: 120,
-                                              fit: BoxFit.contain,
-                                            );
-                                          },
-                                        ),
-                                  Container(
-                                    alignment: Alignment.center,
-                                    width: 120,
-                                    margin: const EdgeInsets.only(top: 16),
-                                    child: FittedBox(
-                                      child: Text(
-                                        m.title,
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 12,
-                                        ),
+                needsLongPressDraggable: false,
+                spacing: 16,
+                runSpacing: 16,
+                onReorder: (oldIndex, newIndex) {
+                  final aux = modules[oldIndex];
+                  setState(() {
+                    modules[oldIndex] = modules[newIndex];
+                    modules[newIndex] = aux;
+                    modules[oldIndex] =
+                        modules[oldIndex].copyWith(index: oldIndex);
+                    modules[newIndex] =
+                        modules[newIndex].copyWith(index: newIndex);
+                  });
+                },
+                children: modules.asMap().entries.map(
+                  (entry) {
+                    final m = entry.value;
+                    final i = entry.key;
+                    return Stack(
+                      children: [
+                        DottedBorder(
+                          color: LibrinoColors.borderGray,
+                          strokeWidth: 1.2,
+                          dashPattern: [2.5, 2],
+                          radius: Radius.circular(20),
+                          borderType: BorderType.RRect,
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 16),
+                            decoration: BoxDecoration(
+                              color: LibrinoColors.backgroundWhite,
+                              borderRadius: BorderRadius.circular(20),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.grey.withOpacity(0.03),
+                                  spreadRadius: 1.25,
+                                  blurRadius: 15,
+                                ),
+                              ],
+                            ),
+                            child: Column(
+                              children: [
+                                m.imageUrl == null
+                                    ? Image.asset(
+                                        'assets/images/generic-module.png',
+                                        width: 100,
+                                        height: 100,
+                                        fit: BoxFit.contain,
+                                      )
+                                    : Image.network(
+                                        m.imageUrl!,
+                                        width: 100,
+                                        height: 100,
+                                        fit: BoxFit.contain,
+                                        errorBuilder:
+                                            (context, error, stackTrace) {
+                                          return Image.asset(
+                                            'assets/images/generic-module.png',
+                                            width: 120,
+                                            height: 120,
+                                            fit: BoxFit.contain,
+                                          );
+                                        },
+                                      ),
+                                Container(
+                                  alignment: Alignment.center,
+                                  width: 120,
+                                  margin: const EdgeInsets.only(top: 16),
+                                  child: FittedBox(
+                                    child: Text(
+                                      m.title,
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 12,
                                       ),
                                     ),
-                                  )
-                                ],
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                        Positioned(
+                          right: 0,
+                          child: Container(
+                            width: 30,
+                            height: 30,
+                            decoration: BoxDecoration(
+                              color: Colors.orangeAccent,
+                              borderRadius: BorderRadius.circular(50),
+                            ),
+                            alignment: Alignment.center,
+                            child: Text(
+                              '${i + 1}',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
                               ),
                             ),
                           ),
-                          Positioned(
-                            right: 0,
-                            child: Container(
-                              width: 30,
-                              height: 30,
-                              decoration: BoxDecoration(
-                                color: Colors.orangeAccent,
-                                borderRadius: BorderRadius.circular(50),
-                              ),
-                              alignment: Alignment.center,
-                              child: Text(
-                                '${i + 1}',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      );
-                    },
-                  ).toList(),
-                ),
-              ],
+                        ),
+                      ],
+                    );
+                  },
+                ).toList(),
+              ),
             ),
           );
         },

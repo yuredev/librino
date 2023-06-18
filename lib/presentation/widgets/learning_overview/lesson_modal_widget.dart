@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:librino/core/constants/colors.dart';
 import 'package:librino/core/constants/mappings.dart';
 import 'package:librino/core/constants/sizes.dart';
+import 'package:librino/core/routes.dart';
 import 'package:librino/data/models/lesson/lesson.dart';
 import 'package:librino/data/models/module/module.dart';
 import 'package:librino/data/models/play_lesson_dto.dart';
@@ -62,6 +63,17 @@ class _LessonModalWidgetState extends State<LessonModalWidget> {
     return all.where((l) => completed.contains(l.id)).length;
   }
 
+  void _onAddContentPress(BuildContext context) async {
+    await Navigator.pushReplacementNamed(
+      context,
+      Routes.addLessonsToModule,
+      arguments: {
+        'module': widget.module,
+        'hasContent': true,
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     const edgeInsets = EdgeInsets.only(
@@ -107,7 +119,7 @@ class _LessonModalWidgetState extends State<LessonModalWidget> {
                     widget.module.lessons!.length *
                     100);
             return SizedBox(
-              height: MediaQuery.of(context).size.height * 0.6,
+              height: MediaQuery.of(context).size.height * 0.75,
               child: Padding(
                 padding: edgeInsets,
                 child: Column(
@@ -170,7 +182,7 @@ class _LessonModalWidgetState extends State<LessonModalWidget> {
                                   '% concluído',
                                 ),
                                 Text(
-                                  '${getCompletedsCount(widget.module.lessons!, completedIds)} '
+                                  '${getCompletedsCount(widget.module.lessons!, completedIds)}/${widget.module.lessons!.length} '
                                   '${getCompletedsCount(widget.module.lessons!, completedIds) == 1 ? 'Lição concluída' : 'Lições concluídas'}',
                                 ),
                               ],
@@ -225,7 +237,7 @@ class _LessonModalWidgetState extends State<LessonModalWidget> {
                                   ),
                                 ),
                               ),
-                            
+
                             // Container(
                             //   margin: const EdgeInsets.only(top: 12),
                             //   child: RichText(
@@ -309,6 +321,20 @@ class _LessonModalWidgetState extends State<LessonModalWidget> {
                     //     ),
                     //   ),
                     // ),
+                    if (authState.user.isInstructor)
+                      Container(
+                        margin: const EdgeInsets.only(bottom: 12),
+                        child: ButtonWidget(
+                          onPress: () => _onAddContentPress(context),
+                          title: 'Adicionar conteúdo',
+                          height: Sizes.defaultButtonHeight,
+                          width: double.infinity,
+                          leftIcon: Icon(
+                            Icons.add,
+                          ),
+                          padding: EdgeInsets.symmetric(vertical: 14),
+                        ),
+                      ),
                     if (!widget.readOnly)
                       ButtonWidget(
                         onPress: () => questionsState is QuestionsLoadedState
@@ -319,12 +345,23 @@ class _LessonModalWidgetState extends State<LessonModalWidget> {
                         width: double.infinity,
                         leftIcon: Icon(
                           Icons.gamepad,
-                          color: Colors.white,
+                          color: authState.user.isInstructor
+                              ? LibrinoColors.main
+                              : null,
                         ),
-                        padding: EdgeInsets.symmetric(vertical: 14),
+                        padding: const EdgeInsets.symmetric(vertical: 14),
                         loadingText: 'Carregando...',
                         isLoading: questionsState is! QuestionsLoadedState,
                         isEnabled: questionsState is QuestionsLoadedState,
+                        color: authState.user.isInstructor
+                            ? Colors.white
+                            : LibrinoColors.main,
+                        borderColor: authState.user.isInstructor
+                            ? LibrinoColors.main
+                            : null,
+                        textColor: authState.user.isInstructor
+                            ? LibrinoColors.main
+                            : Colors.white,
                       ),
                   ],
                 ),

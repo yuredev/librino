@@ -48,4 +48,8 @@ class LessonRepository {
       await docRef.update(l.toJson());
     }
   }
+
+  Future<void> delete(String moduleId, String id) async {
+    await getCollection(moduleId).doc(id).delete();
+  }
 }

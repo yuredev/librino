@@ -3,6 +3,7 @@ import 'package:librino/core/constants/colors.dart';
 import 'package:librino/core/constants/sizes.dart';
 import 'package:librino/core/enums/enums.dart';
 import 'package:librino/data/models/user/librino_user.dart';
+import 'package:librino/presentation/widgets/shared/inkwell_widget.dart';
 
 class InitialAppBar extends StatelessWidget {
   final LibrinoUser user;
@@ -116,13 +117,37 @@ class InitialAppBar extends StatelessWidget {
                 borderRadius: BorderRadius.circular(50),
                 child: Tooltip(
                   message: 'Perfil',
-                  child: InkWell(
+                  child: InkWellWidget(
                     onTap: () => Scaffold.of(context).openEndDrawer(),
-                    borderRadius: BorderRadius.circular(50),
-                    child: Ink.image(
-                      image: AssetImage('assets/images/user2.png'),
-                      width: 40,
-                      height: 40,
+                    borderRadius: 50,
+                    child: Container(
+                      clipBehavior: Clip.antiAlias,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(50),
+                      ),
+                      child: user.photoURL == null
+                          ? Ink(
+                              decoration: BoxDecoration(
+                                image: DecorationImage(
+                                  image: AssetImage('assets/images/user2.png'),
+                                  fit: BoxFit.cover,
+                                ),
+                                borderRadius: BorderRadius.circular(50),
+                              ),
+                              width: 40,
+                              height: 40,
+                            )
+                          : Ink(
+                              decoration: BoxDecoration(
+                                image: DecorationImage(
+                                  image: NetworkImage(user.photoURL!),
+                                  fit: BoxFit.cover,
+                                ),
+                                borderRadius: BorderRadius.circular(50),
+                              ),
+                              width: 40,
+                              height: 40,
+                            ),
                     ),
                   ),
                 ),

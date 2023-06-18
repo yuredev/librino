@@ -6,12 +6,14 @@ import 'package:librino/data/repositories/user/firestore_user_repository.dart';
 import 'package:librino/logic/cubits/auth/auth_cubit.dart';
 import 'package:librino/logic/cubits/global_alert/global_alert_cubit.dart';
 import 'package:librino/logic/cubits/lesson/actions/lesson_actions_state.dart';
+import 'package:librino/logic/cubits/module/load/load_modules_cubit.dart';
 
 class LessonActionsCubit extends Cubit<LessonActionsState> {
   final GlobalAlertCubit _globalAlertCubit = Bindings.get();
   final LessonRepository _lessonRepository = Bindings.get();
   final FirestoreUserRepository _userRepository = Bindings.get();
   final AuthCubit _authCubit = Bindings.get();
+  final LoadModulesCubit _modulesCubit = Bindings.get();
 
   LessonActionsCubit() : super(InitialLessonActionsState());
 
@@ -20,6 +22,7 @@ class LessonActionsCubit extends Cubit<LessonActionsState> {
       emit(CreatingLessonState());
       final lessonSaved = await _lessonRepository.create(lesson);
       _globalAlertCubit.fire('Lição cadastrada com sucesso!');
+      _modulesCubit.load();
       emit(LessonCreatedState(lessonSaved));
     } catch (e) {
       print(e);
@@ -59,6 +62,18 @@ class LessonActionsCubit extends Cubit<LessonActionsState> {
         isErrorMessage: true,
       );
       emit(FinishLessonErrorState());
+    }
+  }
+
+  Future<void> delete(String moduleId, String lessonId) async {
+    try {
+      emit(DeletingLessonState());
+      _lessonRepository.delete(moduleId, lessonId);
+      _modulesCubit.load();
+      emit(LessonDeletedState());
+    } catch (e) {
+      print(e);
+      emit(LessonDeletedState());
     }
   }
 }

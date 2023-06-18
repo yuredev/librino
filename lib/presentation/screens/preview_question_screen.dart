@@ -82,7 +82,7 @@ class PreviewQuestionScreen extends StatelessWidget {
     }
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: LibrinoColors.deepBlue,
+        backgroundColor: LibrinoColors.mainDeeper,
         centerTitle: true,
         title: Text(
           readOnly ? 'Visualizar questão' : 'Adicionar questão?',

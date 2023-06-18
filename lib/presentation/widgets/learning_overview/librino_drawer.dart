@@ -1,4 +1,4 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
+// ignore_for_file: public_member_api_docs, sort_constructors_first, use_build_context_synchronously
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -7,6 +7,7 @@ import 'package:librino/data/models/user/librino_user.dart';
 import 'package:librino/logic/cubits/auth/auth_cubit.dart';
 import 'package:librino/presentation/utils/presentation_utils.dart';
 import 'package:librino/presentation/widgets/shared/button_widget.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class LibrinoDrawer extends StatelessWidget {
   final LibrinoUser user;
@@ -15,6 +16,12 @@ class LibrinoDrawer extends StatelessWidget {
     Key? key,
     required this.user,
   }) : super(key: key);
+
+  Future<void> _launchUrl(BuildContext context, String url) async {
+    if (!await launchUrl(Uri.parse(url))) {
+      PresentationUtils.showSnackBar(context, 'message', isErrorMessage: true);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -49,11 +56,24 @@ class LibrinoDrawer extends StatelessWidget {
                 child: Column(
                   children: [
                     Container(
-                      margin: const EdgeInsets.only(bottom: 10),
-                      child: Image.asset(
-                        'assets/images/user2.png',
-                        width: consts.maxWidth * .42,
+                      clipBehavior: Clip.antiAlias,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(120),
                       ),
+                      margin: const EdgeInsets.only(bottom: 10),
+                      child: user.photoURL == null
+                          ? Image.asset(
+                              'assets/images/user2.png',
+                              width: consts.maxWidth * .42,
+                              height: consts.maxWidth * .42,
+                              fit: BoxFit.cover,
+                            )
+                          : Image.network(
+                              user.photoURL!,
+                              width: consts.maxWidth * .42,
+                              height: consts.maxWidth * .42,
+                              fit: BoxFit.cover,
+                            ),
                     ),
                     Container(
                       margin: const EdgeInsets.only(bottom: 2),
@@ -99,31 +119,33 @@ class LibrinoDrawer extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
+                      // TextButton(
+                      //   style: btnStyle,
+                      //   onPressed: () {},
+                      //   child: Text(
+                      //     'Sobre o Librino',
+                      //     style: textBtnStyle,
+                      //     textAlign: TextAlign.left,
+                      //   ),
+                      // ),
                       TextButton(
                         style: btnStyle,
-                        onPressed: () {},
-                        child: Text(
-                          'Sobre o Librino',
-                          style: textBtnStyle,
-                          textAlign: TextAlign.left,
-                        ),
-                      ),
-                      TextButton(
-                        style: btnStyle,
-                        onPressed: () {},
+                        onPressed: () {
+                          _launchUrl(context, 'https://github.com/yuredev');
+                        },
                         child: Text(
                           'Sobre o desenvolvedor',
                           style: textBtnStyle,
                         ),
                       ),
-                      TextButton(
-                        style: btnStyle,
-                        onPressed: () {},
-                        child: Text(
-                          'Avaliar',
-                          style: textBtnStyle,
-                        ),
-                      ),
+                      // TextButton(
+                      //   style: btnStyle,
+                      //   onPressed: () {},
+                      //   child: Text(
+                      //     'Avaliar',
+                      //     style: textBtnStyle,
+                      //   ),
+                      // ),
                       TextButton(
                         style: btnStyle,
                         onPressed: () {},

@@ -15,6 +15,8 @@ class FirestoreUser extends Equatable {
   final String surname;
   final String name;
   final List<String>? completedLessonsIds;
+  final String? email;
+  final String? photoUrl;
 
   const FirestoreUser({
     this.genderIdentity,
@@ -22,7 +24,9 @@ class FirestoreUser extends Equatable {
     required this.auditoryAbility,
     required this.roles,
     required this.surname,
+    this.email,
     required this.name,
+    this.photoUrl,
     this.completedLessonsIds,
   });
 
@@ -41,6 +45,8 @@ class FirestoreUser extends Equatable {
         roles,
         surname,
         name,
+        photoUrl,
+        email,
       ];
 
   FirestoreUser copyWith({
@@ -51,6 +57,8 @@ class FirestoreUser extends Equatable {
     String? surname,
     String? name,
     List<String>? completedLessonsIds,
+    String? email,
+    String? photoUrl,
   }) {
     return FirestoreUser(
       id: id ?? this.id,
@@ -60,6 +68,8 @@ class FirestoreUser extends Equatable {
       surname: surname ?? this.surname,
       name: name ?? this.name,
       completedLessonsIds: completedLessonsIds ?? this.completedLessonsIds,
+      email: email ?? this.email,
+      photoUrl: photoUrl ?? this.photoUrl,
     );
   }
 }

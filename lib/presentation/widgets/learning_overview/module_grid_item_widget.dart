@@ -11,6 +11,7 @@ import 'package:librino/presentation/widgets/shared/shimmer_widget.dart';
 class ModuleGridItemWidget extends StatelessWidget {
   final void Function()? onPress;
   final String? title;
+  final String? subtitle;
   final double? conclusionPercentage;
   final String? imageUrl;
   final bool isLoading;
@@ -19,6 +20,7 @@ class ModuleGridItemWidget extends StatelessWidget {
     super.key,
     this.onPress,
     this.title,
+    this.subtitle,
     this.conclusionPercentage,
     this.imageUrl,
     this.isLoading = false,
@@ -84,10 +86,22 @@ class ModuleGridItemWidget extends StatelessWidget {
                           title!,
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
-                            fontSize: 12,
+                            fontSize: 12.5,
                           ),
                         ),
                 ),
+                if (!isLoading && subtitle != null)
+                  Container(
+                    margin: const EdgeInsets.only(bottom: spacing - 5),
+                    child: Text(
+                      subtitle!,
+                      style: TextStyle(
+                        fontWeight: FontWeight.w500,
+                        fontSize: 11.5,
+                        color: LibrinoColors.subtitleGray,
+                      ),
+                    ),
+                  ),
                 if (!user.isInstructor)
                   Container(
                     margin: const EdgeInsets.only(bottom: spacing),

@@ -148,7 +148,7 @@ class _CreateLIBRASToWordScreenState extends State<CreateLIBRASToWordScreen> {
     );
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: LibrinoColors.deepBlue,
+        backgroundColor: LibrinoColors.mainDeeper,
         centerTitle: true,
         title: const Text(
           'Criar Questão',

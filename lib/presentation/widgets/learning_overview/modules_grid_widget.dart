@@ -13,6 +13,7 @@ import 'package:librino/logic/cubits/module/load/load_modules_cubit.dart';
 import 'package:librino/logic/cubits/module/load/load_modules_state.dart';
 import 'package:librino/logic/cubits/question/load_questions/load_lesson_questions_cubit.dart';
 import 'package:librino/presentation/utils/presentation_utils.dart';
+import 'package:librino/presentation/widgets/learning_overview/create_module_content_modal.dart';
 import 'package:librino/presentation/widgets/learning_overview/lesson_modal_widget.dart';
 import 'package:librino/presentation/widgets/learning_overview/module_grid_item_widget.dart';
 import 'package:librino/presentation/widgets/shared/illustration_widget.dart';
@@ -25,7 +26,7 @@ class ModulesGridWidget extends StatefulWidget {
 }
 
 class _ModulesGridWidgetState extends State<ModulesGridWidget> {
-  late final LoadSingleLessonCubit loadLessonCubit = context.read();
+  // late final LoadSingleLessonCubit loadLessonCubit = context.read();
   Module? module;
 
   // void onLoadLesson(BuildContext context, LoadLessonState state) {
@@ -113,14 +114,17 @@ class _ModulesGridWidgetState extends State<ModulesGridWidget> {
                                           : m.lessons![currentLessonIndex],
                                       currentLessonIndex == -1,
                                     );
+                                  } else {
+                                    PresentationUtils.showBottomModal(
+                                      context,
+                                      CreateModuleContentModal(module: m),
+                                    );
                                   }
-                                  // loadLessonCubit.loadLesson(
-                                  //   'ZuNAujmyuUYeRfJdJKdi',
-                                  //   m.id!,
-                                  //   0,
-                                  // );
                                 },
                                 title: m.title,
+                                subtitle: authState.user.isInstructor
+                                    ? '${m.lessons!.length} ${m.lessons!.length == 1 ? 'Lição' : 'Lições'}'
+                                    : null,
                                 conclusionPercentage: m.lessons!.isEmpty
                                     ? 0
                                     : getCompletedsCount(

@@ -3,10 +3,12 @@ import 'package:librino/core/bindings.dart';
 import 'package:librino/data/models/module/module.dart';
 import 'package:librino/data/repositories/lesson_repository.dart';
 import 'package:librino/data/repositories/module_repository.dart';
+import 'package:librino/logic/cubits/auth/auth_cubit.dart';
 import 'package:librino/logic/cubits/class/select/select_class_cubit.dart';
 import 'load_modules_state.dart';
 
 class LoadModulesCubit extends Cubit<LoadModulesState> {
+  final AuthCubit authCubit = Bindings.get();
   final ModuleRepository _moduleRepository = Bindings.get();
   final SelectClassCubit _selectClassCubit = Bindings.get();
   final LessonRepository _lessonRepository = Bindings.get();
@@ -28,10 +30,14 @@ class LoadModulesCubit extends Cubit<LoadModulesState> {
         modules[i] = modules[i].copyWith(lessons: moduleLessons);
         modules[i].lessons!.sort((a, b) => a.index - b.index);
       }
-      final modsWithContent =
-          modules.where((m) => m.lessons?.isNotEmpty ?? false).toList();
-      modsWithContent.sort((a, b) => a.index - b.index);
-      emit(HomeModulesListLoaded(modsWithContent));
+      if (!authCubit.signedUser!.isInstructor) {
+        final mods = [...modules];
+        modules
+          ..clear()
+          ..addAll(mods.where((m) => m.lessons?.isNotEmpty ?? false));
+      }
+      modules.sort((a, b) => a.index - b.index);
+      emit(HomeModulesListLoaded(modules));
     } catch (e) {
       print(e);
       emit(HomeModulesListError(
