@@ -36,4 +36,5 @@ abstract class LibrinoColors {
   static const textLightGray = Color.fromARGB(255, 209, 209, 209);
   static const whiteRed = Color.fromARGB(255, 255, 226, 224);
   static const secondaryBlue = Color.fromARGB(255, 65, 106, 167);
+  static const grayBlue = Color.fromARGB(255, 104, 129, 167);
 }

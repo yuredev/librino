@@ -16,6 +16,28 @@ class SubscriptionRepository {
     return subs;
   }
 
+  Future<Subscription?> getBySubscriberAndClass(
+    String subscriberId,
+    String classId,
+  ) async {
+    try {
+      final query = _collection
+          .where('subscriberId', isEqualTo: subscriberId)
+          .where('classId', isEqualTo: classId)
+          .limit(1);
+      final querySnap = await query.get();
+      final subs = Subscription.fromJson(querySnap.docs.first.data());
+      return subs;
+    } catch (e) {
+      if (e is StateError && e.message == 'No element') {
+        return null;
+      } else {
+        print(e);
+        rethrow;
+      }
+    }
+  }
+
   Future<List<Subscription>> getByResponsibleId(String responsibleId) async {
     final query = _collection.where('responsibleId', isEqualTo: responsibleId);
     final querySnap = await query.get();

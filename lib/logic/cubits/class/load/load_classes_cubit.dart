@@ -39,14 +39,14 @@ class LoadClassesCubit extends Cubit<LoadClassesState> {
           final clazz = await _classRepository.getById(sub.classId);
           final owner =
               await _firestoreUserRepository.getById(clazz!.ownerId!);
-          classes.add(clazz.copyWith(ownerName: owner.name));
+          classes.add(clazz.copyWith(ownerName: owner.completeName));
         }
         classesFetched = classes;
       }
       final classes = classesFetched
           .map((c) => c.copyWith(
                 ownerName: _authCubit.signedUser!.isInstructor
-                    ? _authCubit.signedUser!.name
+                    ? _authCubit.signedUser!.completeName
                     : null,
               ))
           .toList();

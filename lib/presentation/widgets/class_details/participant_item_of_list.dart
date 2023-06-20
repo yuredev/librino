@@ -10,10 +10,12 @@ import 'package:librino/presentation/widgets/shared/shimmer_widget.dart';
 class ParticipantItemOfListWidget extends StatelessWidget {
   final LibrinoUser? participant;
   final bool isLoading;
+  final void Function()? onPress;
 
   const ParticipantItemOfListWidget({
     super.key,
     this.participant,
+    this.onPress,
     this.isLoading = false,
   });
 
@@ -21,13 +23,7 @@ class ParticipantItemOfListWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     const margin = 3.0;
     final content = InkWellWidget(
-      onTap: () {
-        Navigator.pushNamed(
-          context,
-          Routes.profile,
-          arguments: {'user': participant},
-        );
-      },
+      onTap: onPress,
       borderRadius: 24,
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 12),
@@ -37,19 +33,29 @@ class ParticipantItemOfListWidget extends StatelessWidget {
               margin: const EdgeInsets.only(right: 16),
               width: 53,
               height: 53,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(50),
+              ),
+              clipBehavior: Clip.antiAlias,
               child: FittedBox(
                 child: Container(
                   decoration: BoxDecoration(
                     color: LibrinoColors.lightGray,
-                    borderRadius: BorderRadius.circular(50),
                   ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(6),
-                    child: const Icon(
-                      Icons.person,
-                      color: LibrinoColors.iconGray,
-                    ),
-                  ),
+                  child: participant == null || participant!.photoURL == null
+                      ? Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: const Icon(
+                            Icons.person,
+                            color: LibrinoColors.iconGray,
+                          ),
+                        )
+                      : Image.network(
+                          participant!.photoURL!,
+                          fit: BoxFit.cover,
+                          width: 53,
+                          height: 53,
+                        ),
                 ),
               ),
             ),

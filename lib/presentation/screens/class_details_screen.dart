@@ -6,6 +6,7 @@ import 'package:librino/core/bindings.dart';
 import 'package:librino/core/constants/colors.dart';
 import 'package:librino/core/constants/sizes.dart';
 import 'package:librino/core/enums/enums.dart';
+import 'package:librino/core/routes.dart';
 import 'package:librino/data/models/class/class.dart';
 import 'package:librino/logic/cubits/class/select/select_class_cubit.dart';
 import 'package:librino/logic/cubits/class/select/select_class_state.dart';
@@ -14,7 +15,6 @@ import 'package:librino/logic/cubits/participants/load_participants_state.dart';
 import 'package:librino/presentation/utils/presentation_utils.dart';
 import 'package:librino/presentation/widgets/class_details/participant_item_of_list.dart';
 import 'package:librino/presentation/widgets/shared/illustration_widget.dart';
-import 'package:librino/presentation/widgets/shared/inkwell_widget.dart';
 import 'package:librino/presentation/widgets/shared/shimmer_widget.dart';
 import 'package:pie_chart/pie_chart.dart';
 import 'package:share_plus/share_plus.dart';
@@ -194,20 +194,32 @@ class _ClassDetailsScreenState extends State<ClassDetailsScreen> {
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.fromLTRB(
-                          Sizes.defaultScreenHorizontalMargin,
-                          24,
-                          Sizes.defaultScreenHorizontalMargin,
-                          0,
+                        padding: const EdgeInsets.only(
+                          left: Sizes.defaultScreenHorizontalMargin,
+                          right: Sizes.defaultScreenHorizontalMargin,
+                          top: 24,
                         ),
-                        child: Text(
-                          state is LoadingParticipantsState
-                              ? 'Carregando participantes...'
-                              : '${state is ParticipantsLoadedState ? "${state.participants.length} " : ""} Participantes',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 15,
-                            color: LibrinoColors.textLightBlack,
+                        child: Container(
+                          margin: const EdgeInsets.only(bottom: 12),
+                          child: RichText(
+                            text: TextSpan(
+                              text: 'Instrutor: ',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 15,
+                                color: LibrinoColors.textLightBlack,
+                              ),
+                              children: [
+                                TextSpan(
+                                  text: widget.clazz.ownerName,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 15,
+                                    color: LibrinoColors.subtitleGray,
+                                  ),
+                                )
+                              ],
+                            ),
                           ),
                         ),
                       ),
@@ -215,11 +227,12 @@ class _ClassDetailsScreenState extends State<ClassDetailsScreen> {
                   ),
                 ),
                 if (state is LoadingParticipantsState ||
-                    state is ParticipantsLoadedState && state.participants.isNotEmpty)
+                    state is ParticipantsLoadedState &&
+                        state.participants.isNotEmpty)
                   SliverPadding(
                     padding: const EdgeInsets.fromLTRB(
                       Sizes.defaultScreenHorizontalMargin,
-                      16,
+                      0,
                       Sizes.defaultScreenHorizontalMargin,
                       16,
                     ),
@@ -319,11 +332,44 @@ class _ClassDetailsScreenState extends State<ClassDetailsScreen> {
                       16,
                     ),
                     sliver: SliverList(
+                        delegate: SliverChildListDelegate([
+                      Text(
+                        state is LoadingParticipantsState
+                            ? 'Carregando participantes...'
+                            : '${state.participants.length} Participantes',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 15,
+                          color: LibrinoColors.textLightBlack,
+                        ),
+                      ),
+                    ])),
+                  ),
+                if (state is ParticipantsLoadedState &&
+                    state.participants.isNotEmpty)
+                  SliverPadding(
+                    padding: const EdgeInsets.fromLTRB(
+                      Sizes.defaultScreenHorizontalMargin,
+                      8,
+                      Sizes.defaultScreenHorizontalMargin,
+                      16,
+                    ),
+                    sliver: SliverList(
                       delegate: SliverChildBuilderDelegate(
                         (context, index) => Container(
                           margin: const EdgeInsets.only(bottom: 18),
                           child: ParticipantItemOfListWidget(
                             participant: state.participants[index],
+                            onPress: () {
+                              Navigator.pushNamed(
+                                context,
+                                Routes.profile,
+                                arguments: {
+                                  'user': state.participants[index],
+                                  'class': widget.clazz,
+                                },
+                              );
+                            },
                           ),
                         ),
                         childCount: state.participants.length,

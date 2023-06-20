@@ -19,6 +19,7 @@ import 'package:librino/logic/cubits/question/load_questions/load_lesson_questio
 import 'package:librino/logic/cubits/question/load_questions/load_questions_base_cubit.dart';
 import 'package:librino/logic/cubits/subscription/actions/subscription_actions_cubit.dart';
 import 'package:librino/logic/cubits/subscription/load/load_subscriptions_cubit.dart';
+import 'package:librino/logic/cubits/user/load_progress/load_user_progress_cubit.dart';
 import 'package:librino/logic/cubits/user/user_crud_cubit.dart';
 import 'package:librino/presentation/screens/class_details_screen.dart';
 import 'package:librino/presentation/screens/content_creation/add_lessons_to_module_screen.dart';
@@ -289,8 +290,19 @@ abstract class Routes {
       case profile:
         return MaterialPageRoute(
           builder: (context) {
-            return ProfileScreen(
-              user: (settings.arguments as Map)['user'],
+            return MultiBlocProvider(
+              providers: [
+                BlocProvider<LoadUserProgressCubit>.value(
+                  value: Bindings.get(),
+                ),
+                BlocProvider<AuthCubit>.value(
+                  value: Bindings.get(),
+                ),
+              ],
+              child: ProfileScreen(
+                user: (settings.arguments as Map)['user'],
+                clazz: (settings.arguments as Map)['class'],
+              ),
             );
           },
         );

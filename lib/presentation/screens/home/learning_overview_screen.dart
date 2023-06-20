@@ -74,7 +74,7 @@ class _LearningOverviewScreenState extends State<LearningOverviewScreen> {
                                   fontWeight: state.clazz == null
                                       ? null
                                       : FontWeight.bold,
-                                  fontSize: 14.5,
+                                  fontSize: 13.5,
                                   color: state.clazz == null
                                       ? LibrinoColors.subtitleGray
                                       : null,

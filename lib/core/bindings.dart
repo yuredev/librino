@@ -30,6 +30,7 @@ import 'package:librino/logic/cubits/question/load_questions/load_lesson_questio
 import 'package:librino/logic/cubits/question/load_questions/load_questions_base_cubit.dart';
 import 'package:librino/logic/cubits/subscription/actions/subscription_actions_cubit.dart';
 import 'package:librino/logic/cubits/subscription/load/load_subscriptions_cubit.dart';
+import 'package:librino/logic/cubits/user/load_progress/load_user_progress_cubit.dart';
 import 'package:librino/logic/cubits/user/user_crud_cubit.dart';
 
 abstract class Bindings {
@@ -59,6 +60,7 @@ abstract class Bindings {
     set(LoadLessonQuestionsCubit());
     set(LoadQuestionBaseCubit());
     set(AuthCubit());
+    set(LoadUserProgressCubit());
     set(LoadModulesCubit());
     set(ModuleActionsCubit());
     set(LessonActionsCubit());

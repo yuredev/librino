@@ -25,13 +25,16 @@ class FirestoreUserRepository {
       final ref = _collection.where('id', isEqualTo: userId);
       final snapshot = (await ref.get()).docs.first;
       final data = snapshot.data();
-      final completedLessonsIds = data['completedLessonsIds'] ?? <String>[];
+      var completedLessonsIds =
+          (data['completedLessonsIds'] as List?)?.cast<String>();
+      completedLessonsIds ??= <String>[];
+
+      if (completedLessonsIds.contains(lessonId)) return;
+
       completedLessonsIds.add(lessonId);
-      if (data['completedLessonsIds'] == null) {
-        data.putIfAbsent('completedLessonsIds', () => completedLessonsIds);
-      } else {
-        data.update('completedLessonsIds', (value) => completedLessonsIds);
-      }
+
+      data['completedLessonsIds'] = completedLessonsIds;
+
       await _collection.doc(snapshot.id).update(data);
     } catch (e) {
       rethrow;
