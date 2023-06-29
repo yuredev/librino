@@ -76,4 +76,25 @@ class SubscriptionActionsCubit extends Cubit<SubscriptionActionsState> {
       emit(RequestSubscriptionErrorState());
     }
   }
+
+  void removeUserFromClass(String userId, String classId) async {
+    try {
+      emit(RepprovingSubscriptionState());
+      final subscription =
+          await _subsRepository.getBySubscriberAndClass(userId, classId);
+      _subsRepository.delete(subscription!.id);
+      _loadSubscriptionsCubit.load();
+      _globalAlertCubit.fire('Participante removido!');
+      emit(SubscriptionRepprovedState());
+    } catch (e) {
+      print(e);
+      _globalAlertCubit.fire(
+        'Erro ao remover participante da turma',
+        isErrorMessage: true,
+      );
+      emit(RepproveSubscriptionError(
+        'Erro ao remover participante da turma',
+      ));
+    }
+  }
 }

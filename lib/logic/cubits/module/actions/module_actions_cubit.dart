@@ -29,9 +29,13 @@ class ModuleActionsCubit extends Cubit<ModuleActionsState> {
     }
   }
 
-  Future<void> reorder(List<Module> modules) async {
+  Future<void> reorder(
+      List<Module> modules, List<String> removedModuleIds) async {
     try {
       emit(UpdatingModulesOrderState());
+      for (final mId in removedModuleIds) {
+        await _moduleRepository.delete(mId);
+      }
       await _moduleRepository.updateList(modules);
       _globalAlertCubit.fire('Ordem dos módulos alterada!');
       emit(ModulesOrderUpdatedState());

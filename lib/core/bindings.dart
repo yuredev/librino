@@ -21,7 +21,6 @@ import 'package:librino/logic/cubits/class/select/select_class_cubit.dart';
 import 'package:librino/logic/cubits/global_alert/global_alert_cubit.dart';
 import 'package:librino/logic/cubits/lesson/actions/lesson_actions_cubit.dart';
 import 'package:librino/logic/cubits/lesson/load/load_lessons_cubit.dart';
-import 'package:librino/logic/cubits/lesson/load/load_single_lesson_cubit.dart';
 import 'package:librino/logic/cubits/module/actions/module_actions_cubit.dart';
 import 'package:librino/logic/cubits/module/load/load_modules_cubit.dart';
 import 'package:librino/logic/cubits/participants/load_participants_cubit.dart';
@@ -30,7 +29,8 @@ import 'package:librino/logic/cubits/question/load_questions/load_lesson_questio
 import 'package:librino/logic/cubits/question/load_questions/load_questions_base_cubit.dart';
 import 'package:librino/logic/cubits/subscription/actions/subscription_actions_cubit.dart';
 import 'package:librino/logic/cubits/subscription/load/load_subscriptions_cubit.dart';
-import 'package:librino/logic/cubits/user/user_crud_cubit.dart';
+import 'package:librino/logic/cubits/user/actions/user_actions_cubit.dart';
+import 'package:librino/logic/cubits/user/load_progress/load_user_progress_cubit.dart';
 
 abstract class Bindings {
   static T get<T extends Object>({String? instanceName}) {
@@ -59,11 +59,11 @@ abstract class Bindings {
     set(LoadLessonQuestionsCubit());
     set(LoadQuestionBaseCubit());
     set(AuthCubit());
+    set(LoadUserProgressCubit());
     set(LoadModulesCubit());
     set(ModuleActionsCubit());
     set(LessonActionsCubit());
-    set(UserCRUDCubit());
-    set(LoadSingleLessonCubit());
+    set(UserActionsCubit());
     set(LoadLessonsCubit());
     set(SearchClassCubit());
     set(LoadSubscriptionsCubit());

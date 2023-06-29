@@ -46,11 +46,11 @@ class LessonActionsCubit extends Cubit<LessonActionsState> {
     }
   }
 
-  void complete(String lessonId) {
+  void complete(String lessonId) async {
     try {
       emit(FinishingLessonState());
       final user = _authCubit.signedUser;
-      _userRepository.registerProgression(lessonId, user!.id);
+      await _userRepository.registerProgression(lessonId, user!.id);
       _authCubit.updateUserState(user.copyWith(
         completedLessonsIds: [...user.completedLessonsIds, lessonId],
       ));

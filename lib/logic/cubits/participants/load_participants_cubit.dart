@@ -16,7 +16,7 @@ class LoadParticipantsCubit extends Cubit<LoadParticipantsState> {
     try {
       emit(LoadingParticipantsState());
       final classSubscriptions =
-          await _subscriptionRepository.getFromClass(classId);
+          await _subscriptionRepository.getActivesFromClass(classId);
       
       final participants = <LibrinoUser>[];
       for (final subscription in classSubscriptions) {

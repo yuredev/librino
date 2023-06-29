@@ -50,4 +50,8 @@ class ClassRepository {
       }
     }
   }
+
+  Future<void> delete(String? id) async {
+    await _collection.doc(id).delete();
+  }
 }

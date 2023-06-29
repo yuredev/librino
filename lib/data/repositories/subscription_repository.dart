@@ -16,6 +16,28 @@ class SubscriptionRepository {
     return subs;
   }
 
+  Future<Subscription?> getBySubscriberAndClass(
+    String subscriberId,
+    String classId,
+  ) async {
+    try {
+      final query = _collection
+          .where('subscriberId', isEqualTo: subscriberId)
+          .where('classId', isEqualTo: classId)
+          .limit(1);
+      final querySnap = await query.get();
+      final subs = Subscription.fromJson(querySnap.docs.first.data());
+      return subs;
+    } catch (e) {
+      if (e is StateError && e.message == 'No element') {
+        return null;
+      } else {
+        print(e);
+        rethrow;
+      }
+    }
+  }
+
   Future<List<Subscription>> getByResponsibleId(String responsibleId) async {
     final query = _collection.where('responsibleId', isEqualTo: responsibleId);
     final querySnap = await query.get();
@@ -49,6 +71,16 @@ class SubscriptionRepository {
 
   Future<List<Subscription>> getFromClass(String? classId) async {
     final query = _collection.where('classId', isEqualTo: classId);
+    final querySnap = await query.get();
+    final subs =
+        querySnap.docs.map((e) => Subscription.fromJson(e.data())).toList();
+    return subs;
+  }
+
+  Future<List<Subscription>> getActivesFromClass(String? classId) async {
+    final query = _collection
+        .where('classId', isEqualTo: classId)
+        .where('subscriptionStage', isEqualTo: 'approved');
     final querySnap = await query.get();
     final subs =
         querySnap.docs.map((e) => Subscription.fromJson(e.data())).toList();
@@ -92,5 +124,15 @@ class SubscriptionRepository {
       (value) => Subscription.stageToString(SubscriptionStage.repproved),
     );
     await docRef.update(data);
+  }
+
+  Future<void> delete(String? id) async {
+    await _collection.doc(id).delete();
+  }
+
+  Future<int> getParticipantsCount(String? id) async {
+    final query = _collection.where('classId', isEqualTo: id).count();
+    final snap = await query.get();
+    return snap.count;
   }
 }

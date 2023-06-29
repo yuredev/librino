@@ -63,8 +63,7 @@ class ClassFoundWidget extends StatelessWidget {
               ),
             ),
             Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -89,7 +88,7 @@ class ClassFoundWidget extends StatelessWidget {
                   ),
                   Container(
                     margin: const EdgeInsets.only(bottom: 6),
-                    child: buildField('Professor: ', clazz.ownerName?? '--'),
+                    child: buildField('Instrutor: ', clazz.ownerName ?? '--'),
                   ),
                   Container(
                     margin: const EdgeInsets.only(bottom: 6),
@@ -97,7 +96,10 @@ class ClassFoundWidget extends StatelessWidget {
                   ),
                   Container(
                     margin: const EdgeInsets.only(bottom: 6),
-                    child: buildField('', '22 Participantes'),
+                    child: buildField(
+                      '',
+                      '${clazz.participantsCount} Participante${clazz.participantsCount == 1 ? '' : 's'}',
+                    ),
                   ),
                 ],
               ),

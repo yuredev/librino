@@ -52,7 +52,7 @@ class AuthCubit extends HydratedCubit<AuthState> {
         profileType: firestoreUser.roles.contains(1)
             ? ProfileType.instructor
             : ProfileType.studant,
-        name: fireAuthUser.displayName!,
+        name: fireAuthUser.displayName ?? firestoreUser.name,
         surname: firestoreUser.surname,
         genderIdentity: firestoreUser.genderIdentity,
         photoURL: fireAuthUser.photoURL,
@@ -77,17 +77,17 @@ class AuthCubit extends HydratedCubit<AuthState> {
     }
   }
 
-  Future<void> signOut() async {
+  Future<void> signOut({bool showMessage = true}) async {
     try {
       final userName = (state as LoggedInState).user.name;
       emit(LoggingOutState());
       await _authRepository.signOut();
       _selectClassCubit.select(null);
-      _globalAlertCubit.fire('Tchau $userName! volte sempre');
+      if (showMessage) _globalAlertCubit.fire('Tchau $userName! volte sempre');
       emit(LoggedOutState());
     } catch (e) {
       print(e);
-      _globalAlertCubit.fire('Erro ao sair da sessão');
+      if (showMessage) _globalAlertCubit.fire('Erro ao sair da sessão');
       emit(LoginErrorState('Erro ao sair da sessão'));
     }
   }

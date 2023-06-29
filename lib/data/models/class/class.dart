@@ -10,8 +10,10 @@ class Class extends Equatable {
   final String description;
   final String? id;
   final String? ownerId;
-  @JsonKey(includeToJson: false)
+  @JsonKey(includeToJson: false, includeFromJson: false)
   final String? ownerName;
+  @JsonKey(includeToJson: false, includeFromJson: false)
+  final int? participantsCount;
 
   const Class({
     required this.description,
@@ -19,6 +21,7 @@ class Class extends Equatable {
     required this.name,
     this.ownerId,
     this.ownerName,
+    this.participantsCount,
   });
 
   @override
@@ -28,6 +31,7 @@ class Class extends Equatable {
         ownerId,
         name,
         ownerName,
+        participantsCount,
       ];
 
   factory Class.fromJson(Map<String, dynamic> json) => _$ClassFromJson(json);
@@ -40,6 +44,7 @@ class Class extends Equatable {
     String? id,
     String? ownerId,
     String? ownerName,
+    int? participantsCount,
   }) {
     return Class(
       name: name ?? this.name,
@@ -47,6 +52,7 @@ class Class extends Equatable {
       id: id ?? this.id,
       ownerId: ownerId ?? this.ownerId,
       ownerName: ownerName ?? this.ownerName,
+      participantsCount: participantsCount ?? this.participantsCount,
     );
   }
 }

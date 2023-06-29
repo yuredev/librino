@@ -21,12 +21,12 @@ class SelectImageSourceModal extends StatelessWidget {
         children: [
           Center(
             child: Container(
-              margin: EdgeInsets.symmetric(vertical: 12),
+              margin: const EdgeInsets.symmetric(vertical: 12),
               child: ModalTopBarWidget(),
             ),
           ),
           Container(
-            padding: EdgeInsets.fromLTRB(18, 16, 18, 16),
+            padding: const EdgeInsets.fromLTRB(18, 16, 18, 16),
             child: Text(
               title,
               style: TextStyle(
@@ -37,7 +37,7 @@ class SelectImageSourceModal extends StatelessWidget {
             ),
           ),
           ListTile(
-            leading: Icon(Icons.camera_alt),
+            leading: const Icon(Icons.camera_alt),
             title: Text(
               firstOption,
               style: TextStyle(

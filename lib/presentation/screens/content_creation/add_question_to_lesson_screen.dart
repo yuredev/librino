@@ -11,7 +11,6 @@ import 'package:librino/logic/cubits/question/actions/question_actions_state.dar
 import 'package:librino/logic/cubits/question/load_questions/load_questions_base_cubit.dart';
 import 'package:librino/logic/cubits/question/load_questions/load_questions_state.dart';
 import 'package:librino/presentation/widgets/shared/illustration_widget.dart';
-import 'package:librino/presentation/widgets/shared/inkwell_widget.dart';
 import 'package:librino/presentation/widgets/shared/list_tile_widget.dart';
 import 'package:librino/presentation/widgets/shared/search_bar_widget.dart';
 
@@ -30,40 +29,17 @@ class _AddQuestionToLessonScreenState extends State<AddQuestionToLessonScreen> {
   late final LoadQuestionBaseCubit loadCubit = context.read();
   var filter = QuestionFilter();
   final scrollCtrl = ScrollController();
-  var page = 0;
   var showEndLoadingMessage = false;
   var isFetchingMore = false;
   var isSwipeActive = false;
-  var allWasLoaded = false;
   final questions = <Question>[];
-  static const _paginationSize = 20;
-
-  Question? get lastQuestion =>
-      questions.isEmpty ? null : questions[page * (_paginationSize - 1)];
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      loadCubit.load(filter, lastQuestion, page);
+      loadCubit.load(filter);
     });
-    scrollCtrl.addListener(() {});
-  }
-
-  void onScrollListen() async {
-    final chegouFinalTela = scrollCtrl.position.pixels >=
-        (scrollCtrl.position.maxScrollExtent * 0.8);
-    setState(() {
-      showEndLoadingMessage = chegouFinalTela;
-    });
-    if (!allWasLoaded && !isSwipeActive && chegouFinalTela && !isFetchingMore) {
-      setState(() {
-        page++;
-        isFetchingMore = true;
-      });
-      await loadCubit.load(filter, lastQuestion, page);
-      setState(() => isFetchingMore = false);
-    }
   }
 
   void onSelectQuestion(Question question) async {
@@ -78,11 +54,9 @@ class _AddQuestionToLessonScreenState extends State<AddQuestionToLessonScreen> {
   Future<void> refreshScreen() async {
     setState(() {
       questions.clear();
-      page = 0;
       isSwipeActive = true;
-      allWasLoaded = false;
     });
-    await loadCubit.load(filter, lastQuestion, page);
+    await loadCubit.load(filter);
     setState(() {
       isSwipeActive = false;
     });
@@ -91,16 +65,8 @@ class _AddQuestionToLessonScreenState extends State<AddQuestionToLessonScreen> {
   void onLoadListen(BuildContext context, LoadQuestionsState state) {
     if (state is PaginatedQuestionsLoadedState) {
       setState(() {
-        if (state.page == 0) {
-          questions.clear();
-          page = 0;
-          allWasLoaded = false;
-        }
-        if (state.questions.isEmpty) {
-          allWasLoaded = true;
-        } else {
-          questions.addAll(state.questions);
-        }
+        questions.clear();
+        questions.addAll(state.questions);
       });
     }
   }
@@ -179,6 +145,7 @@ class _AddQuestionToLessonScreenState extends State<AddQuestionToLessonScreen> {
                           margin: const EdgeInsets.only(bottom: 36),
                           child: Row(
                             children: [
+                              // TODO:
                               Flexible(
                                 child: SearchBarWidget(
                                   formKey: formKey,
@@ -192,38 +159,38 @@ class _AddQuestionToLessonScreenState extends State<AddQuestionToLessonScreen> {
                                   },
                                   onSendButtonPress: () {
                                     if (searchBarCtrl.text.trim().isNotEmpty) {
-                                      loadCubit.load(
-                                          filter, lastQuestion, page);
+                                      loadCubit.load(filter);
                                     }
                                   },
                                 ),
                               ),
-                              Container(
-                                margin: const EdgeInsets.only(left: 8),
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    color: LibrinoColors.lightGrayDarker,
-                                    borderRadius: BorderRadius.circular(
-                                      Sizes.defaultInputBorderRadius,
-                                    ),
-                                  ),
-                                  child: Tooltip(
-                                    message: 'Filtrar questões',
-                                    child: InkWellWidget(
-                                      onTap: () {},
-                                      borderRadius:
-                                          Sizes.defaultInputBorderRadius,
-                                      child: Padding(
-                                        padding: EdgeInsets.all(12),
-                                        child: Icon(
-                                          Icons.tune,
-                                          color: LibrinoColors.subtitleGray,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
+                              // TODO:
+                              // Container(
+                              //   margin: const EdgeInsets.only(left: 8),
+                              //   child: Container(
+                              //     decoration: BoxDecoration(
+                              //       color: LibrinoColors.lightGrayDarker,
+                              //       borderRadius: BorderRadius.circular(
+                              //         Sizes.defaultInputBorderRadius,
+                              //       ),
+                              //     ),
+                              //     child: Tooltip(
+                              //       message: 'Filtrar questões',
+                              //       child: InkWellWidget(
+                              //         onTap: () {},
+                              //         borderRadius:
+                              //             Sizes.defaultInputBorderRadius,
+                              //         child: Padding(
+                              //           padding: EdgeInsets.all(12),
+                              //           child: Icon(
+                              //             Icons.tune,
+                              //             color: LibrinoColors.subtitleGray,
+                              //           ),
+                              //         ),
+                              //       ),
+                              //     ),
+                              //   ),
+                              // ),
                             ],
                           ),
                         ),
@@ -231,7 +198,7 @@ class _AddQuestionToLessonScreenState extends State<AddQuestionToLessonScreen> {
                     ),
                   ),
                 ),
-                if (state is LoadingPaginatedQuestionsState && state.page == 0)
+                if (state is LoadingPaginatedQuestionsState)
                   SliverPadding(
                     padding: const EdgeInsets.only(
                       left: Sizes.defaultScreenHorizontalMargin,

@@ -12,20 +12,6 @@ class LessonRepository {
         .collection('lessons');
   }
 
-  // TODO: consertar
-  Future<Lesson> getLesson(
-    String classId,
-    String moduleId,
-    int lessonNumber,
-  ) async {
-    throw UnimplementedError();
-    // final lessonsRef = getCollection(moduleId);
-    // final moduleLessons = await lessonsRef.get();
-    // final lesson = Lesson.fromJson(moduleLessons);
-    // // lesson.steps.sort((a, b) => a.number - b.number);
-    // return lesson;
-  }
-
   Future<Lesson> create(Lesson lesson) async {
     final docRef = await getCollection(lesson.moduleId).add(lesson.toJson());
     final snapshot = await docRef.get();

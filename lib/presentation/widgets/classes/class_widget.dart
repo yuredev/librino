@@ -15,6 +15,7 @@ class ClassWidget extends StatelessWidget {
   final Color textColor;
   final Color? iconColor;
   final bool disableSelection;
+  final bool disableModal;
   final Class? clazz;
   final bool isLoading;
   final void Function() switchTabCallback;
@@ -25,6 +26,7 @@ class ClassWidget extends StatelessWidget {
     required this.color,
     required this.textColor,
     this.iconColor,
+    this.disableModal = false,
     this.clazz,
     this.isLoading = false,
     required this.switchTabCallback,
@@ -56,15 +58,17 @@ class ClassWidget extends StatelessWidget {
     final SelectClassCubit selectClassCubit = context.read();
     final conteudo = InkWellWidget(
       borderRadius: 24,
-      onTap: () => PresentationUtils.showBottomModal(
-        context,
-        SelectClassModal(
-          cubit: selectClassCubit,
-          clazz: clazz!,
-          switchTabCallback: switchTabCallback,
-          disableSelecion: disableSelection,
-        ),
-      ),
+      onTap: disableModal
+          ? null
+          : () => PresentationUtils.showBottomModal(
+                context,
+                SelectClassModal(
+                  cubit: selectClassCubit,
+                  clazz: clazz!,
+                  switchTabCallback: switchTabCallback,
+                  disableSelecion: disableSelection,
+                ),
+              ),
       child: Stack(
         children: [
           if (clazz?.id == FirebaseConstants.defaultClassId)
@@ -112,10 +116,14 @@ class ClassWidget extends StatelessWidget {
                                   ? 'Equipe Librino'
                                   : clazz?.ownerName ?? '--'),
                     ),
-                    // TODO:
                     isLoading
                         ? const GrayBarWidget(height: 17.5, width: 110)
-                        : buildField('', '21 participantes'),
+                        : buildField(
+                            '',
+                            clazz!.id == FirebaseConstants.defaultClassId
+                                ? 'Conteúdo oficial LIBRINO'
+                                : '${clazz!.participantsCount} participantes',
+                          ),
                   ],
                 ),
               ],

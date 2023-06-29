@@ -19,7 +19,8 @@ import 'package:librino/logic/cubits/question/load_questions/load_lesson_questio
 import 'package:librino/logic/cubits/question/load_questions/load_questions_base_cubit.dart';
 import 'package:librino/logic/cubits/subscription/actions/subscription_actions_cubit.dart';
 import 'package:librino/logic/cubits/subscription/load/load_subscriptions_cubit.dart';
-import 'package:librino/logic/cubits/user/user_crud_cubit.dart';
+import 'package:librino/logic/cubits/user/actions/user_actions_cubit.dart';
+import 'package:librino/logic/cubits/user/load_progress/load_user_progress_cubit.dart';
 import 'package:librino/presentation/screens/class_details_screen.dart';
 import 'package:librino/presentation/screens/content_creation/add_lessons_to_module_screen.dart';
 import 'package:librino/presentation/screens/content_creation/add_question_to_lesson_screen.dart';
@@ -64,6 +65,7 @@ abstract class Routes {
   static const camera = '/camera';
   static const reorderModules = '/reorder-modules';
   static const profile = '/profile';
+  static const editProfile = '/edit_profile';
 
   // Create questions
   static const createLIBRASToPhraseQuestion =
@@ -87,9 +89,7 @@ abstract class Routes {
             return MultiBlocProvider(
               providers: [
                 BlocProvider<LoadModulesCubit>.value(value: Bindings.get()),
-                // BlocProvider<LoadSingleLessonCubit>.value(
-                //   value: Bindings.get(),
-                // ),
+                BlocProvider<UserActionsCubit>.value(value: Bindings.get()),
                 BlocProvider<LoadClassesCubit>.value(value: Bindings.get()),
                 BlocProvider<AuthCubit>.value(value: Bindings.get()),
                 BlocProvider<SelectClassCubit>.value(value: Bindings.get()),
@@ -129,9 +129,19 @@ abstract class Routes {
           return MultiBlocProvider(
             providers: [
               BlocProvider<AuthCubit>.value(value: Bindings.get()),
-              BlocProvider<UserCRUDCubit>.value(value: Bindings.get())
+              BlocProvider<UserActionsCubit>.value(value: Bindings.get())
             ],
             child: RegisterScreen(),
+          );
+        });
+      case editProfile:
+        return MaterialPageRoute(builder: (ctx) {
+          return MultiBlocProvider(
+            providers: [
+              BlocProvider<AuthCubit>.value(value: Bindings.get()),
+              BlocProvider<UserActionsCubit>.value(value: Bindings.get())
+            ],
+            child: RegisterScreen(isEdit: true),
           );
         });
       case phraseToLibrasQuestion:
@@ -167,6 +177,9 @@ abstract class Routes {
             return MultiBlocProvider(
               providers: [
                 BlocProvider<LoadParticipantsCubit>.value(
+                  value: Bindings.get(),
+                ),
+                BlocProvider<SubscriptionActionsCubit>.value(
                   value: Bindings.get(),
                 ),
                 BlocProvider<SelectClassCubit>.value(
@@ -289,8 +302,19 @@ abstract class Routes {
       case profile:
         return MaterialPageRoute(
           builder: (context) {
-            return ProfileScreen(
-              user: (settings.arguments as Map)['user'],
+            return MultiBlocProvider(
+              providers: [
+                BlocProvider<LoadUserProgressCubit>.value(
+                  value: Bindings.get(),
+                ),
+                BlocProvider<AuthCubit>.value(
+                  value: Bindings.get(),
+                ),
+              ],
+              child: ProfileScreen(
+                user: (settings.arguments as Map)['user'],
+                clazz: (settings.arguments as Map)['class'],
+              ),
             );
           },
         );
@@ -318,7 +342,9 @@ abstract class Routes {
                 value: Bindings.get(),
               ),
             ],
-            child: ReorderModulesScreen(),
+            child: ReorderModulesScreen(
+              modules: (settings.arguments as Map)['modules'],
+            ),
           ),
         );
     }

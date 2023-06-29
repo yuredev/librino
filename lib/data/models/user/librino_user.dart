@@ -74,4 +74,26 @@ class LibrinoUser extends Equatable {
       completedLessonsIds: completedLessonsIds ?? this.completedLessonsIds,
     );
   }
+
+  LibrinoUser copyWithout({
+    bool genderIdentity = false,
+    bool name = false,
+    bool surname = false,
+    bool id = false,
+    bool email = false,
+    bool photoURL = false,
+    bool completedLessonsIds = false,
+  }) {
+    return LibrinoUser(
+      auditoryAbility: auditoryAbility,
+      genderIdentity: genderIdentity ? null : this.genderIdentity,
+      profileType: profileType,
+      name: this.name,
+      surname: this.surname,
+      id: this.id,
+      email: this.email,
+      photoURL: photoURL ? null : this.photoURL,
+      completedLessonsIds: this.completedLessonsIds,
+    );
+  }
 }

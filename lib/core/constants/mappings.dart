@@ -9,8 +9,8 @@ const lessonTypeToScreenNameMap = {
 };
 
 const genderIdentityToString = {
-  GenderIdentity.man: 'Homem',
-  GenderIdentity.woman: 'Mulher',
+  GenderIdentity.man: 'Masculino',
+  GenderIdentity.woman: 'Feminino',
   GenderIdentity.nonBinary: 'Não binário',
   GenderIdentity.other: 'Outro',
 };

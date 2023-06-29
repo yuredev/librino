@@ -1,5 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:librino/core/bindings.dart';
+import 'package:librino/core/constants/firebase_constants.dart';
 import 'package:librino/core/enums/enums.dart';
 import 'package:librino/data/models/class/class.dart';
 import 'package:librino/data/repositories/class_repository.dart';
@@ -37,19 +38,26 @@ class LoadClassesCubit extends Cubit<LoadClassesState> {
             .where((e) => e.subscriptionStage == SubscriptionStage.approved);
         for (final sub in studantSubs) {
           final clazz = await _classRepository.getById(sub.classId);
-          final owner =
-              await _firestoreUserRepository.getById(clazz!.ownerId!);
-          classes.add(clazz.copyWith(ownerName: owner.name));
+          final owner = await _firestoreUserRepository.getById(clazz!.ownerId!);
+          classes.add(clazz.copyWith(ownerName: owner.completeName));
         }
         classesFetched = classes;
       }
-      final classes = classesFetched
-          .map((c) => c.copyWith(
-                ownerName: _authCubit.signedUser!.isInstructor
-                    ? _authCubit.signedUser!.name
-                    : null,
-              ))
-          .toList();
+      final classes = <Class>[];
+
+      for (final c in classesFetched) {
+        final participantsCount = c.id != FirebaseConstants.defaultClassId
+            ? await _subscriptionRepository.getParticipantsCount(c.id)
+            : null;
+        classes.add(
+          c.copyWith(
+            ownerName: _authCubit.signedUser!.isInstructor
+                ? _authCubit.signedUser!.completeName
+                : null,
+            participantsCount: participantsCount,
+          ),
+        );
+      }
       classes.sort((a, b) => a.name.compareTo(b.name));
       if (!_authCubit.signedUser!.isInstructor) {
         final defaultClass = await _classRepository.getDefault();
