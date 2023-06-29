@@ -77,6 +77,16 @@ class SubscriptionRepository {
     return subs;
   }
 
+  Future<List<Subscription>> getActivesFromClass(String? classId) async {
+    final query = _collection
+        .where('classId', isEqualTo: classId)
+        .where('subscriptionStage', isEqualTo: 'approved');
+    final querySnap = await query.get();
+    final subs =
+        querySnap.docs.map((e) => Subscription.fromJson(e.data())).toList();
+    return subs;
+  }
+
   Future<Subscription?> getById(String id) async {
     final subs = _collection.where('id', isEqualTo: id);
     try {
@@ -114,5 +124,15 @@ class SubscriptionRepository {
       (value) => Subscription.stageToString(SubscriptionStage.repproved),
     );
     await docRef.update(data);
+  }
+
+  Future<void> delete(String? id) async {
+    await _collection.doc(id).delete();
+  }
+
+  Future<int> getParticipantsCount(String? id) async {
+    final query = _collection.where('classId', isEqualTo: id).count();
+    final snap = await query.get();
+    return snap.count;
   }
 }

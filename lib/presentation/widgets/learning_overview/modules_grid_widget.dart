@@ -2,13 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:librino/data/models/lesson/lesson.dart';
 import 'package:librino/data/models/module/module.dart';
-import 'package:librino/data/models/question/question.dart';
 import 'package:librino/logic/cubits/auth/auth_cubit.dart';
 import 'package:librino/logic/cubits/auth/auth_state.dart';
 import 'package:librino/logic/cubits/class/select/select_class_cubit.dart';
 import 'package:librino/logic/cubits/class/select/select_class_state.dart';
-import 'package:librino/logic/cubits/lesson/load/load_lesson_state.dart';
-import 'package:librino/logic/cubits/lesson/load/load_single_lesson_cubit.dart';
 import 'package:librino/logic/cubits/module/load/load_modules_cubit.dart';
 import 'package:librino/logic/cubits/module/load/load_modules_state.dart';
 import 'package:librino/logic/cubits/question/load_questions/load_lesson_questions_cubit.dart';
@@ -26,25 +23,7 @@ class ModulesGridWidget extends StatefulWidget {
 }
 
 class _ModulesGridWidgetState extends State<ModulesGridWidget> {
-  // late final LoadSingleLessonCubit loadLessonCubit = context.read();
   Module? module;
-
-  // void onLoadLesson(BuildContext context, LoadLessonState state) {
-  //   if (state is LessonLoadError) {
-  //     Navigator.pop(context); // loading
-  //   } else if (state is LessonLoadedState) {
-  //     Navigator.pop(context); // loading
-  //     PresentationUtils.showBottomModal(
-  //       context,
-  //       LessonModalWidget(state.lesson, module: module!),
-  //     );
-  //   } else if (state is LoadinglLessonState) {
-  //     PresentationUtils.showLockedLoading(
-  //       context,
-  //       text: '',
-  //     );
-  //   }
-  // }
 
   void openLessonModal(Module module, Lesson lesson, bool isCompleted) {
     PresentationUtils.showBottomModal(

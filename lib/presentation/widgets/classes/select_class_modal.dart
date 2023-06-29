@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:librino/core/constants/colors.dart';
+import 'package:librino/core/constants/firebase_constants.dart';
 import 'package:librino/core/constants/sizes.dart';
 import 'package:librino/core/routes.dart';
 import 'package:librino/data/models/class/class.dart';
@@ -88,7 +89,7 @@ class SelectClassModal extends StatelessWidget {
               ),
               children: [
                 TextSpan(
-                  text: '21',
+                  text: '${clazz.participantsCount}',
                   style: TextStyle(
                     fontWeight: FontWeight.w400,
                   ),
@@ -97,24 +98,25 @@ class SelectClassModal extends StatelessWidget {
             ),
           ),
           Spacer(),
-          Container(
-            margin: const EdgeInsets.only(
-              bottom: 13,
+          if (clazz.id != FirebaseConstants.defaultClassId)
+            Container(
+              margin: const EdgeInsets.only(
+                bottom: 13,
+              ),
+              child: ButtonWidget(
+                title: 'Ver Turma',
+                width: double.infinity,
+                height: Sizes.defaultButtonHeight,
+                onPress: () {
+                  Navigator.pushReplacementNamed(
+                    context,
+                    Routes.classDetails,
+                    arguments: {'class': clazz},
+                  );
+                },
+                color: LibrinoColors.buttonGray,
+              ),
             ),
-            child: ButtonWidget(
-              title: 'Ver Turma',
-              width: double.infinity,
-              height: Sizes.defaultButtonHeight,
-              onPress: () {
-                Navigator.pushReplacementNamed(
-                  context,
-                  Routes.classDetails,
-                  arguments: {'class': clazz},
-                );
-              },
-              color: LibrinoColors.buttonGray,
-            ),
-          ),
           if (!disableSelecion)
             Container(
               margin: const EdgeInsets.only(

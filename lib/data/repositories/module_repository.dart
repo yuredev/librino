@@ -27,6 +27,7 @@ class ModuleRepository {
     final data = snapshot.data()!;
     data.update('id', (_) => docRef.id);
     if (image != null) {
+      // TODO: arrumar uma forma de colcoar as imagens do módulo em uma pasta do usuário. Desta forma quando o usuário é removido fica impossível remover a imagem dos seus módulos
       final imageRef = _storageRef
           .child('module_images')
           .child('${module.classId}_${data['id']}_${DateTime.now()}.jpg');
@@ -43,5 +44,9 @@ class ModuleRepository {
       final docRef = _collection.doc(l.id);
       await docRef.update(l.toJson());
     }
+  }
+
+  Future<void> delete(String? id) async {
+    await _collection.doc(id).delete();
   }
 }

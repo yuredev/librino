@@ -18,13 +18,9 @@ class QuestionRepository {
   final _collection = Bindings.get<FirebaseFirestore>().collection('questions');
   final Reference _storageRef = Bindings.get();
 
-  Future<List<Question>> getAllPublic(
-      QuestionFilter filter, Question? last) async {
-    //TODO: como pega a página?
-    var query =
-        last == null ? _collection : _collection.startAt([last.toJson()]);
-    query = query.where('isPublic', isEqualTo: true);
-    final snapshot = await query.limit(paginationSize).get();
+  Future<List<Question>> getAllPublic(QuestionFilter filter) async {
+    var query = _collection.where('isPublic', isEqualTo: true);
+    final snapshot = await query.get();
     final data = snapshot.docs.map((e) => Question.fromJson(e.data())).toList();
     return data;
   }
@@ -134,5 +130,15 @@ class QuestionRepository {
       questions.add(Question.fromJson(snap.data()!));
     }
     return questions;
+  }
+
+  Future<void> deletePrivatesFromUser(String id) async {
+    final snap = await _collection
+        .where('ownerId', isEqualTo: id)
+        .where('isPublic', isEqualTo: false)
+        .get();
+    for (final doc in snap.docs) {
+      await _collection.doc(doc.id).delete();
+    }
   }
 }

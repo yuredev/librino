@@ -12,6 +12,7 @@ import 'package:librino/logic/cubits/class/select/select_class_cubit.dart';
 import 'package:librino/logic/cubits/class/select/select_class_state.dart';
 import 'package:librino/logic/cubits/module/load/load_modules_cubit.dart';
 import 'package:librino/logic/cubits/subscription/load/load_subscriptions_cubit.dart';
+import 'package:librino/logic/cubits/user/actions/user_actions_cubit.dart';
 import 'package:librino/presentation/screens/home/classes_screen.dart';
 import 'package:librino/presentation/screens/home/learning_overview_screen.dart';
 import 'package:librino/presentation/screens/home/subscription_requests_screen.dart';
@@ -34,6 +35,7 @@ class _HomeState extends State<Home> {
   late final SelectClassCubit selectClassCubit = context.read();
   late final LoadDefaultClassCubit loadDefaultClassCubit = context.read();
   late final LoadSubscriptionsCubit loadSubscriptionsCubit = context.read();
+  late final UserActionsCubit userCRUDCUbit = context.read();
 
   late final List<Widget> tabs;
   var activeTab = 0;
@@ -172,6 +174,7 @@ class _HomeState extends State<Home> {
         buildWhen: (previous, current) => current is LoggedInState,
         builder: (context, state) => LibrinoDrawer(
           user: (state as LoggedInState).user,
+          userCRUDCubit: userCRUDCUbit,
         ),
       ),
       body: BlocBuilder<AuthCubit, AuthState>(

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:librino/core/constants/colors.dart';
+import 'package:librino/core/constants/firebase_constants.dart';
 import 'package:librino/core/constants/sizes.dart';
 import 'package:librino/logic/cubits/auth/auth_cubit.dart';
 import 'package:librino/logic/cubits/auth/auth_state.dart';
@@ -97,6 +98,8 @@ class ClassesScreen extends StatelessWidget {
                               color: LibrinoColors.mainDeeper,
                               textColor: Colors.white,
                               disableSelection: true,
+                              disableModal: state.clazz!.id ==
+                                  FirebaseConstants.defaultClassId,
                               switchTabCallback: () {},
                               clazz: state.clazz,
                               iconColor: Colors.white.withOpacity(0.7),

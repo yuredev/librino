@@ -20,12 +20,10 @@ class LoadingQuestionsState extends LoadQuestionsState {
 }
 
 class LoadingPaginatedQuestionsState extends LoadQuestionsState {
-  final int page;
-
-  const LoadingPaginatedQuestionsState(this.page);
+  const LoadingPaginatedQuestionsState();
 
   @override
-  List<Object?> get props => [page];
+  List<Object?> get props => [];
 }
 
 class QuestionsLoadedState extends LoadQuestionsState {
@@ -39,12 +37,11 @@ class QuestionsLoadedState extends LoadQuestionsState {
 
 class PaginatedQuestionsLoadedState extends LoadQuestionsState {
   final List<Question> questions;
-  final int page;
 
-  const PaginatedQuestionsLoadedState(this.questions, this.page);
+  const PaginatedQuestionsLoadedState(this.questions);
 
   @override
-  List<Object?> get props => [questions, page];
+  List<Object?> get props => [questions];
 }
 
 class LoadQuestionsErrorState extends LoadQuestionsState {

@@ -195,8 +195,30 @@ class _LessonModalWidgetState extends State<LessonModalWidget> {
                                 progression: percentage,
                               ),
                             ),
+
+                            if (percentage < 100)
+                              Container(
+                                margin: const EdgeInsets.only(top: 24),
+                                child: RichText(
+                                  text: TextSpan(
+                                    text: 'Lição atual: ',
+                                    style: TextStyle(
+                                      color: LibrinoColors.textLightBlack,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                    children: [
+                                      TextSpan(
+                                        text: widget.lesson.title,
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.w400,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
                             Container(
-                              margin: const EdgeInsets.only(top: 24),
+                              margin: const EdgeInsets.only(top: 12),
                               child: RichText(
                                 text: TextSpan(
                                   text: 'Exercícios na lição: ',
@@ -216,28 +238,6 @@ class _LessonModalWidgetState extends State<LessonModalWidget> {
                                 ),
                               ),
                             ),
-                            if (percentage < 100)
-                              Container(
-                                margin: const EdgeInsets.only(top: 12),
-                                child: RichText(
-                                  text: TextSpan(
-                                    text: 'Lição atual: ',
-                                    style: TextStyle(
-                                      color: LibrinoColors.textLightBlack,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                    children: [
-                                      TextSpan(
-                                        text: widget.lesson.title,
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.w400,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-
                             // Container(
                             //   margin: const EdgeInsets.only(top: 12),
                             //   child: RichText(

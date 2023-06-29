@@ -12,6 +12,8 @@ import 'package:librino/logic/cubits/class/select/select_class_cubit.dart';
 import 'package:librino/logic/cubits/class/select/select_class_state.dart';
 import 'package:librino/logic/cubits/participants/load_participants_cubit.dart';
 import 'package:librino/logic/cubits/participants/load_participants_state.dart';
+import 'package:librino/logic/cubits/subscription/actions/subscription_actions_cubit.dart';
+import 'package:librino/logic/cubits/subscription/actions/subscription_actions_state.dart';
 import 'package:librino/presentation/utils/presentation_utils.dart';
 import 'package:librino/presentation/widgets/class_details/participant_item_of_list.dart';
 import 'package:librino/presentation/widgets/shared/illustration_widget.dart';
@@ -112,10 +114,38 @@ class _ClassDetailsScreenState extends State<ClassDetailsScreen> {
           ),
         ),
         actions: [
-          BlocListener<SelectClassCubit, SelectClassState>(
-            listener: (_, state) {
-              PresentationUtils.showToast('${widget.clazz.name} selecionada!');
-            },
+          MultiBlocListener(
+            listeners: [
+              BlocListener<SelectClassCubit, SelectClassState>(
+                listener: (_, state) {
+                  PresentationUtils.showToast(
+                    '${widget.clazz.name} selecionada!',
+                  );
+                },
+              ),
+              BlocListener<SubscriptionActionsCubit, SubscriptionActionsState>(
+                listenWhen: (previous, current) {
+                  if (previous is RepprovingSubscriptionState) {
+                    Navigator.pop(context); // locked loading
+                  }
+                  return [
+                    RepprovingSubscriptionState,
+                    SubscriptionRepprovedState,
+                    RepproveSubscriptionError,
+                  ].contains(current.runtimeType);
+                },
+                listener: (_, state) {
+                  if (state is RepprovingSubscriptionState) {
+                    PresentationUtils.showLockedLoading(
+                      context,
+                      text: 'Removendo participante...',
+                    );
+                  } else if (state is SubscriptionRepprovedState) {
+                    loadCubit.loadFromClass(widget.clazz.id!);
+                  }
+                },
+              ),
+            ],
             child: buildPopupButtons(),
           ),
         ],
@@ -277,7 +307,10 @@ class _ClassDetailsScreenState extends State<ClassDetailsScreen> {
                       6,
                       (_) => Container(
                         margin: const EdgeInsets.only(bottom: 18),
-                        child: ParticipantItemOfListWidget(isLoading: true),
+                        child: ParticipantItemOfListWidget(
+                          classId: widget.clazz.id!,
+                          isLoading: true,
+                        ),
                       ),
                     ))),
                   )
@@ -359,6 +392,7 @@ class _ClassDetailsScreenState extends State<ClassDetailsScreen> {
                         (context, index) => Container(
                           margin: const EdgeInsets.only(bottom: 18),
                           child: ParticipantItemOfListWidget(
+                            classId: widget.clazz.id!,
                             participant: state.participants[index],
                             onPress: () {
                               Navigator.pushNamed(

@@ -3,18 +3,23 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:librino/core/constants/colors.dart';
+import 'package:librino/core/routes.dart';
 import 'package:librino/data/models/user/librino_user.dart';
 import 'package:librino/logic/cubits/auth/auth_cubit.dart';
+import 'package:librino/logic/cubits/user/actions/user_actions_cubit.dart';
 import 'package:librino/presentation/utils/presentation_utils.dart';
 import 'package:librino/presentation/widgets/shared/button_widget.dart';
+import 'package:librino/presentation/widgets/shared/confirm_password_modal.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class LibrinoDrawer extends StatelessWidget {
   final LibrinoUser user;
+  final UserActionsCubit userCRUDCubit;
 
   const LibrinoDrawer({
     Key? key,
     required this.user,
+    required this.userCRUDCubit,
   }) : super(key: key);
 
   Future<void> _launchUrl(BuildContext context, String url) async {
@@ -28,7 +33,7 @@ class LibrinoDrawer extends StatelessWidget {
     final AuthCubit authCubit = context.read();
     final btnStyle = TextButton.styleFrom(
       alignment: Alignment.topLeft,
-      padding: EdgeInsets.symmetric(
+      padding: const EdgeInsets.symmetric(
         horizontal: 39,
         vertical: 13,
       ),
@@ -41,7 +46,6 @@ class LibrinoDrawer extends StatelessWidget {
     );
     const topColor = LibrinoColors.backgroundGray;
     const bottomColor = LibrinoColors.backgroundWhite;
-
     return Drawer(
       width: MediaQuery.of(context).size.width * .65,
       backgroundColor: topColor,
@@ -103,7 +107,13 @@ class LibrinoDrawer extends StatelessWidget {
                         width: consts.maxWidth / 2,
                         fontSize: 11,
                         borderRadius: 40,
-                        onPress: () {},
+                        onPress: () {
+                          Scaffold.of(context).closeEndDrawer();
+                          Navigator.pushNamed(
+                            context,
+                            Routes.editProfile,
+                          );
+                        },
                       ),
                     )
                   ],
@@ -148,11 +158,28 @@ class LibrinoDrawer extends StatelessWidget {
                       // ),
                       TextButton(
                         style: btnStyle,
-                        onPressed: () {},
-                        child: Text(
-                          'Remover conta',
-                          style: textBtnStyle,
-                        ),
+                        onPressed: () async {
+                          final shouldRemove =
+                              await PresentationUtils.showConfirmActionDialog(
+                                    context,
+                                    title: 'Deseja remover sua conta?',
+                                    description:
+                                        'Sua conta será removida e não poderá ser recuperada',
+                                  ) ??
+                                  false;
+                          if (shouldRemove) {
+                            Scaffold.of(context).closeEndDrawer();
+                            PresentationUtils.showBottomModal(
+                              context,
+                              BlocProvider<UserActionsCubit>.value(
+                                value: userCRUDCubit,
+                                child: ConfirmPasswordModal(),
+                              ),
+                            );
+                            // userCRUDCubit.removeAccount('yure123');
+                          }
+                        },
+                        child: const Text('Remover conta', style: textBtnStyle),
                       ),
                       Spacer(),
                       TextButton(
@@ -177,13 +204,13 @@ class LibrinoDrawer extends StatelessWidget {
                           children: [
                             Container(
                               margin: const EdgeInsets.only(right: 4),
-                              child: Icon(
+                              child: const Icon(
                                 Icons.logout,
                                 color: LibrinoColors.textLightBlack,
                                 size: 22,
                               ),
                             ),
-                            Text(
+                            const Text(
                               'Sair',
                               style: TextStyle(
                                 color: LibrinoColors.textLightBlack,

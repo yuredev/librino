@@ -9,8 +9,10 @@ import 'package:librino/logic/cubits/auth/auth_state.dart';
 import 'package:librino/logic/cubits/class/select/select_class_cubit.dart';
 import 'package:librino/logic/cubits/class/select/select_class_state.dart';
 import 'package:librino/logic/cubits/module/load/load_modules_cubit.dart';
+import 'package:librino/logic/cubits/module/load/load_modules_state.dart';
 import 'package:librino/presentation/widgets/shared/initial_app_bar.dart';
 import 'package:librino/presentation/widgets/learning_overview/modules_grid_widget.dart';
+import 'package:librino/presentation/widgets/shared/inkwell_widget.dart';
 import 'package:librino/presentation/widgets/shared/refreshable_scrollview_widget.dart';
 
 const defaultClass = 'ZuNAujmyuUYeRfJdJKdi';
@@ -50,95 +52,102 @@ class _LearningOverviewScreenState extends State<LearningOverviewScreen> {
                     ? 'Continue aprendendo!'
                     : 'Continue criando!',
               ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(
-                  Sizes.defaultScreenHorizontalMargin,
-                  20,
-                  Sizes.defaultScreenHorizontalMargin,
-                  0,
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      margin: const EdgeInsets.only(bottom: 20, left: 6),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          BlocBuilder<SelectClassCubit, SelectClassState>(
-                            builder: (context, state) => Flexible(
-                              child: Text(
-                                state.clazz?.name ??
-                                    'Nenhuma turma selecionada',
-                                style: TextStyle(
-                                  fontWeight: state.clazz == null
-                                      ? null
-                                      : FontWeight.bold,
-                                  fontSize: 13.5,
-                                  color: state.clazz == null
-                                      ? LibrinoColors.subtitleGray
-                                      : null,
+              BlocBuilder<LoadModulesCubit, LoadModulesState>(
+                builder: (context, loadModState) => Padding(
+                  padding: const EdgeInsets.fromLTRB(
+                    Sizes.defaultScreenHorizontalMargin,
+                    20,
+                    Sizes.defaultScreenHorizontalMargin,
+                    0,
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        margin: const EdgeInsets.only(bottom: 20, left: 6),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            BlocBuilder<SelectClassCubit, SelectClassState>(
+                              builder: (context, state) => Flexible(
+                                child: Text(
+                                  state.clazz?.name ??
+                                      'Nenhuma turma selecionada',
+                                  style: TextStyle(
+                                    fontWeight: state.clazz == null
+                                        ? null
+                                        : FontWeight.bold,
+                                    fontSize: 13.5,
+                                    color: state.clazz == null
+                                        ? LibrinoColors.subtitleGray
+                                        : null,
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                          if (user.isInstructor)
-                            Container(
-                              alignment: Alignment.bottomRight,
-                              child: TextButton(
-                                style: TextButton.styleFrom(
-                                  minimumSize: Size.zero,
-                                  padding: EdgeInsets.symmetric(
-                                    horizontal: 4,
-                                    vertical: 4,
+                            Row(
+                              children: [
+                                Tooltip(
+                                  message: 'Mudar turma',
+                                  child: InkWellWidget(
+                                    borderRadius: 2.5,
+                                    onTap: widget.switchTabCallback,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(1.5),
+                                      child: Icon(
+                                        Icons.groups_2_outlined,
+                                        color: LibrinoColors.iconGray,
+                                        size: 23,
+                                      ),
+                                    ),
                                   ),
                                 ),
-                                onPressed: () {
-                                  Navigator.pushNamed(
-                                    context,
-                                    Routes.reorderModules,
-                                  );
-                                },
-                                child: Text(
-                                  'Reordenar',
-                                  style: TextStyle(
-                                    color: Colors.grey,
-                                    fontSize: 12.5,
-                                  ),
-                                ),
-                              ),
+                                if (user.isInstructor &&
+                                    (loadModState is HomeModulesListLoaded ||
+                                        loadModState is LoadingHomeModulesList))
+                                  SizedBox(width: 10),
+                                if (user.isInstructor &&
+                                    (loadModState is HomeModulesListLoaded ||
+                                        loadModState is LoadingHomeModulesList))
+                                  Tooltip(
+                                    message: 'Reordenar',
+                                    child: InkWellWidget(
+                                      borderRadius: 2.5,
+                                      onTap:
+                                          loadModState is HomeModulesListLoaded
+                                              ? () {
+                                                  Navigator.pushNamed(
+                                                    context,
+                                                    Routes.reorderModules,
+                                                    arguments: {
+                                                      'modules':
+                                                          loadModState.modules
+                                                    },
+                                                  );
+                                                }
+                                              : null,
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(1.5),
+                                        child: Icon(
+                                          Icons.toc,
+                                          color: LibrinoColors.iconGray,
+                                        ),
+                                      ),
+                                    ),
+                                  )
+                              ],
                             )
-                          else
-                            Container(
-                              alignment: Alignment.bottomRight,
-                              child: TextButton(
-                                style: TextButton.styleFrom(
-                                  minimumSize: Size.zero,
-                                  padding: EdgeInsets.symmetric(
-                                    horizontal: 4,
-                                    vertical: 4,
-                                  ),
-                                ),
-                                onPressed: widget.switchTabCallback,
-                                child: Text(
-                                  'Mudar turma',
-                                  style: TextStyle(
-                                    color: Colors.grey,
-                                    fontSize: 12.5,
-                                  ),
-                                ),
-                              ),
-                            ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
-                    Container(
-                      margin: const EdgeInsets.only(
-                        bottom: Sizes.defaultScreenBottomMargin * 3,
-                      ),
-                      child: ModulesGridWidget(),
-                    )
-                  ],
+                      Container(
+                        margin: const EdgeInsets.only(
+                          bottom: Sizes.defaultScreenBottomMargin * 3,
+                        ),
+                        child: ModulesGridWidget(),
+                      )
+                    ],
+                  ),
                 ),
               )
             ],

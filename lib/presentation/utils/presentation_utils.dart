@@ -73,6 +73,7 @@ abstract class PresentationUtils {
               ),
               Text(
                 title,
+                textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 18,
                   color: Colors.black,
