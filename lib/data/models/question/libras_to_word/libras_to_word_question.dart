@@ -31,6 +31,9 @@ class LibrasToWordQuestion extends Question {
         assetUrl,
       ];
 
+  @override
+  String get label => 'Tradução de "$rightChoice"';
+
   factory LibrasToWordQuestion.fromJson(Map<String, dynamic> json) =>
       _$LibrasToWordQuestionFromJson(json);
 

@@ -42,7 +42,7 @@ class _CreateLIBRASToWordScreenState extends State<CreateLIBRASToWordScreen> {
   void initState() {
     super.initState();
     statementCtrl.text =
-        'Qual a tradução em português escrito para a frase abaixo em LIBRAS?';
+        'Qual a tradução em português escrito para o sinal abaixo em LIBRAS?';
   }
 
   @override

@@ -37,6 +37,9 @@ class LibrasToPhraseQuestion extends Question {
   @override
   Map<String, dynamic> toJson() => _$LibrasToPhraseQuestionToJson(this);
 
+  @override
+  String get label => 'Tradução de "$answerText"';
+
   LibrasToPhraseQuestion copyWith({
     String? assetUrl,
     String? answerText,
@@ -56,7 +59,4 @@ class LibrasToPhraseQuestion extends Question {
       isPublic: isPublic ?? this.isPublic,
     );
   }
-
-  @override
-  String get label => 'Tradução: $answerText';
 }
