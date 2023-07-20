@@ -71,7 +71,7 @@ class _CreateLessonScreenState extends State<CreateLessonScreen> {
     FocusScope.of(context).unfocus();
     final newQuestion = (await Navigator.pushNamed(
       context,
-      Routes.addQuestionToLesson,
+      Routes.questionBase,
     )) as Question?;
     if (newQuestion == null) return;
     setState(() {

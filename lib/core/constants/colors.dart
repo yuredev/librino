@@ -6,6 +6,7 @@ abstract class LibrinoColors {
   static const mainLighter = Color(0xFF568BDA);
   static const mainDeeper = Color.fromARGB(255, 52, 92, 151);
   static const classFoundBlue = Color.fromARGB(255, 114, 128, 136);
+  static const chipBlue = Color(0xFFD9F1FF);
   // static const deepOrange = Color(0xFFFF7940);
   static const lightGray = Color(0xFFEFEFEF);
   static const lightGrayDarker = Color(0xFFEEEEEE);
@@ -19,6 +20,7 @@ abstract class LibrinoColors {
   static const lightBlue = Color(0xFF1C8CCF);
   static const highlightLightBlue = Color(0xFF31DAFF);
   static const borderGray = Color.fromARGB(255, 228, 228, 228);
+  static const borderGrayDarker = Color.fromARGB(255, 200, 200, 200);
   static const grayInputBorder = Color.fromARGB(255, 175, 175, 175);
   static const lightBorderGray = Color(0xFFEBEBEB);
   static const buttonGray = Color(0xFF9B9999);

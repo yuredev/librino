@@ -23,13 +23,13 @@ import 'package:librino/logic/cubits/user/actions/user_actions_cubit.dart';
 import 'package:librino/logic/cubits/user/load_progress/load_user_progress_cubit.dart';
 import 'package:librino/presentation/screens/class_details_screen.dart';
 import 'package:librino/presentation/screens/content_creation/add_lessons_to_module_screen.dart';
-import 'package:librino/presentation/screens/content_creation/add_question_to_lesson_screen.dart';
 import 'package:librino/presentation/screens/content_creation/create_lesson_screen.dart';
 import 'package:librino/presentation/screens/content_creation/create_module_screen.dart';
 import 'package:librino/presentation/screens/content_creation/create_questions/create_libras_to_phrase_screen.dart';
 import 'package:librino/presentation/screens/content_creation/create_questions/create_libras_to_word_screen.dart';
 import 'package:librino/presentation/screens/content_creation/create_questions/create_phrase_to_libras_screen.dart';
 import 'package:librino/presentation/screens/content_creation/create_questions/create_word_to_libras_screen.dart';
+import 'package:librino/presentation/screens/content_creation/question_base_screen.dart';
 import 'package:librino/presentation/screens/create_class_screen.dart';
 import 'package:librino/presentation/screens/home/home.dart';
 import 'package:librino/presentation/screens/lesson_result_screen.dart';
@@ -58,7 +58,7 @@ abstract class Routes {
   static const createModule = '/create-module';
   static const addLessonsToModule = '/add-lessons-to-module';
   static const createLesson = '/create-lesson';
-  static const addQuestionToLesson = '/add-questions-to-lesson';
+  static const questionBase = '/add-questions-to-lesson';
   static const selectQuestionType = '/select-question-type';
   static const viewSupportContent = '/view-support-content';
   static const previewQuestion = '/preview-question';
@@ -248,7 +248,7 @@ abstract class Routes {
             ),
           ),
         );
-      case addQuestionToLesson:
+      case questionBase:
         return MaterialPageRoute(
           builder: (ctx) => MultiBlocProvider(
             providers: [
@@ -259,7 +259,7 @@ abstract class Routes {
                 value: Bindings.get(),
               ),
             ],
-            child: AddQuestionToLessonScreen(),
+            child: QuestionBaseScreen(),
           ),
         );
       case selectQuestionType:

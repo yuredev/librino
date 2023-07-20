@@ -52,10 +52,10 @@ class SubscriptionItemOfList extends StatelessWidget {
           title:
               '${stage == SubscriptionStage.approved ? "Aprovar" : "Reprovar"} solicitação de matrícula?',
           description:
-              'Após esta ação não será mais possível remover o usuário matrículado',
+              'Este estudante será incluído nos participantes da turma',
         ) ??
         false;
-    if (context.mounted && mustContinue) {
+    if (context.mounted && mustContinue) { 
       final cubit = context.read<SubscriptionActionsCubit>();
       if (stage == SubscriptionStage.approved) {
         cubit.approve(subscription!.id!);
